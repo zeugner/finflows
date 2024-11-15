@@ -1,4 +1,7 @@
-setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/codealpha')
+#source('https://s-ecfin-web.net1.cec.eu.int/directorates/db/u1/R/routines/installMDecfin.txt')
+
+##setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
+#setwd('C:/Users/zeugnst/Documents/R/stuff/data')
 
 ### this takes very long!!!\\\
 
@@ -29,3 +32,17 @@ for (ii in strsplit(xii,split='\\+')[[1]][-(1:5)]) {
 
 lll$F2MLW2=mds('ECB/QSA/Q.N..W2.'%&% xss %&% '.' %&% xss %&% '.N.L..F2M.._Z.XDC._T.S.V.N.')
 saveRDS(lll,'data/fflist.rds')
+
+
+codedescriptions=list()
+
+codedescriptions$INSTR = helpmds('ECB/QSA',dim='INSTR_ASSET',verbose = FALSE)
+codedescriptions$REF_SECTOR = helpmds('ECB/QSA',dim='REF_SECTOR',verbose = FALSE)
+codedescriptions$COUNTERPART_SECTOR = helpmds('ECB/QSA',dim='COUNTERPART_SECTOR',verbose = FALSE)
+codedescriptions$STO = helpmds('ECB/QSA',dim='STO',verbose = FALSE)
+codedescriptions$CUST_BREAKDOWN = helpmds('ECB/QSA',dim='CUST_BREAKDOWN',verbose = FALSE)
+
+
+saveRDS(codedescriptions,'data/codedescriptions.rds')
+
+

@@ -2,15 +2,23 @@
 
 
 library(MDecfin)
-setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/codealpha')
+setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
 
 
 aall=readRDS('data/aall.rds')
+
+#####fill blanks#####
+aall[.AT.S12K..LE._T.2023q4 ]
+aall[....LE._T.  ][aall[...S0.LE._T.]==0, onlyna=TRUE] = 0
+aall[.DE.S12K..LE._T.2023q4 ]
+
 
 #####AUSTRIA#####
 
 #whom to whom with F
 aall[F.AT...LE._T.y2022q4]
+aall[F.AT...LE.FND.y2022q4]
+
 
 ### Assets S121+s122 vis-a-vis counterpart_sectors per FI
 aall[.AT.S12K..LE._T.y2022q4]
@@ -18,6 +26,11 @@ aall[.AT.S12K..LE._T.y2022q4]
 
 ### Liabilities S121+s122 vis-a-vis counterpart_sectors per FI
 aall[.AT..S12K.LE._T.y2022q4]
+
+
+
+
+
 
 
 

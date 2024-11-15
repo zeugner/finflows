@@ -1,8 +1,8 @@
-#source('https://s-ecfin-web.net1.cec.eu.int/directorates/db/u1/R/routines/installMDecfin.txt')
+
 
 
 library(MDecfin)
-setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/codealpha')
+#setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
 
 lll=readRDS('data/fflist.rds')
 
@@ -106,7 +106,22 @@ aall['F2M',,,,,'_T',,usenames=TRUE, justval=TRUE] = xx
 
 
 saveRDS(aall,'data/aallraw.rds')
+
+codedescriptions=readRDS('data/codedescriptions.rds')
+
+for (i in names(codedescriptions)) {
+  tempix = intersect(dimnames(aall)[[i]], rownames(codedescriptions[[i]]))
+  dimcodes(aall)[[i]][tempix,2] = codedescriptions[[i]][tempix,2]
+}
+
+dimcodes(aall)$INSTR['F4S',2] = 'short term loans'
+dimcodes(aall)$COUNTERPART_SECTOR['S1',2] = dimcodes(aall)$REF_SECTOR['S1',2] = 'Total domestic economy'
+dimcodes(aall)$COUNTERPART_SECTOR['S0',2] = dimcodes(aall)$REF_SECTOR['S0',2] = 'Total economy, domestic plus abroad'
+
+
 saveRDS(aall,'data/aall.rds')
+
+#aall=readRDS('data/aall.rds')
 
 
 
