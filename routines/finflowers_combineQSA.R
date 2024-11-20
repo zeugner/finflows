@@ -4,6 +4,7 @@ library(MDecfin)
 lll=readRDS('data/fflist.rds')
 
 
+
 #dim(lll$A$F511)
 #lapply(lll$L, \(x) {names(dim(x)) })
 sss=unique(unlist(lapply(lll$A, \(x) {dimnames(x)$REF_SECTOR })))
