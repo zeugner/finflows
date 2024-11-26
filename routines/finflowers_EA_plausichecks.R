@@ -13,27 +13,34 @@ aall=readRDS('data/aall.rds')
 ######### plausibility checks of data to assure consistency ######### 
 
 ####secotral checks
+## @ Erza: implement for the abs check a level - currently hard coded at 0.01 
+
 #### ASSETS S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
 #!todo: how to handle time (quarter/years) +   
 check1=aall[F..S1.S0.LE._T.2023q4]-rowSums(aall[F..S11+S1M+S12K+S12O+S12Q+S124+S13.S0.LE._T.2023q4])
 #!todo: implement to check only if abs value is >0.00
-fifelse(abs(check1)>0,yes='nok',no='ok',na=NA)
+fifelse(abs(check1)>0.01,yes='nok',no='ok',na=NA)
 
 #### LIAB S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
 #!todo: how to handle time (quarter/years) +   
 check2=aall[F..S0.S1.LE._T.2023q4]-rowSums(aall[F..S0.S11+S1M+S12K+S12O+S12Q+S124+S13.LE._T.2023q4])
 #!todo: implement to check only if abs value is >0.00
-fifelse(abs(check2)>0,yes='nok',no='ok',na=NA)
+fifelse(abs(check2)>0.01,yes='nok',no='ok',na=NA)
 
-#!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+#if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+#!todo: how to handle time (quarter/years) + 
 check3a=aall[F21..S0.S1.LE._T.2023q4]-rowSums(aall[F21..S0.S13+S12K.LE._T.2023q4])
-fifelse(abs(check3a)>0,yes='nok',no='ok',na=NA)
+#!todo: implement to check only if abs value is >0.00
+fifelse(abs(check3a)>0.01,yes='nok',no='ok',na=NA)
+#!todo: how to handle time (quarter/years) + 
 check3b=aall[F2M..S0.S1.LE._T.2023q4]-rowSums(aall[F2M..S0.S13+S12K.LE._T.2023q4])
-fifelse(abs(check3b)>0,yes='nok',no='ok',na=NA)
+#!todo: implement to check only if abs value is >0.00
+fifelse(abs(check3b)>0.01,yes='nok',no='ok',na=NA)
 
 #!todo open: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
-fifelse(aall[..S0.S1.LE._T.2023q4]>0,yes='ok',no='nok',na=NA) 
-
+#!todo: how to handle time (quarter/years) + 
+check4=aall[.AT.S1..LE._T.2023q4]-rowSums(aall[F21..S0.S13+S12K.LE._T.2023q4])
+fifelse(check4>0,yes='ok',no='nok',na=NA) 
 
 
 
