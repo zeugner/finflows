@@ -25,10 +25,16 @@ check2=aall[F..S0.S1.LE._T.2023q4]-rowSums(aall[F..S0.S11+S1M+S12K+S12O+S12Q+S12
 #!todo: implement to check only if abs value is >0.00
 fifelse(abs(check2)>0,yes='nok',no='ok',na=NA)
 
+#!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+check3a=aall[F21..S0.S1.LE._T.2023q4]-rowSums(aall[F21..S0.S13+S12K.LE._T.2023q4])
+fifelse(abs(check3a)>0,yes='nok',no='ok',na=NA)
+check3b=aall[F2M..S0.S1.LE._T.2023q4]-rowSums(aall[F2M..S0.S13+S12K.LE._T.2023q4])
+fifelse(abs(check3b)>0,yes='nok',no='ok',na=NA)
+
 #!todo open: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
 fifelse(aall[..S0.S1.LE._T.2023q4]>0,yes='ok',no='nok',na=NA) 
 
-#!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+
 
 
 ####financial instruments checks
