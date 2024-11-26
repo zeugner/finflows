@@ -26,7 +26,7 @@ check2=aall[F..S0.S1.LE._T.2023q4]-rowSums(aall[F..S0.S11+S1M+S12K+S12O+S12Q+S12
 fifelse(abs(check2)>0,yes='nok',no='ok',na=NA)
 
 #!todo open: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
-fifelse(aall[..S0.S1.LE._T.2023q4]>0,yes='ok',no='nok',na=NA)
+fifelse(aall[..S0.S1.LE._T.2023q4]>0,yes='ok',no='nok',na=NA) 
 
 #!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
 
