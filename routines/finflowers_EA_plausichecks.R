@@ -12,16 +12,31 @@ aall=readRDS('data/aall.rds')
 
 ######### plausibility checks of data to assure consistency ######### 
 
-#!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+####secotral checks
+#### ASSETS S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
+#!todo: how to handle time (quarter/years) +   
+check1=aall[F..S1.S0.LE._T.2023q4]-rowSums(aall[F..S11+S1M+S12K+S12O+S12Q+S124+S13.S0.LE._T.2023q4])
+#!todo: implement to check only if abs value is >0.00
+fifelse(abs(check1)>0,yes='nok',no='ok',na=NA)
 
-aall[!(is.na(aall[F2M+F21...S1M+S11+S12O+S12Q+S124.LE._T.]))]>0
+#### LIAB S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
+#!todo: how to handle time (quarter/years) +   
+check2=aall[F..S0.S1.LE._T.2023q4]-rowSums(aall[F..S0.S11+S1M+S12K+S12O+S12Q+S124+S13.LE._T.2023q4])
+#!todo: implement to check only if abs value is >0.00
+fifelse(abs(check2)>0,yes='nok',no='ok',na=NA)
 
-result_nok <- aall[F2M+F21...S1M+S11+S12O+S12Q+S124.LE._T.]>0
-
-
-
-#!todo: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
+#!todo open: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
 fifelse(aall[..S0.S1.LE._T.2023q4]>0,yes='ok',no='nok',na=NA)
-aall[.AT.S1..LE._T.2023q4]
+
 #!todo: if not S12K or S13 sectors are filled when FI = F21+F2M (should be not filled)
+
+
+####financial instruments checks
+#!todo: @ Stefan check for assets and liabilities if F=F21+F2M+F3+F4+F51+F52+F6+F7+F81+F89
+#!todo: @ Stefan check for assets and liabilities if F3=F3S+F3L
+#!todo: @ Stefan check for assets and liabilities if F4=F4S+F4L
+#!todo: @ Stefan check for assets and liabilities if F51=F511+F51M
+#!todo: @ Stefan check for assets and liabilities if F6=F6N+F6O
+
+
 #!todo: check if they are NA or not filled or zero before filling with 0 (rule 3+2) (should be not filled)
