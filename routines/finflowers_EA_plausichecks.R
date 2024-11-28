@@ -18,8 +18,9 @@ aall=readRDS('data/aall.rds')
 #### ASSETS S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
 #!todo: how to handle time (quarter/years) +   
 check1=aall[F..S1.S0.LE._T.2023q4]-rowSums(aall[F..S11+S1M+S12K+S12O+S12Q+S124+S13.S0.LE._T.2023q4])
-#!todo: implement to check only if abs value is >0.00
-fifelse(abs(check1)>0.01,yes='nok',no='ok',na=NA)
+see_check1 <- check1[abs(check1) > 0.01]
+
+##instead of having array with fifelse(abs(check1)>0.01,yes='nok',no='ok',na=NA)
 
 #### LIAB S1 = S11+S1M+S12K+S13+S12O+S12Q+S124+S13
 #!todo: how to handle time (quarter/years) +   
@@ -45,11 +46,11 @@ fifelse(check4>0,yes='ok',no='nok',na=NA)
 
 
 ####financial instruments checks
-#!todo: @ Stefan check for assets and liabilities if F=F21+F2M+F3+F4+F51+F52+F6+F7+F81+F89
-#!todo: @ Stefan check for assets and liabilities if F3=F3S+F3L
-#!todo: @ Stefan check for assets and liabilities if F4=F4S+F4L
-#!todo: @ Stefan check for assets and liabilities if F51=F511+F51M
-#!todo: @ Stefan check for assets and liabilities if F6=F6N+F6O
+#!todo: @ Stefano check for assets and liabilities if F=F21+F2M+F3+F4+F51+F52+F6+F7+F81+F89
+#!todo: @ Stefano check for assets and liabilities if F3=F3S+F3L
+#!todo: @ Stefano check for assets and liabilities if F4=F4S+F4L
+#!todo: @ Stefano check for assets and liabilities if F51=F511+F51M
+#!todo: @ Stefano check for assets and liabilities if F6=F6N+F6O
 
 
 #!todo: check if they are NA or not filled or zero before filling with 0 (rule 3+2) (should be not filled)
