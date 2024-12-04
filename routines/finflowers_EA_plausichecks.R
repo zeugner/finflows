@@ -135,6 +135,20 @@ result_f51_liab <- check_f51_liab[abs(check_f51_liab) > threshold_liab]
 print("Problematic values in F51 liabilities:")
 print(result_f51_liab)
 
+#################### INVESTMENT FUND SHARES SECTORAL CHECK (F52) ####################
+# Check if total investment fund shares (F52) equals sum of relevant sectors
+# Only monetary financial institutions (S12K) and investment funds (S124) can have F52 liabilities
+
+# LIABILITIES check for F52
+f52_values_liab = aall[F52..S0.S1.LE._T.2023q4]
+threshold_liab = abs(f52_values_liab) * 0.01
+check_f52_liab = aall[F52..S0.S1.LE._T.2023q4] - 
+  (aall[F52..S0.S12K.LE._T.2023q4] + aall[F52..S0.S124.LE._T.2023q4])
+result_f52_liab <- check_f52_liab[abs(check_f52_liab) > threshold_liab]
+print("Problematic values in F52 liabilities sectoral check:")
+print(result_f52_liab)
+
+
 #################### INSURANCE (F6 = F6N + F6O) ####################
 # ASSETS check for F6
 f6_values_assets = aall[F6..S1.S0.LE._T.2023q4]
