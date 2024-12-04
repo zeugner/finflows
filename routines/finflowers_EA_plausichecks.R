@@ -83,7 +83,7 @@ result_check4
 f3_values_assets = aall[F3..S1.S0.LE._T.2023q4]
 threshold_assets = abs(f3_values_assets) * 0.01
 check_f3_assets = aall[F3..S1.S0.LE._T.2023q4] - 
-  (aall[F3S..S1.S0.LE._T.2023q4] + aall[F3L..S1.S0.LE._T.2023q4])
+                (aall[F3S..S1.S0.LE._T.2023q4] + aall[F3L..S1.S0.LE._T.2023q4])
 result_f3_assets <- check_f3_assets[abs(check_f3_assets) > threshold_assets]
 print("Problematic values in F3 assets:")
 print(result_f3_assets)
@@ -92,7 +92,7 @@ print(result_f3_assets)
 f3_values_liab = aall[F3..S0.S1.LE._T.2023q4]
 threshold_liab = abs(f3_values_liab) * 0.01
 check_f3_liab = aall[F3..S0.S1.LE._T.2023q4] - 
-  (aall[F3S..S0.S1.LE._T.2023q4] + aall[F3L..S0.S1.LE._T.2023q4])
+              (aall[F3S..S0.S1.LE._T.2023q4] + aall[F3L..S0.S1.LE._T.2023q4])
 result_f3_liab <- check_f3_liab[abs(check_f3_liab) > threshold_liab]
 print("Problematic values in F3 liabilities:")
 print(result_f3_liab)
@@ -102,7 +102,7 @@ print(result_f3_liab)
 f4_values_assets = aall[F4..S1.S0.LE._T.2023q4]
 threshold_assets = abs(f4_values_assets) * 0.01
 check_f4_assets = aall[F4..S1.S0.LE._T.2023q4] - 
-  (aall[F4S..S1.S0.LE._T.2023q4] + aall[F4L..S1.S0.LE._T.2023q4])
+                (aall[F4S..S1.S0.LE._T.2023q4] + aall[F4L..S1.S0.LE._T.2023q4])
 result_f4_assets <- check_f4_assets[abs(check_f4_assets) > threshold_assets]
 print("Problematic values in F4 assets:")
 print(result_f4_assets)
@@ -111,7 +111,7 @@ print(result_f4_assets)
 f4_values_liab = aall[F4..S0.S1.LE._T.2023q4]
 threshold_liab = abs(f4_values_liab) * 0.01
 check_f4_liab = aall[F4..S0.S1.LE._T.2023q4] - 
-  (aall[F4S..S0.S1.LE._T.2023q4] + aall[F4L..S0.S1.LE._T.2023q4])
+              (aall[F4S..S0.S1.LE._T.2023q4] + aall[F4L..S0.S1.LE._T.2023q4])
 result_f4_liab <- check_f4_liab[abs(check_f4_liab) > threshold_liab]
 print("Problematic values in F4 liabilities:")
 print(result_f4_liab)
@@ -121,7 +121,7 @@ print(result_f4_liab)
 f51_values_assets = aall[F51..S1.S0.LE._T.2023q4]
 threshold_assets = abs(f51_values_assets) * 0.01
 check_f51_assets = aall[F51..S1.S0.LE._T.2023q4] - 
-  (aall[F511..S1.S0.LE._T.2023q4] + aall[F51M..S1.S0.LE._T.2023q4])
+                 (aall[F511..S1.S0.LE._T.2023q4] + aall[F51M..S1.S0.LE._T.2023q4])
 result_f51_assets <- check_f51_assets[abs(check_f51_assets) > threshold_assets]
 print("Problematic values in F51 assets:")
 print(result_f51_assets)
@@ -130,7 +130,7 @@ print(result_f51_assets)
 f51_values_liab = aall[F51..S0.S1.LE._T.2023q4]
 threshold_liab = abs(f51_values_liab) * 0.01
 check_f51_liab = aall[F51..S0.S1.LE._T.2023q4] - 
-  (aall[F511..S0.S1.LE._T.2023q4] + aall[F51M..S0.S1.LE._T.2023q4])
+               (aall[F511..S0.S1.LE._T.2023q4] + aall[F51M..S0.S1.LE._T.2023q4])
 result_f51_liab <- check_f51_liab[abs(check_f51_liab) > threshold_liab]
 print("Problematic values in F51 liabilities:")
 print(result_f51_liab)
@@ -140,7 +140,7 @@ print(result_f51_liab)
 f6_values_assets = aall[F6..S1.S0.LE._T.2023q4]
 threshold_assets = abs(f6_values_assets) * 0.01
 check_f6_assets = aall[F6..S1.S0.LE._T.2023q4] - 
-  (aall[F6N..S1.S0.LE._T.2023q4] + aall[F6O..S1.S0.LE._T.2023q4])
+                (aall[F6N..S1.S0.LE._T.2023q4] + aall[F6O..S1.S0.LE._T.2023q4])
 result_f6_assets <- check_f6_assets[abs(check_f6_assets) > threshold_assets]
 print("Problematic values in F6 assets:")
 print(result_f6_assets)
@@ -149,7 +149,7 @@ print(result_f6_assets)
 f6_values_liab = aall[F6..S0.S1.LE._T.2023q4]
 threshold_liab = abs(f6_values_liab) * 0.01
 check_f6_liab = aall[F6..S0.S1.LE._T.2023q4] - 
-  (aall[F6N..S0.S1.LE._T.2023q4] + aall[F6O..S0.S1.LE._T.2023q4])
+              (aall[F6N..S0.S1.LE._T.2023q4] + aall[F6O..S0.S1.LE._T.2023q4])
 result_f6_liab <- check_f6_liab[abs(check_f6_liab) > threshold_liab]
 print("Problematic values in F6 liabilities:")
 print(result_f6_liab)
@@ -163,15 +163,15 @@ total_assets = aall[F..S1.S0.LE._T.2023q4]
 threshold_assets = abs(total_assets) * 0.01
 
 components_assets = aall[F21..S1.S0.LE._T.2023q4] +
-  aall[F2M..S1.S0.LE._T.2023q4] +
-  aall[F3..S1.S0.LE._T.2023q4] +
-  aall[F4..S1.S0.LE._T.2023q4] +
-  aall[F51..S1.S0.LE._T.2023q4] +
-  aall[F52..S1.S0.LE._T.2023q4] +
-  aall[F6..S1.S0.LE._T.2023q4] +
-  aall[F7..S1.S0.LE._T.2023q4] +
-  aall[F81..S1.S0.LE._T.2023q4] +
-  aall[F89..S1.S0.LE._T.2023q4]
+                  aall[F2M..S1.S0.LE._T.2023q4] +
+                  aall[F3..S1.S0.LE._T.2023q4] +
+                  aall[F4..S1.S0.LE._T.2023q4] +
+                  aall[F51..S1.S0.LE._T.2023q4] +
+                  aall[F52..S1.S0.LE._T.2023q4] +
+                  aall[F6..S1.S0.LE._T.2023q4] +
+                  aall[F7..S1.S0.LE._T.2023q4] +
+                  aall[F81..S1.S0.LE._T.2023q4] +
+                  aall[F89..S1.S0.LE._T.2023q4]
 
 check_total_assets = total_assets - components_assets
 result_total_assets <- check_total_assets[abs(check_total_assets) > threshold_assets]
@@ -183,20 +183,18 @@ total_liab = aall[F..S0.S1.LE._T.2023q4]
 threshold_liab = abs(total_liab) * 0.01
 
 components_liab = aall[F21..S0.S1.LE._T.2023q4] +
-  aall[F2M..S0.S1.LE._T.2023q4] +
-  aall[F3..S0.S1.LE._T.2023q4] +
-  aall[F4..S0.S1.LE._T.2023q4] +
-  aall[F51..S0.S1.LE._T.2023q4] +
-  aall[F52..S0.S1.LE._T.2023q4] +
-  aall[F6..S0.S1.LE._T.2023q4] +
-  aall[F7..S0.S1.LE._T.2023q4] +
-  aall[F81..S0.S1.LE._T.2023q4] +
-  aall[F89..S0.S1.LE._T.2023q4]
+                aall[F2M..S0.S1.LE._T.2023q4] +
+                aall[F3..S0.S1.LE._T.2023q4] +
+                aall[F4..S0.S1.LE._T.2023q4] +
+                aall[F51..S0.S1.LE._T.2023q4] +
+                aall[F52..S0.S1.LE._T.2023q4] +
+                aall[F6..S0.S1.LE._T.2023q4] +
+                aall[F7..S0.S1.LE._T.2023q4] +
+                aall[F81..S0.S1.LE._T.2023q4] +
+                aall[F89..S0.S1.LE._T.2023q4]
 
 check_total_liab = total_liab - components_liab
 result_total_liab <- check_total_liab[abs(check_total_liab) > threshold_liab]
 print("Problematic values in total liabilities:")
 print(result_total_liab)
-
-
 
