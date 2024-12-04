@@ -149,21 +149,17 @@ dimnames(aall)[[3]]
 dim(aall)
 
 # set order for sectors 
-sorder='S11+S121+S12T+S124+S12O+S12Q+S13+S1M+S2+S0+S1+S12K'
-dall=as.data.table(aall,na.rm=TRUE)
-dall
-attr(dall,'dcstruct')
-aall[..S2....]=NA; aall[...S2...]=NA
 sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K',split='\\+')[[1L]]
-sorder
-strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K',split='\\+')
-args(MD3:::as.data.table.md3)
+aall[..S2....]=NA; aall[...S2...]=NA
 dall=as.data.table(aall,na.rm=TRUE, simple=TRUE)
 ddn=attr(dall,'dcstruct')
-ddn
 ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
 ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
-eall=as.md3(dall)
+attr(dall,'dcstruct') = ddn
+aall=as.md3(dall)
+aall[..S2....] = aall[..S0....] - aall[..S1....]
+aall[...S2...] = aall[...S0...] - aall[...S1...]
+#aall[F511.DK...LE._T.2023q4]
+saveRDS(aall,'data/aall1.rds')
 
-eall[F511.DK...LE._T.2023q4]
-eall[..S2....] = aall[..S0....] - aall[..S1....]
+
