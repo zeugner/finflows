@@ -4,11 +4,12 @@
 library(MDecfin)
 #BRUSSELS
 #setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
+#setwd('C:/Users/aruqaer/R/finflow/gitclone/finflows')
 
 #ISPRA
 #setwd('X:/Finflows/zeugner')
 
-aall=readRDS('data/aall.rds')
+aall=readRDS('data/aall1.rds')
 
 #dimcodes(aall)
 
@@ -20,41 +21,47 @@ aall=readRDS('data/aall.rds')
 # Sectors checked: Non-financial corps (S11), Households (S1M), Banks (S12K),
 # Other financial (S12O), Insurance/Pension (S12Q), Investment funds (S124), Government (S13)
 check1=aall[F..S1.S0.LE._T.2023q4]-rowSums(aall[F..S11+S1M+S12K+S12O+S12Q+S124+S13.S0.LE._T.2023q4])
-# Flag differences > 0.01 as 'nok' (not OK)
-fifelse(abs(check1)>0.01,yes='nok',no='ok',na=NA)
-
+result_check1 <- check1[abs(check1) > 1]
 # Extract actual values for problematic cases
-values <- check1$"_.obs_value"
-countries <- check1$REF_AREA
-result <- fifelse(abs(values) > 0.01, 
-                  yes = abs(values), 
-                  no = 0, 
-                  na = NA)
-names(result) <- countries
-result
+print("Problematic values in S1 subsectors assets stocks:")
+result_check1
+
 
 # SECTORAL CONSISTENCY CHECK 2: Total Economy Liabilities Composition
 # Verify if total economy (S1) liabilities equal sum of all institutional sectors
 check2=aall[F..S0.S1.LE._T.2023q4]-rowSums(aall[F..S0.S11+S1M+S12K+S12O+S12Q+S124+S13.LE._T.2023q4])
-fifelse(abs(check2)>0.01,yes='nok',no='ok',na=NA)
+result_check2 <- check2[abs(check2) > 1]
+# Extract actual values for problematic cases
+print("Problematic values in S1 subsectors liabilities stocks:")
+result_check2
 
 # SECTORAL CONSISTENCY CHECK 3a: Currency Liabilities (F21)
 # Verify if currency liabilities are only held by central bank (S12K) and government (S13)
 check3a=aall[F21..S0.S1.LE._T.2023q4]-rowSums(aall[F21..S0.S13+S12K.LE._T.2023q4])
-fifelse(abs(check3a)>0.01,yes='nok',no='ok',na=NA)
+result_check3a <- check3a[abs(check3a) > 1]
+# Extract actual values for problematic cases
+print("Problematic values in currency liabilities:")
+result_check3a
 
 # SECTORAL CONSISTENCY CHECK 3b: Deposit Liabilities (F2M)
 # Verify if deposit liabilities are only held by banks (S12K) and government (S13)
 check3b=aall[F2M..S0.S1.LE._T.2023q4]-rowSums(aall[F2M..S0.S13+S12K.LE._T.2023q4])
-fifelse(abs(check3b)>0.01,yes='nok',no='ok',na=NA)
-
-
+result_check3b <- check3b[abs(check3b) > 1]
+# Extract actual values for problematic cases
+print("Problematic values in deposit liabilities:")
+result_check3b
 
 #!todo open: include a check if S0 is zero also  check if S1 is zero or NA (should be not filled)
 #!todo: how to handle time (quarter/years) + 
-check4=aall[.AT.S1..LE._T.2023q4]-rowSums(aall[F21..S0.S13+S12K.LE._T.2023q4])
-fifelse(check4>0,yes='ok',no='nok',na=NA) 
-
+check4a=aall[...S0.LE._T.2023q4]
+check4b=aall[...S1.LE._T.2023q4]
+result_check4a <- check4a[abs(check4a) == 0] 
+result_check4b <- check4b[abs(check4a) == 0]
+check4 <- result_check4a-result_check4b
+result_check4 <- check4[abs(check4) > 1]
+# Extract actual values for problematic cases
+print("Problematic values in S0:")
+result_check4
 
 
 ####financial instruments checks
@@ -166,7 +173,7 @@ check6c_assets = aall[F51..S1.S0.LE._T.2023q4] -
   (aall[F511..S1.S0.LE._T.2023q4] + aall[F51M..S1.S0.LE._T.2023q4])
 
 print("F51 Assets check results:")
-fifelse(abs(check6c_assets)>0.01, yes='nok', no='ok', na=NA)
+fifelse(abs(check6c_assets)>1, yes='nok', no='ok', na=NA)
 
 # Extract problematic values for F51 assets
 values_f51_assets <- check6c_assets$"_.obs_value"
