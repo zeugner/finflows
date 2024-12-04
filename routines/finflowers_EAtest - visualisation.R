@@ -17,7 +17,7 @@ sector_labels <- c(
   "S12Q" = "Ins & Pens",      # Insurance corporations and pension funds
   "S13" = "Government",       # General government
   "S1M" = "HH & NPISH",       # Households and non-profit institutions
-  "S0" = "Total Econ"         # Total economy
+  "S2" = "RoW"         # Rest of the world
 )
 
 # Extract who-to-whom data for listed shares (F511) in Austria
@@ -28,7 +28,7 @@ sector_labels <- c(
 # - LE: Stock positions (not flows)
 # - _T: Total (no breakdown)
 # - y2022q4: Time period
-f511a = aall[F511.AT.S11+S124+S12K+S12O+S12Q+S13+S1M+S0.S11+S124+S12K+S12O+S12Q+S13+S0.LE._T.y2022q4]
+f511a = aall[F511.AT.S11+S124+S12K+S12O+S12Q+S13+S1M+S2.S11+S124+S12K+S12O+S12Q+S13+S2.LE._T.y2022q4]
 
 # Convert to data.table format for more efficient processing
 f511a_dt <- as.data.table(f511a)
