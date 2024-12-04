@@ -5,7 +5,7 @@ library(MDecfin)
 #setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
 
 # Load the previously created matrix with all financial instruments data
-aall=readRDS('data/aall1.rds')
+aall=readRDS('data/aall.rds')
 
 #Matrix dimensions :
   # 1. INSTR: Financial instrument (e.g., F2M for Deposits)

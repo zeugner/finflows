@@ -1,6 +1,7 @@
 library(MDecfin)
 #setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
 
+
 # Load the list of financial flow matrices/arrays from ECB's QSA data
 # The list contains two main components:
 # - A: Assets matrices
@@ -143,53 +144,8 @@ for (i in irest) {
   }
 }
 
-### stetting order to sectors and calculating RoW (S2) - saving as aall1
 
-dimnames(aall)[[3]]
-## set order for sectors 
-#eall=aal[..S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K.S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K....]
-dim(aall)
-#eall=aall[..S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K.S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K...]
-## set order for sectors
-#sorder='S11+S121+S12T+S124+S12O+S12Q+S13+S1M+S2+S0+S1+S12K'
-#dall=as.data.table(aall,na.rm=TRUE)
-#dall
-#attr(dall,'dcstruct')
-#aall[..S2....]=NA; aall[...S2...]=NA
-#sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K',split='\\+')[[1L]]
-#sorder
-#strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K',split='\\+')
-#args(MD3:::as.data.table.md3)
-#dall=as.data.table(aall,na.rm=TRUE, simple=TRUE)
-#ddn=attr(dall,'dcstruct')
-#ddn
-#ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
-#attr(dall,'dcstruct') = ddn
-#eall=as.md3(dall)
-#dim(eall)
-#eall[F511.DK...LE._T.2023q4]
-#ddn$REF_SECTOR
-#ddn$REF_SECTOR[sorder,]
-#dall=as.data.table(aall,na.rm=TRUE, simple=TRUE)
-#ddn=attr(dall,'dcstruct')
-#ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
-#ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
-#attr(dall,'dcstruct') = ddn
-#eall=as.md3(dall)
-#eall[F511.DK...LE._T.2023q4]
-#eall['F511.DK..S121:S12Q.LE._T.2023q4']
-#aall[..S2....] = aall[..S0....] - aall[..S1....]
 
-sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K',split='\\+')[[1L]]
-aall[..S2....]=NA; aall[...S2...]=NA
-dall=as.data.table(aall,na.rm=TRUE, simple=TRUE)
-ddn=attr(dall,'dcstruct')
-ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
-ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
-attr(dall,'dcstruct') = ddn
-aall=as.md3(dall)
-aall[..S2....] = aall[..S0....] - aall[..S1....]
-#aall[F511.DK...LE._T.2023q4]
-saveRDS(aall,'data/aall1.rds')
+
 
 
