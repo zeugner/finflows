@@ -135,6 +135,7 @@ result_f51_liab <- check_f51_liab[abs(check_f51_liab) > threshold_liab]
 print("Problematic values in F51 liabilities:")
 print(result_f51_liab)
 
+
 #################### INSURANCE (F6 = F6N + F6O) ####################
 # ASSETS check for F6
 f6_values_assets = aall[F6..S1.S0.LE._T.2023q4]
@@ -160,7 +161,7 @@ print(result_f6_liab)
 
 # ASSETS check
 total_assets = aall[F..S1.S0.LE._T.2023q4]
-threshold_assets = abs(total_assets) * 0.01
+threshold_assets = abs(total_assets) * 0.001
 
 components_assets = aall[F21..S1.S0.LE._T.2023q4] +
                   aall[F2M..S1.S0.LE._T.2023q4] +
