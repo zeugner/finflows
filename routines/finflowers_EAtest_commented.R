@@ -3,9 +3,10 @@
 
 library(MDecfin)
 #setwd('U:/Topics/Spillovers_and_EA/flowoffunds/finflows2024/gitcodedata')
+#setwd('C:/Users/aruqaer/R/finflow/gitclone/finflows')
 
 # Load the previously created matrix with all financial instruments data
-aall=readRDS('data/aall.rds')
+aall=readRDS('data/aall1.rds')
 
 #Matrix dimensions :
   # 1. INSTR: Financial instrument (e.g., F2M for Deposits)
@@ -59,18 +60,12 @@ aall[F52..S0.S1.LE._T.y2022q4]-rowSums(aall[F52..S0.S124+S12K.LE._T.y2022q4])
 # - General government (S13)
 # - Households and NPISH (S1M)
 aall[F52...S11+S12O+S12Q+S13+S1M.LE._T.] = 0
-# Additional diagnostic checks
-test=aall[F52.AT...LE._T.2023q4 ]
-aall[F52.AT...LE._T.2023q4 ]
-# Align monetary financial institutions data
-aall[F52...S12T.._T.] = aall[F52...S12K.._T.]
-# Check if total F52 equals sum of relevant sectors
-tempix= aall[F52..S1.S1.LE._T.]==apply(aall[F52..S1.S124+S12K.LE._T.],c(1,3),sum)
 
-# Final diagnostic checks
-# Check MFI data for Austria
-aall[.AT.S12K..LE._T.2023q4 ]
-aall[.AT..S12K.LE._T.2023q4 ]
+# Additional diagnostic checks
+aall[F52.AT...LE._T.2023q4 ]
+# Align monetary financial institutions data, based on the assumption that if S12K is filled, it is S12T and not S121
+aall[F52...S12T.._T.] = aall[F52...S12K.._T.]
+
 
 ### Final checks for S121+S122 (Central bank + Deposit-taking corporations)
 # Assets of MFIs vis-à-vis counterpart sectors per financial instrument
