@@ -1,17 +1,32 @@
-## loading of ESTAT annual sector accounts for F51m (F512+F519) nasa_​10_​f_​bs
-# https://db.nomics.world/Eurostat/nasa_10_f_bs?dimensions=%7B%22na_item%22%3A%5B%22F512%22%2C%22F519%22%5D%7D&tab=list
+#################### LOADING FINANCIAL BALANCE SHEETS FROM EUROSTAT ####################
+# Loading data for equity instruments (F51x series)
+# F51 components:
+# - F511: Listed shares (quoted shares traded on stock exchanges)
+# - F51M: Sum of F512 (unlisted shares) and F519 (other equity)
 
+#################### LISTED SHARES (F511) ####################
+# Load consolidated assets for listed shares
+aa511c=mds("Estat/nasa_10_f_bs/A.MIO_NAC.CO..ASS.F511.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-#aa=mds("Estat/nasq_10_f_cp/Q.MIO_EUR...STK.ASS.F511.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+# Load unconsolidated assets for listed shares
+aa511nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F511.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-#consolidated assets F512
+#################### UNLISTED SHARES AND OTHER EQUITY (F51M) ####################
+# Loading both consolidated and unconsolidated data to calculate intra-sector exposures
+# Consolidated (CO): Positions between units in the same sector are netted out
+# Unconsolidated (NCO): All positions are included, even within the same sector
+# Example: If Bank A owns shares in Bank B, in consolidated data this intra-banking sector
+# position would be netted out, while in unconsolidated data it would be included
+
+# Load consolidated assets for unlisted shares (F512)
 aa512c=mds("Estat/nasa_10_f_bs/A.MIO_NAC.CO..ASS.F512.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-#unconsolidated assets F512
+# Load unconsolidated assets for unlisted shares (F512)
 aa512nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F512.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-#consolidated assets F519
+# Load consolidated assets for other equity (F519)
 aa519c=mds("Estat/nasa_10_f_bs/A.MIO_NAC.CO..ASS.F519.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-#unconsolidated assets F519
+# Load unconsolidated assets for other equity (F519)
 aa519nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F519.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+
