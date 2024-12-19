@@ -1,7 +1,7 @@
 ###
 ## This fills the ECB QSA NAs for cases in which:
-# ref sector is s121 (central bank) and counterpart is s0
-# ref sector is s12T (other MFIs) and counterpart is s0
+# ref sector is S121 (central bank) and counterpart is s0
+# ref sector is S12T (other MFIs) and counterpart is s0
 # using Eurostat data
 
 library(MDecfin)
@@ -31,15 +31,15 @@ aa81nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F81.BE+BG+CZ+DK+DE+EE+IE+EL+ES
 aa89nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F89.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
 ## Try to consolidate the loading
-aa_nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F511+F52+F22+F29+F4+F41+F42+F3+F31+F32+F21+F51+F512+F519.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+## aa_nc=mds("Estat/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F511+F52+F22+F29+F4+F41+F42+F3+F31+F32+F21+F51+F512+F519.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 ## until here everything runs ok but if I try to add another financial instrument it does not work anymore:
 ## Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
 ## Could not fetch data for query code ESTAT/nasa_10_f_bs/A.MIO_NAC.NCO..ASS.F511+F52+F22+F29+F4+F41+F42+F3+F31+F32+F21+F51+F512+F519+F81.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE.
 
 
 # Process F2M (sum of F22 and F29)
-aaF22A = aa22nc[ASS...]
-aaF29A = aa29nc[ASS...]
+aaF22A = aa22nc[..]
+aaF29A = aa29nc[..]
 aaF2MA = aaF22A + aaF29A
 names(dimnames(aaF2MA))[[1]] = 'REF_AREA'
 names(dimnames(aaF2MA))[[2]] = 'REF_SECTOR'
@@ -53,8 +53,8 @@ aall[F2M..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF2M[".S121.1999q4:"]
 aall[F2M..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF2M[".S12T.1999q4:"]
 
 # Process F51M (sum of F512 and F519)
-aaF512A = aa512nc[ASS...]
-aaF519A = aa519nc[ASS...]
+aaF512A = aa512nc[..]
+aaF519A = aa519nc[..]
 aaF51MA = aaF512A + aaF519A
 names(dimnames(aaF51MA))[[1]] = 'REF_AREA'
 names(dimnames(aaF51MA))[[2]] = 'REF_SECTOR'
@@ -68,8 +68,8 @@ aall[F51M..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF51M[".S121.1999q4:"]
 aall[F51M..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF51M[".S12T.1999q4:"]
 
 # Process F6N (sum of F62 and F63_F64_F65)
-aaF62A = aa62nc[ASS...]
-aaF626364A = aa6nnc[ASS...]
+aaF62A = aa62nc[..]
+aaF626364A = aa6nnc[..]
 aaF6NA = aaF62A + aaF626364A
 names(dimnames(aaF6NA))[[1]] = 'REF_AREA'
 names(dimnames(aaF6NA))[[2]] = 'REF_SECTOR'
@@ -83,7 +83,7 @@ aall[F6N..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6N[".S121.1999q4:"]
 aall[F6N..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6N[".S12T.1999q4:"]
 
 # Process F511 (Listed shares)
-aaF511A = aa511nc[ASS...]
+aaF511A = aa511nc[..]
 names(dimnames(aaF511A))[[1]] = 'REF_AREA'
 names(dimnames(aaF511A))[[2]] = 'REF_SECTOR'
 dtF511A = as.data.table(aaF511A, na.rm = TRUE)
@@ -98,7 +98,7 @@ aall[F511..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF511[".S121.1999q4:"]
 aall[F511..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF511[".S12T.1999q4:"]
 
 # Process F52 (Investment fund shares)
-aaF52A = aa52nc[ASS...]
+aaF52A = aa52nc[..]
 names(dimnames(aaF52A))[[1]] = 'REF_AREA'
 names(dimnames(aaF52A))[[2]] = 'REF_SECTOR'
 dtF52A = as.data.table(aaF52A, na.rm = TRUE)
@@ -113,7 +113,7 @@ aall[F52..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF52[".S121.1999q4:"]
 aall[F52..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF52[".S12T.1999q4:"]
 
 # Process F4 (Loans)
-aaF4A = aa4nc[ASS...]
+aaF4A = aa4nc[..]
 names(dimnames(aaF4A))[[1]] = 'REF_AREA'
 names(dimnames(aaF4A))[[2]] = 'REF_SECTOR'
 dtF4A = as.data.table(aaF4A, na.rm = TRUE)
@@ -128,7 +128,7 @@ aall[F4..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4[".S121.1999q4:"]
 aall[F4..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4[".S12T.1999q4:"]
 
 # Process F4S (Short-term loans)
-aaF4SA = aa41nc[ASS...]
+aaF4SA = aa41nc[..]
 names(dimnames(aaF4SA))[[1]] = 'REF_AREA'
 names(dimnames(aaF4SA))[[2]] = 'REF_SECTOR'
 dtF4SA = as.data.table(aaF4SA, na.rm = TRUE)
@@ -143,7 +143,7 @@ aall[F4S..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4S[".S121.1999q4:"]
 aall[F4S..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4S[".S12T.1999q4:"]
 
 # Process F4L (Long-term loans)
-aaF4LA = aa42nc[ASS...]
+aaF4LA = aa42nc[..]
 names(dimnames(aaF4LA))[[1]] = 'REF_AREA'
 names(dimnames(aaF4LA))[[2]] = 'REF_SECTOR'
 dtF4LA = as.data.table(aaF4LA, na.rm = TRUE)
@@ -158,7 +158,7 @@ aall[F4L..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4L[".S121.1999q4:"]
 aall[F4L..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF4L[".S12T.1999q4:"]
 
 # Process F3 (Debt securities)
-aaF3A = aa3nc[ASS...]
+aaF3A = aa3nc[..]
 names(dimnames(aaF3A))[[1]] = 'REF_AREA'
 names(dimnames(aaF3A))[[2]] = 'REF_SECTOR'
 dtF3A = as.data.table(aaF3A, na.rm = TRUE)
@@ -173,7 +173,7 @@ aall[F3..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3[".S121.1999q4:"]
 aall[F3..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3[".S12T.1999q4:"]
 
 # Process F3S (Short-term debt securities)
-aaF3SA = aa31nc[ASS...]
+aaF3SA = aa31nc[..]
 names(dimnames(aaF3SA))[[1]] = 'REF_AREA'
 names(dimnames(aaF3SA))[[2]] = 'REF_SECTOR'
 dtF3SA = as.data.table(aaF3SA, na.rm = TRUE)
@@ -188,7 +188,7 @@ aall[F3S..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3S[".S121.1999q4:"]
 aall[F3S..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3S[".S12T.1999q4:"]
 
 # Process F3L (Long-term debt securities)
-aaF3LA = aa32nc[ASS...]
+aaF3LA = aa32nc[..]
 names(dimnames(aaF3LA))[[1]] = 'REF_AREA'
 names(dimnames(aaF3LA))[[2]] = 'REF_SECTOR'
 dtF3LA = as.data.table(aaF3LA, na.rm = TRUE)
@@ -203,7 +203,7 @@ aall[F3L..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3L[".S121.1999q4:"]
 aall[F3L..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF3L[".S12T.1999q4:"]
 
 # Process F21 (Currency)
-aaF21A = aa21nc[ASS...]
+aaF21A = aa21nc[..]
 names(dimnames(aaF21A))[[1]] = 'REF_AREA'
 names(dimnames(aaF21A))[[2]] = 'REF_SECTOR'
 dtF21A = as.data.table(aaF21A, na.rm = TRUE)
@@ -218,7 +218,7 @@ aall[F21..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF21[".S121.1999q4:"]
 aall[F21..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF21[".S12T.1999q4:"]
 
 # Process F (Total financial assets/liabilities)
-aaFA = aafnc[ASS...]
+aaFA = aafnc[..]
 names(dimnames(aaFA))[[1]] = 'REF_AREA'
 names(dimnames(aaFA))[[2]] = 'REF_SECTOR'
 dtFA = as.data.table(aaFA, na.rm = TRUE)
@@ -233,7 +233,7 @@ aall[F..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF[".S121.1999q4:"]
 aall[F..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF[".S12T.1999q4:"]
 
 # Process F51 (Equity)
-aaF51A = aa51nc[ASS...]
+aaF51A = aa51nc[..]
 names(dimnames(aaF51A))[[1]] = 'REF_AREA'
 names(dimnames(aaF51A))[[2]] = 'REF_SECTOR'
 dtF51A = as.data.table(aaF51A, na.rm = TRUE)
@@ -248,7 +248,7 @@ aall[F51..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF51[".S121.1999q4:"]
 aall[F51..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF51[".S12T.1999q4:"]
 
 # Process F6 (Insurance, pension and standardized guarantee schemes)
-aaF6A = aa6nc[ASS...]
+aaF6A = aa6nc[..]
 names(dimnames(aaF6A))[[1]] = 'REF_AREA'
 names(dimnames(aaF6A))[[2]] = 'REF_SECTOR'
 dtF6A = as.data.table(aaF6A, na.rm = TRUE)
@@ -263,7 +263,7 @@ aall[F6..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6[".S121.1999q4:"]
 aall[F6..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6[".S12T.1999q4:"]
 
 # Process F6O (Non-life insurance provisions)
-aaF6OA = aa6onc[ASS...]
+aaF6OA = aa6onc[..]
 names(dimnames(aaF6OA))[[1]] = 'REF_AREA'
 names(dimnames(aaF6OA))[[2]] = 'REF_SECTOR'
 dtF6OA = as.data.table(aaF6OA, na.rm = TRUE)
@@ -278,7 +278,7 @@ aall[F6O..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6O[".S121.1999q4:"]
 aall[F6O..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6O[".S12T.1999q4:"]
 
 # Process F7 (Financial derivatives)
-aaF7A = aa7nc[ASS...]
+aaF7A = aa7nc[..]
 names(dimnames(aaF7A))[[1]] = 'REF_AREA'
 names(dimnames(aaF7A))[[2]] = 'REF_SECTOR'
 dtF7A = as.data.table(aaF7A, na.rm = TRUE)
@@ -293,7 +293,7 @@ aall[F7..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF7[".S121.1999q4:"]
 aall[F7..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF7[".S12T.1999q4:"]
 
 # Process F81 (Trade credits and advances)
-aaF81A = aa81nc[ASS...]
+aaF81A = aa81nc[..]
 names(dimnames(aaF81A))[[1]] = 'REF_AREA'
 names(dimnames(aaF81A))[[2]] = 'REF_SECTOR'
 dtF81A = as.data.table(aaF81A, na.rm = TRUE)
@@ -308,7 +308,7 @@ aall[F81..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF81[".S121.1999q4:"]
 aall[F81..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF81[".S12T.1999q4:"]
 
 # Process F89 (Other accounts receivable/payable)
-aaF89A = aa89nc[ASS...]
+aaF89A = aa89nc[..]
 names(dimnames(aaF89A))[[1]] = 'REF_AREA'
 names(dimnames(aaF89A))[[2]] = 'REF_SECTOR'
 dtF89A = as.data.table(aaF89A, na.rm = TRUE)
