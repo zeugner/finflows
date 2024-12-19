@@ -323,19 +323,78 @@ aall[F89..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF89[".S121.1999q4:"]
 aall[F89..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF89[".S12T.1999q4:"]
 
 
-#### CHECK IF S121+S12T = S12K !!! 
 
 #################### CONSISTENCY CHECKS ####################
 
 # SECTORAL CONSISTENCY CHECK 
 # Verify if central bank + financial sector (S12K) from ECB equals sum of S121+S12T
-# This is for F: how to check all FIs at the same time? Is there a way? 
-# This can be done one financial instrument at the time (leaving blank the country)
-# OR one country at the time (leaving blank the financial instrument)
-# but AT LEAST BY NOW we cannot leave both FI and country blank
-check1=aall[..S12K.S0.LE._T.2023q4]-rowSums(aall[..S121+S12T.S0.LE._T.2023q4])
-result_check1 <- check1[abs(check1) > 1.5]
-# Extract actual values for problematic cases
-result_check1
-dimcodes(aall)
+
+# Check function with multiple thresholds
+check_sectors = function(thresholds = c(1, 1.5, 2)) {
+  # Get the data
+  data_parts = aall[..S121+S12T.S0.LE._T.2023q4]
+  data_whole = aall[..S12K.S0.LE._T.2023q4]
+  
+  # Convert to data.table for easier handling
+  parts_dt = as.data.table(data_parts, na.rm=TRUE)
+  whole_dt = as.data.table(data_whole, na.rm=TRUE)
+  
+  # Calculate difference
+  diff = data_whole - apply(data_parts, c(1,2), sum, na.rm=TRUE)
+  
+  # For each threshold, analyze discrepancies
+  for(threshold in thresholds) {
+    cat("\n\n=== Analysis for threshold", threshold, "===\n")
+    
+    # Get indices where absolute difference exceeds threshold
+    significant_indices = which(abs(diff) > threshold, arr.ind = TRUE)
+    
+    if(length(significant_indices) > 0) {
+      cat("\nFound", nrow(significant_indices), "discrepancies larger than", threshold, "\n")
+      
+      # For each discrepancy, print detailed information
+      for(i in 1:nrow(significant_indices)) {
+        instr_idx = significant_indices[i, 1]
+        country_idx = significant_indices[i, 2]
+        
+        # Get dimension names
+        instr_name = dimnames(diff)[[1]][instr_idx]
+        country_name = dimnames(diff)[[2]][country_idx]
+        
+        # Extract values using data.table
+        s121_vals = parts_dt[INSTR == instr_name & REF_AREA == country_name & 
+                               REF_SECTOR == "S121", obs_value]
+        s12t_vals = parts_dt[INSTR == instr_name & REF_AREA == country_name & 
+                               REF_SECTOR == "S12T", obs_value]
+        s12k_vals = whole_dt[INSTR == instr_name & REF_AREA == country_name, obs_value]
+        
+        # Only print if we have all values
+        if(length(s121_vals) > 0 && length(s12t_vals) > 0 && length(s12k_vals) > 0) {
+          s121_val = s121_vals[1]
+          s12t_val = s12t_vals[1]
+          s12k_val = s12k_vals[1]
+          
+          cat("\nDiscrepancy found for:\n")
+          cat("Instrument:", instr_name, "\n")
+          cat("Country:", country_name, "\n")
+          cat("S121 value:", format(s121_val, digits=2), "\n")
+          cat("S12T value:", format(s12t_val, digits=2), "\n")
+          cat("Sum of parts (S121+S12T):", format(s121_val + s12t_val, digits=2), "\n")
+          cat("S12K value:", format(s12k_val, digits=2), "\n")
+          cat("Difference:", format(s12k_val - (s121_val + s12t_val), digits=2), "\n")
+          cat("--------------------\n")
+        }
+      }
+    } else {
+      cat("\nNo discrepancies found exceeding threshold", threshold, "\n")
+    }
+  }
+  
+  # Return the full difference matrix for further analysis if needed
+  return(invisible(diff))
+}
+
+# Run the check with default thresholds
+result = check_sectors()
+
 
