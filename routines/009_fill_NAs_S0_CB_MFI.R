@@ -73,12 +73,13 @@ aaF626364A = aa6nnc[..]
 aaF6NA = aaF62A + aaF626364A
 names(dimnames(aaF6NA))[[1]] = 'REF_AREA'
 names(dimnames(aaF6NA))[[2]] = 'REF_SECTOR'
-dtF6NA = as.data.table(aaF6NA, na.rm = TRUE)
+dtF6NA = as.data.table(unflag(aaF6NA), na.rm = TRUE)
 dtF6NA$TIME = frequency(dtF6NA$TIME, "Q", refersto = "end")
 attr(dtF6NA, "dcsimp") = NULL
 attr(dtF6NA, "dcstruct") = NULL
 dtF6NA$TIME = as.character(dtF6NA$TIME)
 ppF6N = as.md3(copy(dtF6NA), id.vars=1:3)
+#why not use ppF6N=disaggreate(aaF6NA,'Q',last)
 aall[F6N..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6N[".S121.1999q4:"]
 aall[F6N..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF6N[".S12T.1999q4:"]
 

@@ -55,8 +55,9 @@ names(dimnames(ll))[[2]] = 'REF_SECTOR'
 # Process F (sum of F per functional categories)
 print('filling NAs of crossborder financial assets')
 aaF = aa[..FA__D__F+FA__O__F+FA__P__F+FA__R__F+FA__F__F7.]
-dtaaF = as.data.table(aaF, na.rm = TRUE)
+dtaaF = as.data.table(aaF, na.rm = TRUE)   ### why is this done?
 ppFA = as.md3(dtaaF,id.vars=1:4,obsattr = "obs_status")
+#ppFA=copy(aa[..FA__D__F+FA__O__F+FA__P__F+FA__R__F+FA__F__F7.]) # why not just this?
 aall[F..S121.S2.LE._T., usenames=TRUE, onlyna=TRUE] = zerofiller(ppFA[".S121.FA__D__F.1999q4:"])+zerofiller(ppFA[".S121.FA__O__F.1999q4:"])+zerofiller(ppFA[".S121.FA__P__F.1999q4:"])+zerofiller(ppFA[".S121.FA__F__F7.1999q4:"])+zerofiller(ppFA[".S121.FA__R__F.1999q4:"])
 aall[F..S12T.S2.LE._T., usenames=TRUE, onlyna=TRUE] = zerofiller(ppFA[".S12T.FA__D__F.1999q4:"])+zerofiller(ppFA[".S12T.FA__O__F.1999q4:"])+zerofiller(ppFA[".S12T.FA__P__F.1999q4:"])+zerofiller(ppFA[".S12T.FA__F__F7.1999q4:"])
 aall[F..S13.S2.LE._T., usenames=TRUE, onlyna=TRUE] = zerofiller(ppFA[".S13.FA__D__F.1999q4:"])+zerofiller(ppFA[".S13.FA__O__F.1999q4:"])+zerofiller(ppFA[".S13.FA__P__F.1999q4:"])+zerofiller(ppFA[".S13.FA__F__F7.1999q4:"])
