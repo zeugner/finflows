@@ -71,7 +71,7 @@ aall[F52.AT...LE._T.2023q4 ]
 # Align monetary financial institutions data
 aall[F52...S12T.._T.] = aall[F52...S12K.._T.]
 # Check if total F52 equals sum of relevant sectors
-tempix= aall[F52..S1.S1.LE._T.]==apply(aall[F52..S1.S124+S12K.LE._T.],c(1,3),sum)
+#tempix= aall[F52..S1.S1.LE._T.]==apply(aall[F52..S1.S124+S12K.LE._T.],c(1,3),sum)
 
 # Final diagnostic checks
 # Check MFI data for Austria
@@ -84,4 +84,4 @@ aall[.AT.S12K..LE._T.y2022q4]
 # Liabilities of MFIs vis-à-vis counterpart sectors per financial instrument
 aall[.AT..S12K.LE._T.y2022q4]
 
-saveRDS(aall, file.path(data_dir, 'aall.rds'))
+saveRDS(aall, file.path(data_dir, 'aall2.rds'))
