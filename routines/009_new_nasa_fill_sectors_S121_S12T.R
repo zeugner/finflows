@@ -3,6 +3,10 @@ library(MDecfin)
 # Load unconsolidated data
 la = readRDS("data/nasa_unconsolidated.rds")
 
+###new
+aall=readRDS(file.path(data_dir,'aall4.rds'))
+setkey(aall, NULL)
+
 # Process F2M (sum of F22 and F29)
 aaF22A = la$aa22nc[..]
 aaF29A = la$aa29nc[..]
@@ -137,3 +141,5 @@ names(dimnames(aaF89A))[[2]] = 'REF_SECTOR'
 ppF89=copy(aaF89A); frequency(ppF89)='Q'
 aall[F89..S121.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF89[".S121.1999q4:"]
 aall[F89..S12T.S0.LE._T., usenames=TRUE, onlyna=TRUE] = ppF89[".S12T.1999q4:"]
+
+saveRDS(aall, file.path(data_dir, 'aall4.rds'))
