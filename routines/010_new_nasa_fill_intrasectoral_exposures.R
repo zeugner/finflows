@@ -4,6 +4,11 @@ library(MDecfin)
 la = readRDS("data/nasa_unconsolidated.rds")
 lc = readRDS("data/nasa_consolidated.rds")
 
+###new
+aall=readRDS(file.path(data_dir,'aall4.rds'))
+setkey(aall, NULL)
+
+
 # F51M (Unlisted shares and other equity)
 intra512 = la$aa512nc - lc$aa512c
 intra519 = la$aa519nc - lc$aa519c
@@ -444,31 +449,6 @@ aall[F6N..S12Q.S12Q.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6N[".S128_S129.
 # Calculate and fill S12R
 aall[F6N..S12R.S12R.LE._T.] = aall[F6N..S124.S124.LE._T.] + aall[F6N..S12O.S12O.LE._T.] + aall[F6N..S12Q.S12Q.LE._T.]
 
-# F6O (Non-life insurance provisions)
-intra6O = la$aa6onc - lc$aa6oc
-names(dimnames(intra6O))[[1]] = 'REF_AREA'
-names(dimnames(intra6O))[[2]] = 'REF_SECTOR'
-ppIntra6O=copy(intra6O); frequency(ppIntra6O)='Q'
-
-# Fill all individual sectors (including main sectors) 
-aall[F6O..S121.S121.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S121.1999q4:"]
-aall[F6O..S122.S122.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S122.1999q4:"]
-aall[F6O..S123.S123.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S123.1999q4:"]
-aall[F6O..S124.S124.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S124.1999q4:"]
-aall[F6O..S125.S125.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S125.1999q4:"]
-aall[F6O..S126.S126.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S126.1999q4:"]
-aall[F6O..S127.S127.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S127.1999q4:"]
-aall[F6O..S128.S128.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S128.1999q4:"]
-aall[F6O..S129.S129.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S129.1999q4:"]
-aall[F6O..S11.S11.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S11.1999q4:"]
-aall[F6O..S13.S13.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S13.1999q4:"]
-aall[F6O..S1M.S1M.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S1M.1999q4:"]
-
-# Fill combined sectors
-aall[F6O..S12T.S12T.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S12T.1999q4:"]
-aall[F6O..S12K.S12K.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S121_S122_S123.1999q4:"]
-aall[F6O..S12O.S12O.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S125_S126_S127.1999q4:"]
-aall[F6O..S12Q.S12Q.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra6O[".S128_S129.1999q4:"]
 
 # Calculate and fill S12R
 aall[F6O..S12R.S12R.LE._T.] = aall[F6O..S124.S124.LE._T.] + aall[F6O..S12O.S12O.LE._T.] + aall[F6O..S12Q.S12Q.LE._T.]
@@ -559,3 +539,6 @@ aall[F89..S12Q.S12Q.LE._T., usenames=TRUE, onlyna=TRUE] = ppIntra89[".S128_S129.
 
 # Calculate and fill S12R
 aall[F89..S12R.S12R.LE._T.] = aall[F89..S124.S124.LE._T.] + aall[F89..S12O.S12O.LE._T.] + aall[F89..S12Q.S12Q.LE._T.]
+
+# Save final rounded data
+saveRDS(aall, file.path(data_dir, 'aall5.rds'))
