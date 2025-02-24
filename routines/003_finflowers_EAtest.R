@@ -37,19 +37,20 @@ aall[F.AT...LE.FND.y2022q4]
 
 ### Rule 1: If total economy (S0) assets = 0, then all counterpart sectors should be 0
 # If assets for total economy are 0, set all corresponding counterpart sectors to 0
-aall[....LE._T. ][aall[...S0.LE._T.]==0, onlyna=TRUE] = 0
+
+aall[....._T. ][aall[...S0.._T.]==0, onlyna=TRUE] = 0
 # Diagnostic check: MFI data for Austria in 2023Q4
 aall[.AT.S12K..LE._T.2023q4 ]
 
 ### Rule 2: Deposits can only be liabilities of banks (S12K) or government (S13)
 # Set deposits (F2M) and currency (F21) to 0 for non-bank/non-govt sectors
-aall[F2M+F21...S1M+S11+S12O+S12Q+S124.LE._T.] = 0
+aall[F2M+F21...S1M+S11+S12O+S12Q+S124.._T.] = 0
 # Diagnostic check: German MFI deposits in 2023Q1
 aall[F2M.DE.S12K..LE._T.2023q1]
 
 ### Rule 3: Households and NPISH (S1M) cannot have certain liabilities
 # Set to 0: listed shares (F511), investment fund shares (F52), and non-life insurance provisions (F6O)
-aall[F511+F52+F6O...S1M.LE._T.] = 0
+aall[F511+F52+F6O...S1M.._T.] = 0
 # Diagnostic check: S1M liabilities for Austria, Germany, Italy in 2023Q4
 aall[.AT+DE+IT.S0.S1M.LE._T.2023q4]
 
@@ -64,7 +65,7 @@ aall[F52..S0.S1.LE._T.y2022q4]-rowSums(aall[F52..S0.S124+S12K.LE._T.y2022q4])
 # - Insurance corps and Pension Funds (S12Q)
 # - General government (S13)
 # - Households and NPISH (S1M)
-aall[F52...S11+S12O+S12Q+S13+S1M.LE._T.] = 0
+aall[F52...S11+S12O+S12Q+S13+S1M.._T.] = 0
 # Additional diagnostic checks
 test=aall[F52.AT...LE._T.2023q4 ]
 aall[F52.AT...LE._T.2023q4 ]
