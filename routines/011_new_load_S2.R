@@ -38,33 +38,32 @@ saveRDS(laiip,file='data/iip6_assets.rds')
 saveRDS(lliip,file='data/iip6_liabilities.rds')
 
 
+##loading of ESTAT bop quarterly data / [bop_iip6_q] 
+# https://db.nomics.world/Eurostat/bop_c6_q
 
-##########testnotworkingyet#############
-#Create list to store all cross border exposure 
-print('loading of cross border assets')
+##quartlery assets 
+#aa=mds("Estat/bop_c6_q/Q.MIO_EUR...S1.ASS.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+print('loading of cross border assets transaction')
+taa1=mds("Estat/bop_c6_q/Q.MIO_EUR..S121+S122.S1.ASS.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+taa2=mds("Estat/bop_c6_q/Q.MIO_EUR..S123+S12M.S1.ASS.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+taa3=mds("Estat/bop_c6_q/Q.MIO_EUR..S12T+S1P.S1.ASS.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+taa4=mds("Estat/bop_c6_q/Q.MIO_EUR..S1V.S1.ASS.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
 
-laiip=list()
-laiip$aa1=mds("Estat/bop_iip6_q/Q.MIO_EUR..S1M+S11.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa2=mds("Estat/bop_iip6_q/Q.MIO_EUR..S121+S12T+S12K.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa3=mds("Estat/bop_iip6_q/Q.MIO_EUR..S13.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa4=mds("Estat/bop_iip6_q/Q.MIO_EUR..S124.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa5=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12O.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa6=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12Q.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-laiip$aa7=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12M.S1.A_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+temptaa=merge(taa1,taa2)
+##technical bug in merge, therefore 'x' used - no impact on the data or sectors (13/01/25)
+labop=merge(temptaa, taa3, taa4, along='sector10',newcodes=c('S12T','S1P','S1V'))
 
-print('loading of cross borderliabilities')
-lliip=list()
-lliip$ll1=mds("Estat/bop_iip6_q/Q.MIO_EUR..S121+S12T.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll2=mds("Estat/bop_iip6_q/Q.MIO_EUR..S11.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll3=mds("Estat/bop_iip6_q/Q.MIO_EUR..S1M.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll4=mds("Estat/bop_iip6_q/Q.MIO_EUR..S13.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll5=mds("Estat/bop_iip6_q/Q.MIO_EUR..S124.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll6=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12O.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll7=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12Q.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll8=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12M.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
-lliip$ll9=mds("Estat/bop_iip6_q/Q.MIO_EUR..S12K.S1.L_LE.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+##quarterly liabilities 
+print('loading of cross border liabilities transactions')
+tll1=mds("Estat/bop_c6_q/Q.MIO_EUR..S121+S122.S1.LIAB.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+tll2=mds("Estat/bop_c6_q/Q.MIO_EUR..S123+S12M.S1.LIAB.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+tll3=mds("Estat/bop_c6_q/Q.MIO_EUR..S12T+S1P.S1.LIAB.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+tll4=mds("Estat/bop_c6_q/Q.MIO_EUR..S1V.S1.LIAB.WRL_REST.BE+BG+CZ+DK+DE+EE+IE+EL+ES+FR+HR+IT+CY+LV+LT+LU+HU+MT+NL+AT+PL+PT+RO+SI+SK+FI+SE")
+
+temptll=merge(tll1,tll2)
+llbop=merge(temptll,tll3,tll4, along='sector10',newcodes=c('S12T','S1P','S1V'))
 
 # Save all data
-saveRDS(laiip,file='data/iip6_assets.rds')
-saveRDS(lliip,file='data/iip6_liabilities.rds')
+saveRDS(labop,file='data/bop6_assets.rds')
+saveRDS(llbop,file='data/bop6_liabilities.rds')
 
