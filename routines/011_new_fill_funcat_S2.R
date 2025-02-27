@@ -49,7 +49,7 @@ gc()
 # Initialize the new elements with NA
 aall[....._F.] <- NA
 aall[....._O.] <- NA
-aall[....._T.] <- NA
+aall[....._P.] <- NA
 aall[....._R.] <- NA
 
 gc()
