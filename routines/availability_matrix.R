@@ -1,7 +1,10 @@
 library(MDecfin)
+###new
+aall=readRDS(file.path(data_dir,'aall6.rds'))
+setkey(aall, NULL)
 
 # Define reference sectors to analyze
-ref_sectors <- c("S12K", "S121", "S12T", "S1M", "S2", "S11", "S13")
+ref_sectors <- c("S12K", "S121", "S12T", "S1M", "S2", "S11", "S13", "S12R")
 
 # Define counterpart sectors (columns)
 counterpart_sectors <- c("S121", "S12T", "S124", "S12O", "S12Q", "S13", "S1M", "S11", "S2", "S0", "S1", "S12K", "S12R")
@@ -47,5 +50,5 @@ for(sector in ref_sectors) {
   cat("\n", paste(rep("-", 80), collapse=""), "\n")
 }
 
-saveRDS(aall, file.path('X:/Finflows/zeugner/data/aall_filled.rds'))
+saveRDS(aall, file.path('H:/R/finflowbackup/data/aall_filled.rds'))
 

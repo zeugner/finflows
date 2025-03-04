@@ -49,7 +49,7 @@ gc()
 # Initialize the new elements with NA
 aall[....._F.] <- NA
 aall[....._O.] <- NA
-aall[....._T.] <- NA
+aall[....._P.] <- NA
 aall[....._R.] <- NA
 
 gc()
@@ -559,5 +559,15 @@ aall[..S1.S2.._R., usenames=TRUE, onlyna=TRUE] = zerofiller(aall[..S121.S2.._R.]
 aall[..S1.S2.._T., usenames=TRUE, onlyna=TRUE] = zerofiller(aall[..S1.S2.._D.]) +zerofiller(aall[..S1.S2.._P.]) +zerofiller(aall[..S1.S2.._O.]) +zerofiller(aall[..S1.S2.._F.])++zerofiller(aall[..S1.S2.._R.])
 aall[...S2.._T., usenames=TRUE, onlyna=TRUE] = zerofiller(aall[...S2.._D.]) +zerofiller(aall[...S2.._P.]) +zerofiller(aall[...S2.._O.]) +zerofiller(aall[...S2.._F.])
 aall[..S2..._T., usenames=TRUE, onlyna=TRUE] = zerofiller(aall[..S2..._D.]) +zerofiller(aall[..S2..._P.]) +zerofiller(aall[..S2..._O.]) +zerofiller(aall[..S2..._F.]) 
+aall[F...S2.._T.] <- NA
+aall[F..S2..._T.] <- NA
+aall[F...S2.._T., usenames=TRUE, onlyna=TRUE]=zerofiller(aall[F2M...S2.LE._T.])+zerofiller(aall[F21...S2.LE._T.])+zerofiller(aall[F3...S2.LE._T.])+zerofiller(aall[F4...S2.LE._T.])+zerofiller(aall[F511...S2.LE._T.])+zerofiller(aall[F51M...S2.LE._T.])+zerofiller(aall[F52...S2.LE._T.])+zerofiller(aall[F6...S2.LE._T.])+zerofiller(aall[F7...S2.LE._T.])+zerofiller(aall[F81...S2.LE._T.])+zerofiller(aall[F89...S2.LE._T.])
+aall[F..S2..._T., usenames=TRUE, onlyna=TRUE]=zerofiller(aall[F2M..S2..LE._T.])+zerofiller(aall[F21..S2..LE._T.])+zerofiller(aall[F3..S2..LE._T.])+zerofiller(aall[F4..S2..LE._T.])+zerofiller(aall[F511..S2..LE._T.])+zerofiller(aall[F51M..S2..LE._T.])+zerofiller(aall[F52..S2..LE._T.])+zerofiller(aall[F6..S2..LE._T.])+zerofiller(aall[F7..S2..LE._T.])+zerofiller(aall[F81..S2..LE._T.])+zerofiller(aall[F89..S2..LE._T.])
+
+
+##calculate S1 as a residual after having filled S2 
+#stocks and flows
+aall[...S1.._T., usenames=TRUE, onlyna=TRUE]=aall[...S0.._T.]-aall[...S2.._T.]
+aall[..S1..._T., usenames=TRUE, onlyna=TRUE]=aall[..S0..._T.]-aall[..S2..._T.]
 
 saveRDS(aall,file='data/aall7_funcat.rds')
