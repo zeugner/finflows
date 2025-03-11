@@ -1,5 +1,11 @@
 library(MDecfin)
 
+aa5 = readRDS("data/aa5.rds")
+aa511 = aa5$aa511[....]
+aa51M = aa5$aa51M[....]
+aa511t = aa5$aa511t[....]
+aa51Mt = aa5$aa51Mt[....]
+
 names(dimnames(aa511))[[2]] = 'REF_AREA'
 names(dimnames(aa511))[[3]] = 'REF_SECTOR'
 
@@ -18,6 +24,10 @@ zerofiller=function(x, fillscalar=0){
   temp[onlyna=TRUE]=fillscalar
   temp
 }
+
+aall=readRDS(file.path(data_dir,'aall4.rds'))
+setkey(aall, NULL)
+
 
 #check
 aall[F511.AT...LE._T.2022q4]
@@ -207,3 +217,5 @@ aall[F51....._T., usenames=TRUE, onlyna=TRUE] = zerofiller(aall["F51M....._T."])
 
 
 gc()
+
+saveRDS(aall, file.path(data_dir, 'aall4.rds'))
