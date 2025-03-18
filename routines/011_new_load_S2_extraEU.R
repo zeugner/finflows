@@ -70,7 +70,3 @@ exeullbop=merge(exeutemptll,exeutll3,exeutll4, along='sector10',newcodes=c('S12T
 # Save all data
 saveRDS(exeulabop,file='data/bop6_assets_exeu.rds')
 saveRDS(exeullbop,file='data/bop6_liabilities_exeu.rds')
-
-
-#### EXTRA EA #### 
-
