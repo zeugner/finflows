@@ -1,6 +1,4 @@
 
-#setwd('E:/eutemp/')
-library(MDecfin)
 #### all of this is for sector S12T
 
 absirawq=mds('ECB/BSI/Q..N.A.A41+A5A+A50.A.1+4...Z01.E',labels=TRUE, ccode = NULL) #separating Q and M because of widely different elements that are filled
