@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Loans (F4) Exposures Between Sectors - Italy - 2014q4</title>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/sankey.js"></script>
+  <script src="https://code.highcharts.com/modules/dependency-wheel.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+  <style>
+    #container {
+      min-width: 800px;
+      max-width: 1000px;
+      height: 700px;
+      margin: 1em auto;
+    }
+    .highcharts-figure {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <figure class="highcharts-figure">
+    <div id="container"></div>
+    <h2 style="text-align: center">Loans (F4) Exposures Between Sectors - Italy</h2>
+    <h3 style="text-align: center">2014q4 Stock Positions</h3>
+  </figure>
+
+  <script>
+    // HARDCODED COLOR MAP - This ensures the colors are always the same
+    
+  const colorMap = {
+    "Non-Fin Corp": "#4285F4",  // Blue
+    "Inv Funds": "#EA4335",     // Red
+    "Banks": "#FBBC05",         // Yellow
+    "Other Fin": "#34A853",     // Green
+    "Ins & Pens": "#8E24AA",    // Purple
+    "Government": "#F4511E",    // Orange
+    "HH & NPISH": "#00ACC1",    // Cyan
+    "RoW": "#6D4C41"            // Brown
+  };
+
+    // Data for the chart
+    const data = [
+    { "from": "Non-Fin Corp", "to": "Non-Fin Corp", "weight": 48985 },
+    { "from": "Banks", "to": "Non-Fin Corp", "weight": 807641 },
+    { "from": "Other Fin", "to": "Non-Fin Corp", "weight": 113831 },
+    { "from": "Government", "to": "Non-Fin Corp", "weight": 32855 },
+    { "from": "HH & NPISH", "to": "Non-Fin Corp", "weight": 12937 },
+    { "from": "RoW", "to": "Non-Fin Corp", "weight": 118097 },
+    { "from": "Banks", "to": "Banks", "weight": 37328 },
+    { "from": "Other Fin", "to": "Banks", "weight": 66 },
+    { "from": "Government", "to": "Banks", "weight": 957 },
+    { "from": "Banks", "to": "Other Fin", "weight": 240597 },
+    { "from": "Other Fin", "to": "Other Fin", "weight": 4664 },
+    { "from": "RoW", "to": "Other Fin", "weight": 98933 },
+    { "from": "Banks", "to": "Ins & Pens", "weight": 4189 },
+    { "from": "Other Fin", "to": "Ins & Pens", "weight": 12 },
+    { "from": "Government", "to": "Ins & Pens", "weight": 366 },
+    { "from": "RoW", "to": "Ins & Pens", "weight": 5997 },
+    { "from": "Non-Fin Corp", "to": "Government", "weight": 2375 },
+    { "from": "Banks", "to": "Government", "weight": 123939 },
+    { "from": "Other Fin", "to": "Government", "weight": 10815 },
+    { "from": "Government", "to": "Government", "weight": 44205 },
+    { "from": "RoW", "to": "Government", "weight": 47377 },
+    { "from": "Banks", "to": "HH & NPISH", "weight": 596662 },
+    { "from": "Other Fin", "to": "HH & NPISH", "weight": 85274 },
+    { "from": "Ins & Pens", "to": "HH & NPISH", "weight": 1700 },
+    { "from": "Government", "to": "HH & NPISH", "weight": 8865 },
+    { "from": "Non-Fin Corp", "to": "RoW", "weight": 22248 },
+    { "from": "Banks", "to": "RoW", "weight": 86488 },
+    { "from": "Other Fin", "to": "RoW", "weight": 9624 },
+    { "from": "Ins & Pens", "to": "RoW", "weight": 1000 },
+    { "from": "Government", "to": "RoW", "weight": 51499 }
+    ];
+
+    // Build up the node list with consistent colors
+    const allNodes = [];
+    const addedNodes = {};
+    
+    // First collect all unique nodes
+    data.forEach(function(link) {
+      if (!addedNodes[link.from]) {
+        addedNodes[link.from] = true;
+        allNodes.push({
+          id: link.from,
+          color: colorMap[link.from] || "#CCCCCC" // Use default gray if no color found
+        });
+      }
+      if (!addedNodes[link.to]) {
+        addedNodes[link.to] = true;
+        allNodes.push({
+          id: link.to,
+          color: colorMap[link.to] || "#CCCCCC" // Use default gray if no color found
+        });
+      }
+    });
+
+    // Create the chart with preset nodes and colors
+    Highcharts.chart("container", {
+      chart: {
+        type: "dependencywheel"
+      },
+      title: {
+        text: ""
+      },
+      series: [{
+        keys: ["from", "to", "weight"],
+        data: data,
+        name: "Loan Value",
+        nodes: allNodes,
+        nodeWidth: 20
+      }],
+      tooltip: {
+        formatter: function() {
+          if (this.point.from && this.point.to && this.point.weight) {
+            return "<b>" + this.point.from + "</b> → <b>" + 
+                  this.point.to + "</b>: " + 
+                  Highcharts.numberFormat(this.point.weight, 0) + " million";
+          }
+          return false;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+
