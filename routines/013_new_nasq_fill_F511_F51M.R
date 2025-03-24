@@ -1,11 +1,3 @@
-#function to fill nas
-zerofiller=function(x, fillscalar=0){
-  temp=copy(x)
-  temp[onlyna=TRUE]=fillscalar
-  temp
-}
-
-
 
 aa5 = readRDS("data/aa5.rds")
 aa511 = aa5$aa511[....]
