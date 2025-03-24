@@ -1,4 +1,4 @@
-library(MDecfin)
+
 
 # Load both consolidated and unconsolidated data
 lat = readRDS("data/nasa_unconsolidated_TRANS.rds")
