@@ -1,4 +1,3 @@
-library(MDecfin)
 
 # Load unconsolidated data
 la = readRDS("data/nasa_unconsolidated.rds")
