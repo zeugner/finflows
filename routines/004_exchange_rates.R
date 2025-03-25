@@ -1,4 +1,4 @@
-library(MDecfin)
+
 library(tidyr)
 
 # Set data directory
@@ -47,7 +47,7 @@ saveRDS(xrates_FLO, file.path(data_dir, 'xrates_flo.rds'))
 
 # Read supplementary exchange rate data from IMF and ECB
 # This data is used to fill gaps in Eurostat-derived exchange rates
-fxpppQ <- read.csv("X:/FinFlows/zeugner/data/fxpppQ.csv")
+fxpppQ <- read.csv(file.path(data_dir,'fxpppQ.csv'))
 
 # Transform data from wide to long format for easier processing
 # Each row will contain: country, indicator, time, and exchange rate
@@ -122,8 +122,8 @@ fxppXRA_subset <- fxppXRA[common_countries_F, common_times_F]    # Subset for fl
 
 # Fill NA values in the original exchange rate arrays with values from supplementary data
 # Using zerofiller function to replace any remaining NAs with zeros
-xrates_STO[., usenames=TRUE, onlyna=TRUE] = zerofiller(fxppXRE_subset[.])  # Fill stock rates
-xrates_FLO[., usenames=TRUE, onlyna=TRUE] = zerofiller(fxppXRA_subset[.])  # Fill flow rates
+xrates_STO[., usenames=TRUE, onlyna=TRUE] = fxppXRE_subset[.]  # Fill stock rates
+xrates_FLO[., usenames=TRUE, onlyna=TRUE] = fxppXRA_subset[.]  # Fill flow rates
 
 # Verification checks
 xrates_STO[BG.]  # Check Bulgaria's stock rates
