@@ -41,3 +41,5 @@ message('12 done. saving...'); save.image('C:/Users/Public/finflowsbuffer/loadin
 source(script_dir %&% '/013_loadiip.R'); gc()
 message('13 done. saving...'); save.image('C:/Users/Public/finflowsbuffer/loading_outcome.rda')
 
+source(script_dir %&% '/014_load_counterpart_info.R'); gc()
+message('14 done. saving...'); save.image('C:/Users/Public/finflowsbuffer/loading_outcome.rda')
