@@ -5,9 +5,13 @@
 
 ### this takes very long!!!\\\
 
-library(MDecfin)
+library(MDstats); library(MD3)
+`%&%` = function (..., collapse = NULL, recycle0 = FALSE)  .Internal(paste0(list(...), collapse, recycle0))
+
 # Set data directory
-data_dir <- if (exists("data_dir")) data_dir else "data"
+if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
+
+if (!dir.exists('C:/Users/Public/finflowsbuffer')) { dir.create('C:/Users/Public/finflowsbuffer')}
 
 # Load and process data
 xss='S1+S11+S1M+S13+S12K+S12T+S121+S124+S12O+S12Q'
@@ -22,7 +26,7 @@ for (ii in strsplit(xii,split='\\+')[[1]]) {
   message(ii); cat(format(Sys.time(),'%H:%M:%S') %&% ": " %&% ii %&% '\n', 
                    file = file.path(data_dir, 'finflows.log'), append = TRUE)
   lll[['L']][[ii]]=mds('ECB/QSA/Q.N..W0+W2.'%&% xss %&% '.S1.N.L.LE+F.' %&% ii %&% '.._Z.XDC._T.S.V.N.')
-  saveRDS(lll, file.path(data_dir, 'fflist.rds'))
+  saveRDS(lll, file.path('C:/Users/Public/finflowsbuffer', 'fflist.rds'))
 }
 
 gc()
@@ -31,7 +35,7 @@ for (ii in strsplit(xii,split='\\+')[[1]][-(1:5)]) {
   message(ii); cat(format(Sys.time(),'%H:%M:%S') %&% ": A " %&% ii %&% '\n', 
                    file = file.path(data_dir, 'finflows.log'), append = TRUE)
   lll[['A']][[ii]]=mds('ECB/QSA/Q.N..W0+W2.'%&% xss %&% '.' %&% xss %&% '.N.A.LE+F.' %&% ii %&% '.._Z.XDC._T.S.V.N.')
-  saveRDS(lll, file.path(data_dir, 'fflist.rds'))
+  saveRDS(lll, file.path('C:/Users/Public/finflowsbuffer', 'fflist.rds'))
 }
 
 # Save code descriptions
@@ -43,4 +47,4 @@ codedescriptions$STO = helpmds('ECB/QSA',dim='STO',verbose = FALSE)
 codedescriptions$CUST_BREAKDOWN = helpmds('ECB/QSA',dim='CUST_BREAKDOWN',verbose = FALSE)
 
 saveRDS(codedescriptions, file.path(data_dir, 'codedescriptions.rds'))
-
+saveRDS(lll, file.path(data_dir, 'fflist.rds'))
