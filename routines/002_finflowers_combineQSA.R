@@ -1,4 +1,4 @@
-library(MDecfin)
+
 # Set data directory
 data_dir <- if (exists("data_dir")) data_dir else "data"
 
@@ -169,6 +169,4 @@ aall[..S12R....] = aall[..S124....]+aall[..S12O....]+aall[..S12Q....]
 aall[...S12R...] = aall[...S124...]+aall[...S12O...]+aall[...S12Q...]
 #aall[F511.DK...LE._T.2023q4]
 # Save 
-saveRDS(aall, file.path(data_dir, 'aall1.rds'))
-
-
+saveRDS(aall, file.path(data_dir, 'aall_1.rds'))
