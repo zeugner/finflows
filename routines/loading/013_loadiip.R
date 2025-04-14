@@ -5,7 +5,7 @@ countries=c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV
 sectors=c("S1","S121","S123","S12M","S12R","S12T","S13","S1P","S1V","S1Z")
 
 allsecload=function(cc,cpsto='S1.ASS.',dataflow='bop_c6_q') {
-  ll=paste0("Estat/",dataflow,"/Q.MIO_EUR..",sectors,".",cpsto,"WRL_REST.",cc)
+  ll=paste0("Estat/",dataflow,"/Q.MIO_EUR..",sectors,".",cpsto,".",cc)
   message(Sys.timo() , ': loading ',cc,'...')
   lapply(as.list(ll), \(x) try(mds(x,drop=FALSE),silent=TRUE))
 }
