@@ -1,6 +1,7 @@
 library(MDstats); library(MD3)
 
-#### bilateral exposure flows ####
+#### bilateral exposure transactions #### 
+
 countries=c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE")
 sectors=c("S1","S121","S123","S12M","S12R","S12T","S13","S1P","S1V","S1Z")
 
@@ -36,7 +37,9 @@ save.image('C:/USers/Public/finflowsbuffer/boploadedstuff.rda')
 
 iamd3=merge(aba2,lba2,along='STO',newcodes=c('ASS','LIAB'))
 
-saveRDS(iamd3,file='data/bop_cpssmall.rds')
+saveRDS(iamd3,file='data/bop_cps.rds')
+
+gc()
 
 #### bilateral exposure stocks #### 
 countries=c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE")
