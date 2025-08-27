@@ -1,7 +1,4 @@
-#setwd("V:/FinFlows/githubrepo/trialarea")
-
 library(MDstats); library(MD3)
-`%&%` = function (..., collapse = NULL, recycle0 = FALSE)  .Internal(paste0(list(...), collapse, recycle0))
 
 # Set data directory
 #data_dir= file.path(getwd(),'data')
@@ -41,12 +38,10 @@ aall[..S2.S12R.F._D., usenames=FALSE, onlyna=TRUE] = aall[..S0.S124.F._D.]+aall[
 
 ###############################################################
 # Add the new dimension COUNTERPART_AREA with W0, W1, W2 codes
-saveRDS(aall,file='V:/FinFlows/githubrepo/trialarea/data/aall_iipfiller_intermediate.rds')
-#aall=readRDS(file='V:/FinFlows/githubrepo/trialarea/data/aall_iipfiller_intermediate.rds')
+saveRDS(aall,file=file.path(data_dir,'aall_iipfiller_intermediate,rds'))
 aallsmall = copy(aall)
 #aallsmall = copy(aall[F3+F4+F52.AT+IT+BE.....y2021q1:y]); rm(aall)
 gc()
-#saveRDS(aallsmall,file='V:/FinFlows/githubrepo/trialarea/data/aallsmall.rds')
 aall=add.dim(aallsmall, .dimname = 'COUNTERPART_AREA', .dimcodes = c('W2', 'W0', 'WRL_REST'), .fillall = FALSE)
 aall <- aperm(aall, c(2:length(dim(aall)),1))
 gc()
@@ -170,8 +165,6 @@ ll[F511.AT.S1.S2+S1+S0.LE._T.2022q4.]
 #should exist:
 ll[F511.AT.S1.S1.LE._T.2022q4.]
 
-
-
 #switching structure of CP AREA and CP Sector for liabilities 
 ll=aperm(copy(ll), c(1,8,4,3,5,6,7,2))
 dim(ll)
@@ -212,11 +205,6 @@ gc()
 str(ll)
 
 ea4liab=eatemp['EA20+EA19+EA18..W1+W0...L...'  ]
-# names(dimnames(ea4liab))[1] = 'COUNTERPART_AREA' 
-# names(dimnames(ea4liab))[3]='REF_AREA'
-# names(dimnames(ea4liab))[4] = 'COUNTERPART_SECTOR' 
-# names(dimnames(ea4liab))[5]='REF_SECTOR'
-##eventuell cp und ref area anpassen nach datencheck #erza
 str(ea4liab)
 
 lookup=c(F2M='F2M.T.',F21='F21.T.', F3='F3.T.',F3S='F3.S.',F3L='F3.L.',F4='F4.T.', F4S='F4.S.',F4='F4.L.',F511='F511._Z.',
@@ -235,13 +223,120 @@ for (i in names(lookup)) {
 gc()
 ll[.WRL_REST.S1..LE._T.2022q4.EA20]
 
-##this step can be deleted - just for the wip phase
 saveRDS(aa,file='data/aa_iip_cps_temp.rds')
 saveRDS(ll,file='data/ll_iip_cps_temp.rds')
 
 
 #aa=readRDS(file.path(data_dir,'aa_iip_cps_temp.rds')); gc()
 #ll=readRDS(file.path(data_dir,'ll_iip_cps_temp.rds')); gc()
+##############################################################
+########filling of quarterly financial bop data###############
+##############################################################
+
+bopeu=readRDS(file.path(data_dir,'bop_cps_euea.rds'))
+dimnames(bopeu)
+names(dimnames(bopeu))[2:4] = c( 'REF_AREA' ,'COUNTERPART_AREA','REF_SECTOR')
+dimnames(bopeu)[['REF_AREA']] = ccode(dimnames(bopeu)[['REF_AREA']],2,'iso2m'); gc()
+dimnames(bopeu)[['COUNTERPART_AREA']] = ccode(dimnames(bopeu)[['COUNTERPART_AREA']],2,'iso2m'); gc()
+#dimnames(bopeu)$REF_SECTOR[dimnames(bopeu)$REF_SECTOR=='S1V'] ='S11'
+
+assetfiller = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+                                           "EXT_EU28",  "BG", "BR", "CA", "CH", "NA", 
+                                           "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+                                           "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US"),
+                       sss=c("S1", "S121", "S122", "S123", "S12K", "S12M", "S12T", "S13", "S1P", "S11", "S1V", "S124", "S12Q", "S1M")) {
+  aaF = bopeu[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
+  for (cp in cparea) {
+    message(cp)
+    aa['F',,sss,'S1',le,'_T',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()  #stefan to check
+    aa['F',,sss,'S1',le,'_P',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
+    aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
+    aa['F',,sss,'S1',le,'_D',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
+    aa['F',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
+    aa['F',,sss,'S1',le,'_F',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
+    aa['F2M',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3", ]); gc()
+    aa['F4',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4", ]); gc()
+    aa['F4',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4", ]); gc()
+    aa['F52',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52", ]); gc()
+    aa['F511',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
+    aa['F511',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
+    #aa['F51',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51", ]); gc()
+    aa['F51M',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51M", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()
+    aa['F51M',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
+    aa['F6',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6", ]); gc()
+    aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
+    aa['F81',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
+    aa['F89',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+  }
+}
+
+
+assetfiller(bopeu["ASS....."],'F',c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+                                    "EXT_EU28",  "BG", "BR", "CA", "CH", "NA", 
+                                    "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+                                    "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US"))
+aa[.EA20.S1.S1.F..2022q4.EXT_EA20]
+
+saveRDS(aa,file='data/aa_bop_cps_eu_temp.rds')
+#aa=readRDS(file.path(data_dir,'aa_bop_cps_temp.rds')); gc()
+
+#########################
+
+liabfiller = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+                                          "EXT_EU28",  "BG", "BR", "CA", "CH", "NA", 
+                                          "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+                                          "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US"),
+                      sss=c("S1", "S121", "S122", "S123", "S12K", "S12M", "S12T", "S13", "S1P", "S11", "S1V", "S124", "S12Q", "S1M")) {
+  llF = bopeu[dimnames(ll)$REF_AREA,,sss,,time(ll)]; gc()
+  # names(dimnames(llF))[names(dimnames(llF))=="REF_SECTOR"] <- 'COUNTERPART_SECTOR'
+  # names(dimnames(llF))[names(dimnames(llF))=="REF_AREA"] <- 'COUNTERPART_AREA'
+  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_SECTOR"] <- 'REF_SECTOR'
+  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_AREA"] <- 'REF_AREA'
+  for (cp in cparea) {
+    message(cp)
+    ll['F',cp,'S1',sss,le,'_T',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA", ]); gc()
+    ll['F',cp,'S1',sss,le,'_O',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,sss,"FA__O__F", ]); gc()
+    ll['F',cp,'S1',sss,le,'_P',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F", ]); gc()
+    ll['F',cp,'S1',sss,le,'_D',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F", ]); gc()
+    ll['F',cp,'S1',sss,le,'_R',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__R__F", ]); gc()
+    ll['F',cp,'S1',sss,le,'_F',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__F__F7", ]); gc()
+    ll['F2M',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F2", ]); gc()
+    ll['F3',cp,'S1',sss,le,'_D',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F3", ]); gc()
+    ll['F3',cp,'S1',sss,le,'_P',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F3", ]); gc()
+    ll['F4',cp,'S1',sss,le,'_D',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F4", ]); gc()
+    ll['F4',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F4", ]); gc()
+    ll['F52',cp,'S1',sss,le,'_P',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F52", ]); gc()
+    ll['F511',cp,'S1',sss,le,'_D',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F511", ]); gc()
+    ll['F511',cp,'S1',sss,le,'_P',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F511", ]); gc()
+    #aall['F51',cp,'S1',sss,le,'_P',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F51", ]); gc()
+    ll['F51M',cp,'S1',sss,le,'_D',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F51M", ]); gc()
+    ll['F51M',cp,'S1',sss,le,'_P',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,".FA__P__F512", ]); gc()
+    ll['F51M',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F519", ]); gc()
+    ll['F6',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F6", ]); gc()
+    ll['F81',cp,'S1',sss,le,'_D',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F81", ]); gc()
+    ll['F81',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F81", ]); gc()
+    ll['F89',cp,'S1',sss,le,'_O',,, usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F89", ]); gc()
+  }
+}
+
+
+liabfiller(bopeu["LIAB....."],'F',c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+                                  "EXT_EU28",  "BG", "BR", "CA", "CH", "NA", 
+                                  "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+                                  "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US"))
+
+gc()
+
+
+ll[.EXT_EA20.S1.S1.F..2022q4.EA20]
+
+
+saveRDS(ll,file='data/ll_bop_cps_eu_temp.rds')
 
 ##############################################################
 ########filling of quarterly financial bop data###############
@@ -252,9 +347,7 @@ dimnames(bop)
 names(dimnames(bop))[2:4] = c( 'REF_AREA' ,'COUNTERPART_AREA','REF_SECTOR')
 dimnames(bop)[['REF_AREA']] = ccode(dimnames(bop)[['REF_AREA']],2,'iso2m'); gc()
 dimnames(bop)[['COUNTERPART_AREA']] = ccode(dimnames(bop)[['COUNTERPART_AREA']],2,'iso2m'); gc()
-#dimnames(bop)$REF_SECTOR[dimnames(bop)$REF_SECTOR=='S12M'] ='S12R'
-#S1V is total of S11+S1M but assumed to be S11 in this gap filler
-dimnames(bop)$REF_SECTOR[dimnames(bop)$REF_SECTOR=='S1V'] ='S11'
+#dimnames(bop)$REF_SECTOR[dimnames(bop)$REF_SECTOR=='S1V'] ='S11'
 #!?!? to be reviewed later
 assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
                                            "EXT_EU28", "AT", "BG", "BR", "CA", "CH", "CN", "CY",
@@ -262,7 +355,7 @@ assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
                                            "FR", "HK", "HR", "HU", "IE", "IN", "IT", "JP",
                                            "LT", "LU", "LV", "MT", "NL", "OFFSHO", "PL", "PT",
                                            "RO", "RU", "SE", "SI", "SK", "GB", "US", "BE"),
-                       sss=c("S1", "S121", "S123", "S12M", "S12T", "S13", "S1P", "S11", "S12R")) {
+                       sss=c("S1", "S121", "S123", "S12T", "S13", "S1P", "S1V")) {
   #aaF = bop["A_F....FA__D__F+FA__P__F+FA__O__F+FA__R__F+FA__F__F7."]; gc()
   aaF = bop[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
@@ -272,6 +365,8 @@ assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
     aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
     aa['F',,sss,'S1',le,'_D',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
     aa['F',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
     aa['F',,sss,'S1',le,'_F',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
     aa['F2M',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
     aa['F3',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
@@ -283,7 +378,7 @@ assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
     aa['F511',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
     #aa['F51',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51", ]); gc()
     aa['F51M',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F512", ]+aaF[,cp,,"FA__D__F519", ]); gc()
-    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,".FA__P__F512", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()
     aa['F51M',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
     aa['F6',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6", ]); gc()
     aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
@@ -314,10 +409,7 @@ liabfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20"
                                           "RO", "RU", "SE", "SI", "SK", "GB", "US", "BE"),
                       sss=c("S1", "S121", "S123", "S12M", "S12T", "S13", "S1P", "S11", "S12R")) {
   llF = bop[dimnames(ll)$REF_AREA,,sss,,time(ll)]; gc()
-  # names(dimnames(llF))[names(dimnames(llF))=="REF_SECTOR"] <- 'COUNTERPART_SECTOR'
-  # names(dimnames(llF))[names(dimnames(llF))=="REF_AREA"] <- 'COUNTERPART_AREA'
-  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_SECTOR"] <- 'REF_SECTOR'
-  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_AREA"] <- 'REF_AREA'
+ 
   for (cp in cparea) {
     message(cp)
     ll['F',cp,'S1',sss,le,'_T',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA", ]); gc()
@@ -373,24 +465,28 @@ names(dimnames(iip))[2:4] = c( 'REF_AREA' ,'COUNTERPART_AREA','REF_SECTOR')
 dimnames(iip)[['REF_AREA']] = ccode(dimnames(iip)[['REF_AREA']],2,'iso2m'); gc()
 dimnames(iip)[['COUNTERPART_AREA']] = ccode(dimnames(iip)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 dimnames(iip)$REF_SECTOR[dimnames(iip)$REF_SECTOR=='S12M'] ='S12R'
-#!?!? to be reviewed later
+
 assetfiller = function(iip,le='LE',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20", "WRL_REST", "AT", "BG", "BR", "CA", "CH", "CN", "CY", "CZ",
                                             "DE", "DK", "EE", "GR", "ES", "EU27", "EU28", "EUI", "EXT_EU27", "EXT_EU28", "FI", "FR",
                                             "G20_X_EU27", "HK", "HR", "HU", "IE", "IMF", "IN", "IT", "JP", "LT", "LU", "LV", "MT", "NL",
                                             "OFFSHO", "PL", "PT", "RO", "RU", "SE", "SI", "SK", "GB", "US", "AR", "AU", "ID", "KR", "MX", "NO",
-                                            "SA", "TR", "ZA", "BE"),sss=c('S121','S12T','S13','S11','S1M','S124','S12O','S12Q','S1')) {
-  #aaF = iip["A_LE....FA__D__F+FA__P__F+FA__O__F+FA__R__F+FA__F__F7."]; gc()
+                                            "SA", "TR", "ZA", "BE"),
+                       sss=c('S121','S12T','S12K','S13','S11','S1M','S124','S12O','S12Q','S1')) {
+
   aaF = iip[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
     message(cp)
+    aa['F',,sss,'S1',le,'_T',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()
     aa['F',,sss,'S1',le,'_P',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
     aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
     aa['F',,sss,'S1',le,'_D',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
     aa['F',,sss,'S1',le,'_R',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
     aa['F',,sss,'S1',le,'_F',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
     aa['F2M',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
     aa['F3',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
     aa['F3',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
     aa['F4',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4", ]); gc()
     aa['F4',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4", ]); gc()
     aa['F52',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52", ]); gc()
@@ -425,12 +521,9 @@ liabfiller = function(iip,le='LE',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
                                            "SA", "TR", "ZA", "BE"),sss=c('S121','S12T','S13','S11','S1M','S124','S12O','S12Q','S1')) {
   #aaF = iip["A_LE....FA__D__F+FA__P__F+FA__O__F+FA__R__F+FA__F__F7."]; gc()
   llF = iip[dimnames(ll)$REF_AREA,,sss,,time(ll)]; gc()
-  # names(dimnames(llF))[names(dimnames(llF))=="REF_SECTOR"] <- 'COUNTERPART_SECTOR'
-  # names(dimnames(llF))[names(dimnames(llF))=="REF_AREA"] <- 'COUNTERPART_AREA'
-  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_SECTOR"] <- 'REF_SECTOR'
-  # names(dimnames(llF))[names(dimnames(llF))=="COUNTERPART_AREA"] <- 'REF_AREA'
   for (cp in cparea) {
     message(cp)
+    ll['F',cp,'S1',sss,le,'_T',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA", ]); gc()
     ll['F',cp,'S1',sss,le,'_P',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__P__F", ]); gc()
     ll['F',cp,'S1',sss,le,'_O',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__O__F", ]); gc()
     ll['F',cp,'S1',sss,le,'_D',,,  usenames=TRUE, onlyna=TRUE] <<- as.array(llF[,cp,,"FA__D__F", ]); gc()
@@ -469,6 +562,100 @@ saveRDS(ll,file='data/ll_iip_cps_temp.rds')
 # aa=readRDS(file.path(data_dir,'aa_iip_cps_temp.rds')); gc()
 # ll=readRDS(file.path(data_dir,'ll_iip_cps_temp.rds')); gc()
 
+##############################################################
+########      filling EUI bop and iip data     ###############
+##############################################################
+bopeui=readRDS(file.path(data_dir,'bop_eui.rds'))
+iipeui=readRDS(file.path(data_dir,'iip_eui.rds'))
+dim(bopeui); dim(iipeui)
+str(bopeui); str(iipeui)
+frequency(iipeui)='Q'; gc()
+eui=merge(bopeui,iipeui,along='STO',newcodes=c('F','LE')); gc()
+dimnames(eui)
+names(dimnames(eui))[3:5] = c( 'INSTR' ,'REF_SECTOR','COUNTERPART_SECTOR')
+names(dimnames(eui))[7:8] = c( 'COUNTERPART_AREA', 'REF_AREA')
+dimnames(eui)[['REF_AREA']] = ccode(dimnames(eui)[['REF_AREA']],2,'iso2m'); gc()
+dimnames(eui)[['COUNTERPART_AREA']] = ccode(dimnames(eui)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
+dimnames(eui)$COUNTERPART_AREA[dimnames(eui)$COUNTERPART_AREA=='WORLD'] ='WRL_REST'
+dimnames(eui)$REF_SECTOR[dimnames(eui)$REF_SECTOR=='S12M'] ='S12R'
+eui=eui[".EUR......."];gc()
+
+#transform from EUR to MEUR 
+eui=unflag(eui)
+deui=as.data.table(eui,.simple=TRUE,na.rm=TRUE)
+deui[, obs_value := obs_value / 1e6]
+eui=as.md3(deui); rm(deui)
+
+gc()
+
+refa=dimnames(eui)[['REF_AREA']]
+for (i in refa) {
+aa['F',i , ,'S1' ,'F' ,'_T',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA',,,'ASS',,i,];
+aa['F',i , ,'S1' ,'LE' ,'_T',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA',,,'A_LE',,i,];
+aa['F',i , ,'S1' ,'F' ,'_D',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__D__F',,,'ASS',,i,];
+aa['F',i , ,'S1' ,'LE' ,'_D',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__D__F',,,'A_LE',,i,];
+aa['F',i , ,'S1' ,'F' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F',,,'ASS',,i,];
+aa['F',i , ,'S1' ,'LE' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F',,,'A_LE',,i,];
+aa['F2M',i , ,'S1' ,'F' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F2',,,'ASS',,i,];
+aa['F2M',i , ,'S1' ,'LE' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F2',,,'A_LE',,i,];
+aa['F4',i , ,'S1' ,'F' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F2',,,'ASS',,i,];
+aa['F4',i , ,'S1' ,'LE' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F4',,,'A_LE',,i,];
+aa['F51M',i , ,'S1' ,'F' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F519',,,'ASS',,i,];
+aa['F51M',i , ,'S1' ,'LE' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F519',,,'A_LE',,i,];
+aa['F89',i , ,'S1' ,'F' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F89',,,'ASS',,i,];
+aa['F89',i , ,'S1' ,'LE' ,'_O',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F89',,,'A_LE',,i,];
+aa['F',i , ,'S1' ,'F' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F',,,'ASS',,i,];
+aa['F',i , ,'S1' ,'LE' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F',,,'A_LE',,i,];
+aa['F3',i , ,'S1' ,'F' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3',,,'ASS',,i,];
+aa['F3',i , ,'S1' ,'LE' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3',,,'A_LE',,i,];
+aa['F3S',i , ,'S1' ,'F' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3__S',,,'ASS',,i,];
+aa['F3S',i , ,'S1' ,'LE' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3__S',,,'A_LE',,i,];
+aa['F3L',i , ,'S1' ,'F' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3__L',,,'ASS',,i,];
+aa['F3L',i , ,'S1' ,'LE' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3__L',,,'A_LE',,i,];
+aa['F51',i , ,'S1' ,'F' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F51',,,'ASS',,i,];
+aa['F51',i , ,'S1' ,'LE' ,'_P',, , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F51',,,'A_LE',,i,]
+  }
+
+aa[F.COMM.S1.S1.LE._T.2023Q4.] 
+
+refa=dimnames(eui)[['REF_AREA']]
+for (i in refa) {
+  ll['F', ,'S1', ,'F' ,'_T',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA',,,'LIAB',,i,];
+  ll['F', ,'S1', ,'LE' ,'_T',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA',,,'L_LE',,i,];
+  ll['F', ,'S1', ,'F' ,'_D',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__D__F',,,'LIAB',,i,];
+  ll['F', ,'S1', ,'LE' ,'_D',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__D__F',,,'L_LE',,i,];
+  ll['F', ,'S1', ,'F' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F',,,'LIAB',,i,];
+  ll['F', ,'S1', ,'LE' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F',,,'L_LE',,i,];
+  ll['F2M', ,'S1', ,'F' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F2',,,'LIAB',,i,];
+  ll['F2M', ,'S1', ,'LE' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F2',,,'L_LE',,i,];
+  ll['F4', ,'S1', ,'F' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F4',,,'LIAB',,i,];
+  ll['F4', ,'S1', ,'LE' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F4',,,'L_LE',,i,];
+  ll['F51M', ,'S1', ,'F' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F519',,,'LIAB',,i,];
+  ll['F51M', ,'S1', ,'LE' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F519',,,'L_LE',,i,];
+  ll['F89', ,'S1', ,'F' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__O__F89',,,'LIAB',,i,];
+  ll['F89', ,'S1', ,'LE' ,'_O',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__O__F89',,,'L_LE',,i,];
+  ll['F', ,'S1', ,'F' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F',,,'LIAB',,i,];
+  ll['F', ,'S1', ,'LE' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F',,,'L_LE',,i,];
+  ll['F3', ,'S1', ,'F' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3',,,'LIAB',,i,];
+  ll['F3', ,'S1', ,'LE' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3',,,'L_LE',,i,];
+  ll['F3S', ,'S1', ,'F' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3__S',,,'LIAB',,i,];
+  ll['F3S', ,'S1', ,'LE' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3__S',,,'L_LE',,i,];
+  ll['F3L', ,'S1', ,'F' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F3__L',,,'LIAB',,i,];
+  ll['F3L', ,'S1', ,'LE' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F3__L',,,'L_LE',,i,];
+  ll['F51', ,'S1', ,'F' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['F','FA__P__F51',,,'LIAB',,i,];
+  ll['F51', ,'S1', ,'LE' ,'_P',,i , usenames=TRUE, onlyna=TRUE] =eui['LE','FA__P__F51',,,'L_LE',,i,]
+}
+
+ll[F..S1.S1.LE._T.2023Q4.COMM] 
+
+gc()
+saveRDS(aa,file='data/aa_iip_cps_temp.rds')
+
+saveRDS(ll,file='data/ll_iip_cps_temp.rds')
+# 
+# aa=readRDS(file.path(data_dir,'aa_iip_cps_temp.rds')); gc()
+# ll=readRDS(file.path(data_dir,'ll_iip_cps_temp.rds')); gc()
+
 
 #####################################################
 #####################################################
@@ -477,6 +664,7 @@ saveRDS(ll,file='data/ll_iip_cps_temp.rds')
 #####################################################
 #####################################################
 
+#if the transformation into as.md3 does not work, open command prompt as admin and run: ipconfig /flushdns
 
 aa[....._X..]=NA;gc()
 daa=as.data.table(aa,.simple=TRUE); gc()
@@ -516,162 +704,4 @@ saveRDS(ll2,file='data/ll_iip_cps.rds')
 
 aa=aa2
 ll=ll2
-
-#####################################################
-#####################################################
-### APPROACH WITH APPLY - currently not used      ###
-### category _X = sum of functional categories    ###
-#####################################################
-#####################################################
-
-#####################################################
-#####################################################
-### calculating temporary sum in functional ASSETS###
-### category _X = sum of functional categories    ###
-#####################################################
-#####################################################
-
-# 
-# str(aa)
-# temp=as.data.table(unflag(aa[,,,,,c('_D','_P','_O','_R'),, ]),na.rm=TRUE)[,sum(obs_value), by=setdiff(names(dim(aa)),'FUNCTIONAL_CAT')]
-# temp2=suppressWarnings(as.md3(temp))
-# str(temp2)
-# 
-# #deposits
-# print('filling NAs of crossborder F2M ')
-# aa['F2M',,,,,'_X',,, onlyna=TRUE] = aa['F2M',,,,,'_O',, ];gc()
-# aa[F2M..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #bonds
-# print('filling NAs of crossborder F3 ')
-# aa['F3',,'S121',,,'_X',,, onlyna=TRUE] = aa['F3',,'S121',,,'_D',, ]  + aa['F3',,'S121',,,'_P',, ] + aa['F3',,'S121',,,'_R',, ];gc()
-# 
-# aa['F3',,,,,'_X',,, onlyna=TRUE] =apply(aa['F3',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F3..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #loans
-# print('filling NAs of crossborder F4 ')
-# aa['F4',,,,,'_X',,, onlyna=TRUE] =apply(aa['F4',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa['F4L',,,,,'_X',,, onlyna=TRUE] =apply(aa['F4L',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa['F4S',,,,,'_X',,, onlyna=TRUE] =apply(aa['F4S',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F4..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #investmentfund shares
-# print('filling NAs of crossborder F52 ')
-# aa['F52',,,,,'_X',,, onlyna=TRUE] =apply(aa['F52',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F52..S11.S1.LE..2024q1.WRL_REST]
-# 
-# 
-# #listed shares
-# print('filling NAs of crossborder F511 ')
-# aa['F511',,,,,'_X',,, onlyna=TRUE] =apply(aa['F511',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F511..S11.S1.LE..2024q1.WRL_REST]
-# 
-# 
-# #unlisted equity (F51M or F512+F519)
-# print('filling NAs of crossborder F51M ')
-# aa['F51M',,,,,'_D',,, onlyna=TRUE] = aa['F512',,,,,'_D',, ]  + aa['F519',,,,,'_D',, ];gc()
-# aa['F51M',,,,,'_X',,, onlyna=TRUE] =apply(aa['F51M',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F51M..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #total equity 
-# # print('filling NAs of crossborder F51 ')
-# # aa['F51',,,,,'_X',,, onlyna=TRUE] =apply(aa[c('F511','F51M'),,,,,'_X',, ], c(1:4,6:7),sum, na.rm=TRUE)
-# # aa[F51..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #insurance, pension and standardized guarantee schemes
-# print('filling NAs of crossborder F6 ')
-# aa['F6',,,,,'_X',,, onlyna=TRUE] =apply(aa['F6',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F6..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #trade credits
-# print('filling NAs of crossborder F81 ')
-# aa['F81',,,,,'_X',,, onlyna=TRUE] =apply(aa['F81',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F81..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #Other acc. payable/receivable
-# print('filling NAs of crossborder F89 ')
-# aa['F89',,,,,'_X',,, onlyna=TRUE] =apply(aa['F89',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# aa[F89..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #total financial assets/liabilities
-# print('filling NAs of crossborder assets/liabilities ')
-# aa['F',,,,,'_X',,, onlyna=TRUE] =apply(aa[c('F2M','F3','F4','F511','F51M','F52','F6','F81','F89'),,,,,'_X',, ], c(1:4,6:7),sum, na.rm=TRUE)
-# gc()
-# aa[F..S11.S1.LE..2024q1.WRL_REST]
-# 
-# 
-# #####################################################
-# #####################################################
-# ### calculating temporary sum in functional LIABs ###
-# ### category _X = sum of functional categories    ###
-# #####################################################
-# #####################################################
-# 
-# str(ll)
-# temp=as.data.table(unflag(ll[,,,,,c('_D','_P','_O','_R'),, ]),na.rm=TRUE)[,sum(obs_value), by=setdiff(names(dim(ll)),'FUNCTIONAL_CAT')]
-# temp2=suppressWarnings(as.md3(temp))
-# str(temp2)
-# 
-# #deposits
-# print('filling NAs of crossborder F2M ')
-# ll['F2M',,,,,'_X',,, onlyna=TRUE] = ll['F2M',,,,,'_O',, ];gc()
-# ll[F2M..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #bonds
-# print('filling NAs of crossborder F3 ')
-# ll['F3',,'S121',,,'_X',,, onlyna=TRUE] = ll['F3',,'S121',,,'_D',, ]  + ll['F3',,'S121',,,'_P',, ] + ll['F3',,'S121',,,'_R',, ];gc()
-# ll['F3',,,,,'_X',,, onlyna=TRUE] =apply(ll['F3',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F3..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #loans
-# print('filling NAs of crossborder F4 ')
-# ll['F4',,,,,'_X',,, onlyna=TRUE] =apply(ll['F4',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll['F4L',,,,,'_X',,, onlyna=TRUE] =apply(ll['F4L',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll['F4S',,,,,'_X',,, onlyna=TRUE] =apply(ll['F4S',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F4..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #investmentfund shares
-# print('filling NAs of crossborder F52 ')
-# ll['F52',,,,,'_X',,, onlyna=TRUE] =apply(ll['F52',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F52..S11.S1.LE..2024q1.WRL_REST]
-# 
-# 
-# #listed shares
-# print('filling NAs of crossborder F511 ')
-# ll['F511',,,,,'_X',,, onlyna=TRUE] =apply(ll['F511',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F511..S11.S1.LE..2024q1.WRL_REST]
-# 
-# 
-# #unlisted equity (F51M or F512+F519)
-# print('filling NAs of crossborder F51M ')
-# ll['F51M',,,,,'_D',,, onlyna=TRUE] = ll['F512',,,,,'_D',, ]  + ll['F519',,,,,'_D',, ]
-# ll['F51M',,,,,'_X',,, onlyna=TRUE] =apply(ll['F51M',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F51M..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #total equity 
-# # print('filling NAs of crossborder F51 ')
-# # ll['F51',,,,,'_X',,, onlyna=TRUE] =apply(ll[c('F511','F51M'),,,,,'_X',, ], c(1:4,6:7),sum, na.rm=TRUE)
-# # ll[F51..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #insurance, pension and standardized guarantee schemes
-# print('filling NAs of crossborder F6 ')
-# ll['F6',,,,,'_X',,, onlyna=TRUE] =apply(ll['F6',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F6..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #trade credits
-# print('filling NAs of crossborder F81 ')
-# ll['F81',,,,,'_X',,, onlyna=TRUE] =apply(ll['F81',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F81..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #Other acc. payable/receivable
-# print('filling NAs of crossborder F89 ')
-# ll['F89',,,,,'_X',,, onlyna=TRUE] =apply(ll['F89',,,,,c('_D','_P','_O','_R'),, ], c(1:4,6:7),sum, na.rm=TRUE);gc()
-# ll[F89..S11.S1.LE..2024q1.WRL_REST]
-# 
-# #total financial assets/liabilities
-# print('filling NAs of crossborder assets/liabilities ')
-# ll['F',,,,,'_X',,, onlyna=TRUE] =apply(ll[c('F2M','F3','F4','F511','F51M','F52','F6','F81','F89'),,,,,'_X',, ], c(1:4,6:7),sum, na.rm=TRUE)
-# gc()
-# ll[F..S11.S1.LE..2024q1.WRL_REST]
 
