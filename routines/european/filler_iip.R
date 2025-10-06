@@ -3,6 +3,16 @@ library(MDstats); library(MD3)
 # Set data directory
 #data_dir= file.path(getwd(),'data')
 if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
+<<<<<<< HEAD
+source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
+
+##############################################################
+########      loading prepared domestic data    ##############
+##############################################################
+
+aa=readRDS(file.path(data_dir,'aa_prep.rds')); gc()
+lll=readRDS(file.path(data_dir,'ll_prep.rds')); gc()
+=======
 
 
 #temp load current aall version
@@ -175,6 +185,7 @@ ll[F511.WRL_REST.S1.S2.LE..2022q4.AT]
 #should  exist:
 ll[F511..S1.S1.LE..2022q4.AT]
 gc()
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 ##############################################################
 ########filling of EA aggregate based on ECB QSA##############
@@ -193,10 +204,20 @@ lookup=c(F2M='F2M.T.',F21='F21.T.', F3='F3.T.',F3S='F3.S.',F3L='F3.L.',F4='F4.T.
 
 for (i in names(lookup)) {
   aa[i,'EA20',,,,'_T',,'WRL_REST', usenames=TRUE, onlyna=TRUE] = eatemp['EA20..W1...A.' %&% lookup[i] ];
+<<<<<<< HEAD
+  aa[i,'EA20',,,,'_T',,'EXT_EA20', usenames=TRUE, onlyna=TRUE] = eatemp['EA20..W1...A.' %&% lookup[i] ];
+  aa[i,'EA20',,,,'_T',,'W0', usenames=TRUE, onlyna=TRUE] = eatemp['EA20..W0...A.' %&% lookup[i] ];
+  aa[i,'EA19',,,,'_T',,'WRL_REST', usenames=TRUE, onlyna=TRUE] = eatemp['EA19..W1...A.' %&% lookup[i] ];
+  aa[i,'EA19',,,,'_T',,'EXT_EA19', usenames=TRUE, onlyna=TRUE] = eatemp['EA19..W1...A.' %&% lookup[i] ];
+  aa[i,'EA19',,,,'_T',,'W0', usenames=TRUE, onlyna=TRUE] = eatemp['EA19..W0...A.' %&% lookup[i] ];
+  aa[i,'EA18',,,,'_T',,'WRL_REST', usenames=TRUE, onlyna=TRUE] = eatemp['EA18..W1...A.' %&% lookup[i] ];
+  aa[i,'EA18',,,,'_T',,'EXT_EA18', usenames=TRUE, onlyna=TRUE] = eatemp['EA18..W1...A.' %&% lookup[i] ];
+=======
   aa[i,'EA20',,,,'_T',,'W0', usenames=TRUE, onlyna=TRUE] = eatemp['EA20..W0...A.' %&% lookup[i] ];
   aa[i,'EA19',,,,'_T',,'WRL_REST', usenames=TRUE, onlyna=TRUE] = eatemp['EA19..W1...A.' %&% lookup[i] ];
   aa[i,'EA19',,,,'_T',,'W0', usenames=TRUE, onlyna=TRUE] = eatemp['EA19..W0...A.' %&% lookup[i] ];
   aa[i,'EA18',,,,'_T',,'WRL_REST', usenames=TRUE, onlyna=TRUE] = eatemp['EA18..W1...A.' %&% lookup[i] ];
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
   aa[i,'EA18',,,,'_T',,'W0', usenames=TRUE, onlyna=TRUE] = eatemp['EA18..W0...A.' %&% lookup[i] ]
 }
 aa[.EA20..S1.LE._T.2022q4.WRL_REST]
@@ -213,18 +234,33 @@ lookup=c(F2M='F2M.T.',F21='F21.T.', F3='F3.T.',F3S='F3.S.',F3L='F3.L.',F4='F4.T.
 
 for (i in names(lookup)) {
   ll[i,'WRL_REST',,,,'_T',,'EA20', usenames=TRUE, onlyna=TRUE] = ea4liab['EA20..W1...' %&% lookup[i] ];
+<<<<<<< HEAD
+  ll[i,'EXT_EA20',,,,'_T',,'EA20', usenames=TRUE, onlyna=TRUE] = ea4liab['EA20..W1...' %&% lookup[i] ];
+  ll[i,'W0',,,,'_T',,'EA20', usenames=TRUE, onlyna=TRUE] = ea4liab['EA20..W0...' %&% lookup[i] ];
+  ll[i,'WRL_REST',,,,'_T',,'EA19', usenames=TRUE, onlyna=TRUE] = ea4liab['EA19..W1...' %&% lookup[i] ];
+  ll[i,'EXT_EA19',,,,'_T',,'EA19', usenames=TRUE, onlyna=TRUE] = ea4liab['EA19..W1...' %&% lookup[i] ];
+  ll[i,'W0',,,,'_T',,'EA19', usenames=TRUE, onlyna=TRUE] = ea4liab['EA19..W0...' %&% lookup[i] ];
+  ll[i,'WRL_REST',,,,'_T',,'EA18', usenames=TRUE, onlyna=TRUE] = ea4liab['EA18..W1...' %&% lookup[i] ];
+  ll[i,'EXT_EA18',,,,'_T',,'EA18', usenames=TRUE, onlyna=TRUE] = ea4liab['EA18..W1...' %&% lookup[i] ];
+=======
   ll[i,'W0',,,,'_T',,'EA20', usenames=TRUE, onlyna=TRUE] = ea4liab['EA20..W0...' %&% lookup[i] ];
   ll[i,'WRL_REST',,,,'_T',,'EA19', usenames=TRUE, onlyna=TRUE] = ea4liab['EA19..W1...' %&% lookup[i] ];
   ll[i,'W0',,,,'_T',,'EA19', usenames=TRUE, onlyna=TRUE] = ea4liab['EA19..W0...' %&% lookup[i] ];
   ll[i,'WRL_REST',,,,'_T',,'EA18', usenames=TRUE, onlyna=TRUE] = ea4liab['EA18..W1...' %&% lookup[i] ];
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
   ll[i,'W0',,,,'_T',,'EA18', usenames=TRUE, onlyna=TRUE] = ea4liab['EA18..W0...' %&% lookup[i] ]
 }
 
 gc()
 ll[.WRL_REST.S1..LE._T.2022q4.EA20]
 
+<<<<<<< HEAD
+saveRDSvl(aa,file='aa_iip_cps_temp.rds')
+saveRDSvl(ll,file='ll_iip_cps_temp.rds')
+=======
 saveRDS(aa,file='data/aa_iip_cps_temp.rds')
 saveRDS(ll,file='data/ll_iip_cps_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 
 #aa=readRDS(file.path(data_dir,'aa_iip_cps_temp.rds')); gc()
@@ -248,6 +284,32 @@ assetfiller = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST",
   aaF = bopeu[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
     message(cp)
+<<<<<<< HEAD
+    aa['F',,sss,'S1',le,'_T',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()  #stefan to check
+    aa['F',,sss,'S1',le,'_P',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
+    aa['F',,sss,'S1',le,'_O',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
+    aa['F',,sss,'S1',le,'_D',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
+    aa['F',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
+    aa['F',,sss,'S1',le,'_F',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
+    aa['F2M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3", ]); gc()
+    aa['F4',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4", ]); gc()
+    aa['F4',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4", ]); gc()
+    aa['F52',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52", ]); gc()
+    aa['F511',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
+    aa['F511',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
+    #aa['F51',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51", ]); gc()
+    aa['F51M',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51M", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()
+    aa['F51M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
+    aa['F6',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6", ]); gc()
+    aa['F81',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
+    aa['F81',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
+    aa['F89',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+=======
     aa['F',,sss,'S1',le,'_T',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()  #stefan to check
     aa['F',,sss,'S1',le,'_P',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
     aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
@@ -272,6 +334,7 @@ assetfiller = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST",
     aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
     aa['F81',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
     aa['F89',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
   }
 }
 
@@ -282,7 +345,11 @@ assetfiller(bopeu["ASS....."],'F',c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", 
                                     "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US"))
 aa[.EA20.S1.S1.F..2022q4.EXT_EA20]
 
+<<<<<<< HEAD
+saveRDSvl(aa,file='aa_bop_cps_eu_temp.rds')
+=======
 saveRDS(aa,file='data/aa_bop_cps_eu_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 #aa=readRDS(file.path(data_dir,'aa_bop_cps_temp.rds')); gc()
 
 #########################
@@ -336,7 +403,11 @@ gc()
 ll[.EXT_EA20.S1.S1.F..2022q4.EA20]
 
 
+<<<<<<< HEAD
+saveRDSvl(ll,file='ll_bop_cps_eu_temp.rds')
+=======
 saveRDS(ll,file='data/ll_bop_cps_eu_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 ##############################################################
 ########filling of quarterly financial bop data###############
@@ -360,6 +431,32 @@ assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
   aaF = bop[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
     message(cp)
+<<<<<<< HEAD
+    aa['F',,sss,'S1',le,'_T',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()  #stefan to check
+    aa['F',,sss,'S1',le,'_P',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
+    aa['F',,sss,'S1',le,'_O',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
+    aa['F',,sss,'S1',le,'_D',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
+    aa['F',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
+    aa['F',,sss,'S1',le,'_F',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
+    aa['F2M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3", ]); gc()
+    aa['F4',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4", ]); gc()
+    aa['F4',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4", ]); gc()
+    aa['F52',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52", ]); gc()
+    aa['F511',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
+    aa['F511',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
+    #aa['F51',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51", ]); gc()
+    aa['F51M',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F512", ]+aaF[,cp,,"FA__D__F519", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()
+    aa['F51M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
+    aa['F6',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6", ]); gc()
+    aa['F81',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
+    aa['F81',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
+    aa['F89',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+=======
     aa['F',,sss,'S1',le,'_T',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()  #stefan to check
     aa['F',,sss,'S1',le,'_P',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
     aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
@@ -384,6 +481,7 @@ assetfiller = function(bop,le='F',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20
     aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
     aa['F81',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
     aa['F89',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
   }
 }
 
@@ -396,7 +494,11 @@ assetfiller(bop["ASS....."],'F',c("EA19", "EA20", "EXT_EA19", "EXT_EA20", "WRL_R
                                   "RO", "RU", "SE", "SI", "SK", "GB", "US", "BE"))
 aa[.AT.S1.S1.F..2022q4.WRL_REST]
 
+<<<<<<< HEAD
+saveRDSvl(aa,file='aa_bop_cps_temp.rds')
+=======
 saveRDS(aa,file='data/aa_bop_cps_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 #aa=readRDS(file.path(data_dir,'aa_bop_cps_temp.rds')); gc()
 
 #########################
@@ -451,7 +553,11 @@ gc()
 ll[.WRL_REST.S1.S1.F..2022q4.AT]
 
 
+<<<<<<< HEAD
+saveRDSvl(ll,file='ll_bop_cps_temp.rds')
+=======
 saveRDS(ll,file='data/ll_bop_cps_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 ##############################################################
 ########filling of quaterly and annual iip data###############
@@ -476,6 +582,32 @@ assetfiller = function(iip,le='LE',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA2
   aaF = iip[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
     message(cp)
+<<<<<<< HEAD
+    aa['F',,sss,'S1',le,'_T',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()
+    aa['F',,sss,'S1',le,'_P',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
+    aa['F',,sss,'S1',le,'_O',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
+    aa['F',,sss,'S1',le,'_D',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F", ]); gc()
+    aa['F',,sss,'S1',le,'_R',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F", ]); gc()
+    aa['F',,sss,'S1',le,'_F',,cp,  usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7", ]); gc()
+    aa['F2M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2", ]); gc()
+    aa['F2M',,sss,'S1',le,'_R',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2", ]); gc()
+    aa['F3',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3", ]); gc()
+    aa['F3',,sss,'S1',le,'_R',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3", ]); gc()
+    aa['F4',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4", ]); gc()
+    aa['F4',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4", ]); gc()
+    aa['F52',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52", ]); gc()
+    aa['F511',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
+    aa['F511',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
+    aa['F51',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51", ]); gc()
+    aa['F51M',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51M", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,".FA__P__F512", ]); gc()
+    aa['F51M',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
+    aa['F6',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6", ]); gc()
+    aa['F81',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
+    aa['F81',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
+    aa['F89',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+=======
     aa['F',,sss,'S1',le,'_T',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA", ]); gc()
     aa['F',,sss,'S1',le,'_P',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F", ]); gc()
     aa['F',,sss,'S1',le,'_O',,cp,  usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F", ]); gc()
@@ -500,6 +632,7 @@ assetfiller = function(iip,le='LE',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA2
     aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81", ]); gc()
     aa['F81',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81", ]); gc()
     aa['F89',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89", ]); gc()
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
   }
 }
 
@@ -512,7 +645,11 @@ assetfiller(iip["A_LE....."],'LE',c("IT", "EA19", "EA20", "EXT_EA19", "EXT_EA20"
 aa[.AT.S1.S1.LE..2022q4.WRL_REST]
  gc()
 
+<<<<<<< HEAD
+saveRDSvl(aa,file='aa_iip_cps_temp.rds')
+=======
 saveRDS(aa,file='data/aa_iip_cps_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 liabfiller = function(iip,le='LE',cparea=c("EA19", "EA20", "EXT_EA19", "EXT_EA20", "WRL_REST", "AT", "BG", "BR", "CA", "CH", "CN", "CY", "CZ",
                                            "DE", "DK", "EE", "GR", "ES", "EU27", "EU28", "EUI", "EXT_EU27", "EXT_EU28", "FI", "FR",
@@ -557,7 +694,11 @@ liabfiller(iip["L_LE....."],'LE',c("IT", "EA19", "EA20", "EXT_EA19", "EXT_EA20",
 ll[.WRL_REST.S1.S1.LE..2022q4.AT]
 
 gc()
+<<<<<<< HEAD
+saveRDSvl(ll,file='ll_iip_cps_temp.rds')
+=======
 saveRDS(ll,file='data/ll_iip_cps_temp.rds')
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 # aa=readRDS(file.path(data_dir,'aa_iip_cps_temp.rds')); gc()
 # ll=readRDS(file.path(data_dir,'ll_iip_cps_temp.rds')); gc()
@@ -649,6 +790,15 @@ for (i in refa) {
 ll[F..S1.S1.LE._T.2023Q4.COMM] 
 
 gc()
+<<<<<<< HEAD
+saveRDSvl(aa,file.path(data_dir,'aa_iip_cps.rds'))
+saveRDSvl(ll,file.path(data_dir,'ll_iip_cps.rds'))
+
+saveRDSvl(aa,file.path(data_dir,'vintages/aa_iip_cps_' %&% format(Sys.time(),'%F') %&% '_.rds'))
+saveRDSvl(ll,file.path(data_dir,'vintages/ll_iip_cps_' %&% format(Sys.time(),'%F') %&% '_.rds'))
+
+
+=======
 saveRDS(aa,file='data/aa_iip_cps_temp.rds')
 
 saveRDS(ll,file='data/ll_iip_cps_temp.rds')
@@ -705,3 +855,4 @@ saveRDS(ll2,file='data/ll_iip_cps.rds')
 aa=aa2
 ll=ll2
 
+>>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
