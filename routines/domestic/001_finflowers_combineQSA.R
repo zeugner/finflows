@@ -62,9 +62,10 @@ aaraw=copy(aall)
 
 # Handle Investment Fund Shares (F52)
 # Rule : Only investment funds (S124) can have investment fund shares as liabilities
-
+# Question for Erza/Stefan: Should we add explicit checks to enforce this rule? Or we do it later on?
 aall['F52',,,,,'_T',]  =NA  # Clear all F52 data
 
+##################### IN WHAT FOLLOWS, ON THE RIGHT-HAND SIDE, I HAVE TO ADD A DIMENSION AND FILTER FOR _T: WHY IS IT THE CASE NOW AND WASN'T BEFORE?
 
 aall['F52',,,,,'_T',]  = lll$A$F52[.W2...._T.]  # Fill with domestic scope data 
 aall['F52',,,'S0',,'_T',] = lll$A$F52[.W0..S1.._T.]  # World scope data for total economy
@@ -130,7 +131,6 @@ for (i in irest) {
   aall[i,,,,,,]=NA  # Clear data for instrument
   aall[i,,,'S0',,,]=lll$A[[i]][]  # Set total economy assets
   # Handle liabilities based on whether they have CUST_BREAKDOWN dimension
- 
   if ('CUST_BREAKDOWN' %in% names(dim(lll$Ladj[[i]]))) {
     aall[i,,'S0',,,,]=lll$Ladj[[i]]  # Use full breakdown if available
   } else {
@@ -139,7 +139,7 @@ for (i in irest) {
 }
 
 ### setting order to sectors and calculating RoW (S2) + financial sector excluding S12K
-# saving as aall1
+# saving as aall
 
 # set order for sectors 
 sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K+S12R',split='\\+')[[1L]]
@@ -155,6 +155,12 @@ aall[..S2....] = aall[..S0....] - aall[..S1....]
 aall[...S2...] = aall[...S0...] - aall[...S1...]
 aall[..S12R....] = aall[..S124....]+aall[..S12O....]+aall[..S12Q....]
 aall[...S12R...] = aall[...S124...]+aall[...S12O...]+aall[...S12Q...]
+
+### EURO AREA
+
+dimnames(aall)$REF_AREA[dimnames(aall)$REF_AREA=='I7'] = 'EA18'
+dimnames(aall)$REF_AREA[dimnames(aall)$REF_AREA=='I8'] = 'EA19'
+dimnames(aall)$REF_AREA[dimnames(aall)$REF_AREA=='I9'] = 'EA20'
 
 # Save 
 saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_qsa.rds'))

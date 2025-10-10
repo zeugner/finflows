@@ -1,5 +1,6 @@
 ################################################################################
-# MAIN LOADING SCRIPT - Finflows - Domestic
+# MAIN LOADING SCRIPT - Financial Flows Analysis
+# Purpose: Interactive loading of raw data from external sources
 ################################################################################
 
 # Load required packages
@@ -8,7 +9,7 @@ if (!require("MDecfin")) {
 }
 
 # Set the project directories
-if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
+if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
 script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/loading/'
 
 # Check directories exist
@@ -123,70 +124,70 @@ loading_plan <- list(
   
   # Eurostat NASA data
   nasa_data = list(
-    script = file.path(script_dir, "003_load_NASA.R"),
+    script = file.path(script_dir, "007_load_NASA.R"),
     output = file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_assets.rds"),
     name = "Eurostat NASA Annual Data"
   ),
   
   # Eurostat NASQ data
   nasq_data = list(
-    script = file.path(script_dir, "004_load_NASQ.R"),
+    script = file.path(script_dir, "008_load_NASQ.R"),
     output = file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"),
     name = "Eurostat NASQ Quarterly Data"
   ),
   
   # ECB BSI MFI data
   bsi_mfi = list(
-    script = file.path(script_dir, "005_load_BSI_MFI.R"),
+    script = file.path(script_dir, "012_load_BSI_MFI_new.R"),
     output = file.path(data_dir, "bsi_assets.rds"),
     name = "ECB BSI MFI Holdings"
   ),
   
   # ECB BSI Loans and Deposits
   bsi_loans_deposits = list(
-    script = file.path(script_dir, "006_load_bsi_loans_dep.R"),
+    script = file.path(script_dir, "013_load_bsi_loans_dep.R"),
     output = file.path(data_dir, "bsi_loans_dep.rds"),
     name = "ECB BSI Loans and Deposits"
   ),
   
   # Counterpart information
   counterpart_info = list(
-    script = file.path(script_dir, "007_load_counterpart_info.R"),
+    script = file.path(script_dir, "013_load_counterpart_info.R"),
     output = file.path(data_dir, "cpq_new.rds"),
     name = "Counterpart Information (NASA CP)"
   ),
   
   # Securities Holdings Statistics
   shs_data = list(
-    script = file.path(script_dir, "008_load_shs_s.R"),
+    script = file.path(script_dir, "load_shs_s.R"),
     output = file.path(data_dir, "ash.rds"),
     name = "ECB Securities Holdings Statistics"
   ),
   
   # Row equity processing
   row_equity = list(
-    script = file.path(script_dir, "009_row_equity_processing.R"),
+    script = file.path(script_dir, "row_equity_processing.R"),
     output = file.path(data_dir, "af51.rds"),
     name = "Rest of World Equity Processing"
   ),
   
   # Government F5 data
   gov_f5 = list(
-    script = file.path(script_dir, "010_govF5.R"),
+    script = file.path(script_dir, "govF5.R"),
     output = file.path(data_dir, "gov_equity.rds"),
     name = "Government F5 Holdings"
   ),
   
   # ECB Central Bank Holdings
   ecb_capital = list(
-    script = file.path(script_dir, "011_central_bank_holdings_ECB_F519.R"),
+    script = file.path(script_dir, "central_bank_holdings_ECB_F519.R"),
     output = file.path(data_dir, "ecb_capital_md3.rds"),
     name = "ECB Central Bank Capital Holdings"
   ),
   
   # Exchange rates data
   exchange_rates = list(
-    script = file.path(script_dir, "002_load_exchange_rates.R"),
+    script = file.path(script_dir, "load_exchange_rates.R"),
     output = file.path(data_dir, "eurostat_f3_stocks.rds"),
     name = "Exchange Rates Data"
   )
@@ -231,8 +232,4 @@ cat(paste(rep("=", 80), collapse=""), "\n")
 
 ################################################################################
 # End of Loading Script
-<<<<<<< HEAD
 ################################################################################
-=======
-################################################################################
->>>>>>> 55a5a789115f3c6e93936ceaded19180b9724739
