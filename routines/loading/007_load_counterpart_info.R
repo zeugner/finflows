@@ -43,6 +43,11 @@ saveRDS(cpq_fdi, file=file.path(data_dir, 'cpq_fdi_new.rds'))
 ##### plug this in at the end of the nasa_10_f_cp loader....
 cpa=cpa_raw=mds('EStat/nasa_10_f_cp') 
 
+cpinfo=cpa['STK.S2+S1.S1+S11.F3.ASS+LIAB.MIO_NAC..']
+qsinfo=MDstats::mds('ECB/QSA/Q.N..W1+W2.S1+S11.S1.N.A+L.LE.F3.T._Z.XDC._T.S.V.N._T')
+
+
+
 ## note for domestic linkages, A and L are the same across QSA and NASA_10_F_CP
 # cpinfo[S1.S11.ASS..2022]
 # qsinfo[.W2.S11.A.2022q4]
