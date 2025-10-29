@@ -3,7 +3,7 @@ library(MD3)
 
 # Set data directory
 #data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data'
+if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data'
 source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
 
 
@@ -66,14 +66,14 @@ dimnames(aall)[['REF_AREA']] = ccode(dimnames(aall)[['REF_AREA']],2,'iso2m'); gc
 aall[F.AT.S1.S2+S0.LE._T.2022q4]
 aall[F.AT.S2+S0.S1.LE._T.2022q4]
 
-
+#what is saveRDSvl?
 saveRDSvl(aall,file=file.path(data_dir,'aall_temp.rds'))
 saveRDSvl(aall,file=file.path(data_dir,'vintages/aall_temp' %&% format(Sys.time(),'%F') %&% '_.rds'))
 
 ##############################################################
 ### load FDI Information from ECB QSA
 ##############################################################
-fnd=readRDS('V:/FinFlows/githubrepo/trialarea/data/fndqsa.rds')
+fnd=readRDS('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/trialarea/data/fndqsa.rds')
 names(dimnames(fnd))[5] = 'INSTR'
 fnd=aperm(copy(fnd),c(5,2,3,1,4,6))
 

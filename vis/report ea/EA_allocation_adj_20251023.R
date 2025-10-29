@@ -84,9 +84,9 @@ ren <- function(x, map) ifelse(x %in% names(map), map[x], x)
 
 ec_theme <- hc_theme(
   chart = list(backgroundColor="#FFF", style=list(fontFamily="Arial, Helvetica, sans-serif")),
-  title = list(align="left", style=list(fontSize="18px", fontWeight="bold", color="black")),
-  subtitle = list(align="left", style=list(fontSize="11px", color="black")),
-  caption = list(align="left", style=list(fontSize="10px", color="black")),
+  title = list(align="left", style=list(fontSize="22px", fontWeight="bold", color="black")),
+  subtitle = list(align="left", style=list(fontSize="13px", color="black")),
+  caption = list(align="left", style=list(fontSize="11px", color="black")),
   legend = list(enabled = FALSE),
   tooltip = list(backgroundColor="#FFF", borderColor="#CCC", style=list(color="black")),
   plotOptions = list(sankey = list(dataLabels = list(style = list(color="black", textOutline="none", fontWeight="bold"))))
@@ -102,7 +102,7 @@ df_s1m_all <- dfeat %>%
     to_area  = as.character(COUNTERPART_AREA),
     to_id    = paste0(to_sec, "_", to_area),
     to_label = paste(ren(to_sec, sector_labels), ren(to_area, area_labels), sep = " · "),
-    weight   = as.numeric(obs_value)
+        weight   = as.numeric(obs_value)
   ) %>%
   filter(is.finite(weight), weight > 0, to_id != "S1_W2")   # drop S1 · W2 everywhere
 
@@ -160,7 +160,7 @@ mid_totals <- bind_rows(
     transmute(mid_id = paste0(to_id, "_mid"),
               mid_label = to_label,
               weight = weight,
-              color  = "#D9D9D9")                # grey
+              color  = "#A3BCE0")                # grey
 ) %>%
   mutate(share = ifelse(total_hh_assets > 0, weight / total_hh_assets, 0))
 
@@ -189,7 +189,7 @@ right_totals <- right_flows %>%
 
 # ======================= 5) Nodes ============================================
 left_node <- list(list(
-  id="S1M_src", name="Households", column=0, color="#D9D9D9",
+  id="S1M_src", name="Households", column=0, color="#A3BCE0",
   dataLabels=list(style=list(color="black", textOutline="none"))
 ))
 
@@ -210,7 +210,7 @@ right_nodes <- lapply(seq_len(nrow(right_totals)), function(i) {
     id     = paste0(rw$to_id, "_dst"),
     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
     column = 2,
-    color  = "#D9D9D9",
+    color  = "#A3BCE0",
     dataLabels = list(style = list(color = "black", textOutline = "none"))
   )
 })
@@ -279,22 +279,43 @@ right_shares <- right_shares %>%
 
 
 # 4) Rebuild right-hand nodes WITH share in the label (and only once)
+# right_nodes <- lapply(seq_len(nrow(right_shares)), function(i) {
+#   rw <- right_shares[i, ]
+#   list(
+#     id     = paste0(rw$to_id, "_dst"),
+#     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
+#     column = 2,
+#     color  = "#A3BCE0",
+#     dataLabels = list(style = list(color = "black", textOutline = "none"))
+#   )
+# })
+
 right_nodes <- lapply(seq_len(nrow(right_shares)), function(i) {
   rw <- right_shares[i, ]
   list(
     id     = paste0(rw$to_id, "_dst"),
     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
     column = 2,
-    color  = "#D9D9D9",
-    dataLabels = list(style = list(color = "black", textOutline = "none"))
+    color  = "#A3BCE0",
+    dataLabels = list(
+      enabled = TRUE,
+      align   = "left",   # <— push label to the right of node
+      x       = 10,       # <— horizontal offset (pixels)
+      crop    = FALSE,    # <— do not crop outside plot area
+      overflow= "allow",  # <— allow drawing outside
+      style   = list(color = "black", textOutline = "none")
+    )
   )
 })
 
-
 # 5) Assemble nodes once (left + middle (with your mid_totals) + RIGHT just built)
 left_node <- list(list(
-  id="S1M_src", name="Households' financial savings", column=0, color="#D9D9D9",
-  dataLabels=list(style=list(color="black", textOutline="none"))
+  id="S1M_src", name="Households' financial savings", column=0, color="#A3BCE0",
+  dataLabels=list(align = "left",
+                  x = -10,
+                  crop = FALSE,
+                  overflow = "allow",
+                  style=list(color="black", textOutline="none"))
 ))
 
 mid_nodes <- lapply(seq_len(nrow(mid_totals)), function(i) {
@@ -332,7 +353,7 @@ mid_shares <- links_all %>%
 mid_nodes <- lapply(seq_len(nrow(mid_shares)), function(i) {
   m <- mid_shares[i, ]
   # color: S12 in yellow, direct mids in grey
-  col <- if (m$mid_id == "S12_mid") "#FFD724" else "#D9D9D9"
+  col <- if (m$mid_id == "S12_mid") "#FFD724" else "#A3BCE0"
   list(
     id     = m$mid_id,
     name   = sprintf("%s — %.1f%% ", m$mid_label, 100 * m$share),
@@ -364,6 +385,20 @@ col_captions <- list(
 # ======================= 8) Plot =============================================
 highchart() %>%
   hc_add_dependency("modules/sankey") %>%
+  hc_chart(spacingRight = 240) %>%
+  hc_plotOptions(
+    series = list(
+      clip = FALSE,                   # <— don’t clip series to plot area
+      dataLabels = list(
+        crop = FALSE, overflow = "allow"  # global safety
+      )
+    ),
+    sankey = list(
+      dataLabels = list(
+        style = list(color = "black", textOutline = "none")
+      )
+    )
+  ) %>%
   hc_size(width = 1000, height = 560) %>%
   hc_add_series(
     type  = "sankey",
@@ -387,7 +422,7 @@ highchart() %>%
     )
   ) %>%
   hc_title(text = " ") %>%
-  hc_subtitle(text = "Yellow = holdings via financial sector; Grey = direct holdings") %>%
+  hc_subtitle(text = "Blue = direct holdings; Yellow = holdings via financial sector ") %>%
   hc_caption(text = " ") %>%
   hc_add_theme(ec_theme) %>%
   hc_annotations(col_captions) %>%

@@ -19,8 +19,8 @@ aa=readRDS(file.path(data_dir,'aa_iip_agg.rds')); gc()
 #ll=readRDS(file.path(data_dir,'ll_iip_agg.rds')); gc()
 
 # S1M assets
-as1t=aa[.EA20+DE+AT+FR+NL+IE+ES+BE+SI+PT+FI+IT+LT+CY+LU+LV+SK+EE+GR+HR+MT+CZ+HU+SE+DK+RO+BG.S1M+S1.S12+S11+S13+S1M+S1.LE._T.2024q4.W2+WRL_REST]-aa[.EA20+DE+AT+FR+NL+IE+ES+BE+SI+PT+FI+IT+LT+CY+LU+LV+SK+EE+GR+HR+MT+CZ+HU+SE+DK+RO+BG.S1M+S1.S12+S11+S13+S1M+S1.LE._T.2023q4.W2+WRL_REST]
-as1t[F51M.EA20...W2, usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F51M.DE...W2])+
+as1t=aa[.EA20+DE+AT+FR+NL+IE+ES+BE+SI+PT+FI+IT+LT+CY+LU+LV+SK+EE+GR+HR+MT+CZ+HU+SE+DK+RO+BG+PL.S1M+S1.S12+S11+S13+S1M+S1.LE._T.2024q4.W2+WRL_REST]-aa[.EA20+DE+AT+FR+NL+IE+ES+BE+SI+PT+FI+IT+LT+CY+LU+LV+SK+EE+GR+HR+MT+CZ+HU+SE+DK+RO+BG+PL.S1M+S1.S12+S11+S13+S1M+S1.LE._T.2023q4.W2+WRL_REST]
+as1t[F51M.EA20...W2, usenames=TRUE,onlyna=TRUE]=zerofiller(as1t[F51M.DE...W2])+
   zerofiller(as1t[F51M.AT...W2])+zerofiller(as1t[F51M.FR...W2])+zerofiller(as1t[F51M.NL...W2])+
   zerofiller(as1t[F51M.IE...W2])+zerofiller(as1t[F51M.ES...W2])+zerofiller(as1t[F51M.BE...W2])+
   zerofiller(as1t[F51M.SI...W2])+zerofiller(as1t[F51M.PT...W2])+zerofiller(as1t[F51M.FI...W2])+
@@ -29,7 +29,9 @@ as1t[F51M.EA20...W2, usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F51M.DE...W2])+
   zerofiller(as1t[F51M.EE...W2])+zerofiller(as1t[F51M.GR...W2])+zerofiller(as1t[F51M.HR...W2])+
   zerofiller(as1t[F51M.MT...W2])
 
-as1t[F6.EA20...W2, usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F6.DE...W2])+
+
+
+as1t[F6.EA20...W2, usenames=TRUE,onlyna=TRUE]=zerofiller(as1t[F6.DE...W2])+
   zerofiller(as1t[F6.AT...W2])+zerofiller(as1t[F6.FR...W2])+zerofiller(as1t[F6.NL...W2])+
   zerofiller(as1t[F6.IE...W2])+zerofiller(as1t[F6.ES...W2])+zerofiller(as1t[F6.BE...W2])+
   zerofiller(as1t[F6.SI...W2])+zerofiller(as1t[F6.PT...W2])+zerofiller(as1t[F6.FI...W2])+
@@ -38,29 +40,32 @@ as1t[F6.EA20...W2, usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F6.DE...W2])+
   zerofiller(as1t[F6.EE...W2])+zerofiller(as1t[F6.GR...W2])+zerofiller(as1t[F6.HR...W2])+
   zerofiller(as1t[F6.MT...W2])
 
-as1t[FT.EA20..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F2M.EA20...])+
+as1t[FT.EA20..., usenames=TRUE,onlyna=TRUE]=zerofiller(as1t[F2M.EA20...])+
   zerofiller(as1t[F3.EA20...])+zerofiller(as1t[F4.EA20...])+zerofiller(as1t[F511.EA20...])+
   zerofiller(as1t[F51M.EA20...])+zerofiller(as1t[F52.EA20...])+zerofiller(as1t[F6.EA20...])
 
 as1t[FT.EA20..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F2M.EA20...])+
-   zerofiller(as1t[F3.EA20...])+zerofiller(as1t[F4.EA20...])+zerofiller(as1t[F511.EA20...])+
-   zerofiller(as1t[F51M.EA20...])+zerofiller(as1t[F52.EA20...])+zerofiller(as1t[F6.EA20...])
+  zerofiller(as1t[F3.EA20...])+zerofiller(as1t[F4.EA20...])+zerofiller(as1t[F511.EA20...])+
+  zerofiller(as1t[F51M.EA20...])+zerofiller(as1t[F52.EA20...])+zerofiller(as1t[F6.EA20...])
 
 # as2t=aa[.CZ+HU+SE+DK+RO+BG.S1M+S1.S12+S11+S13+S1M+S1.LE._T.2024q4.W2+WRL_REST]
 # 
-# as1t[.EU27_2020..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[.EA20...])+zerofiller(as2t[.CZ...])+
-#   zerofiller(as2t[.HU...])+zerofiller(as2t[.SE...])+zerofiller(as2t[.DK...])+
-#   zerofiller(as2t[.RO...])+zerofiller(as2t[.BG...])
-# 
-# as1t[FT.EU27_2020..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F2M.EU27_2020...])+
-#   zerofiller(as1t[F3.EU27_2020...])+zerofiller(as1t[F4.EU27_2020...])+zerofiller(as1t[F511.EU27_2020...])+
-#   zerofiller(as1t[F51M.EU27_2020...])+zerofiller(as1t[F52.EU27_2020...])+zerofiller(as1t[F6.EU27_2020...])
+as1t[.EU27_2020..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[.EA20...])+zerofiller(as1t[.CZ...])+
+  zerofiller(as1t[.HU...])+zerofiller(as1t[.SE...])+zerofiller(as1t[.DK...])+
+  zerofiller(as1t[.RO...])+zerofiller(as1t[.BG...])++zerofiller(as1t[.PL...])
 
-as1m=as1t[FT.EA20.S1M+S1.S12+S11+S13+S1M+S1.W2+WRL_REST]
+as1t[FT.EU27_2020..., usnemaes=TRUE,onlyna=TRUE]=zerofiller(as1t[F2M.EU27_2020...])+
+  zerofiller(as1t[F3.EU27_2020...])+zerofiller(as1t[F4.EU27_2020...])+zerofiller(as1t[F511.EU27_2020...])+
+  zerofiller(as1t[F51M.EU27_2020...])+zerofiller(as1t[F52.EU27_2020...])+zerofiller(as1t[F6.EU27_2020...])
+
+#as1m=as1t[FT.EA20.S1M+S1.S12+S11+S13+S1M+S1.W2+WRL_REST]
+as1m=as1t[FT.EU27_2020.S1M+S1.S12+S11+S13+S1M+S1.W2+WRL_REST]
 
 # S12 assets
-as12s=aa[.EA20.S12+S1.S12K+S12Q+S12O+S124+S11+S13+S1M+S1.LE..2024q4.W2+WRL_REST]-aa[.EA20.S12+S1.S12K+S12Q+S12O+S124+S11+S13+S1M+S1.LE..2023q4.W2+WRL_REST]
-
+as12s=aa[.EA20+CZ+HU+SE+DK+RO+BG+PL.S12+S1.S12K+S12Q+S12O+S124+S11+S13+S1M+S1.LE..2024q4.W2+WRL_REST]-aa[.EA20+CZ+HU+SE+DK+RO+BG+PL.S12+S1.S12K+S12Q+S12O+S124+S11+S13+S1M+S1.LE..2023q4.W2+WRL_REST]
+as12s[Fx7.EU27_2020...., usnemaes=TRUE ,onlyna=TRUE]=zerofiller(as12s[Fx7.EA20....])+zerofiller(as12s[Fx7.CZ....])+
+  zerofiller(as12s[Fx7.HU....])+zerofiller(as12s[Fx7.SE....])+zerofiller(as12s[Fx7.DK....])+
+  zerofiller(as12s[Fx7.RO....])+zerofiller(as12s[Fx7.BG....])+zerofiller(as12s[Fx7.PL....])
 
 
 library(dplyr)
@@ -84,9 +89,9 @@ ren <- function(x, map) ifelse(x %in% names(map), map[x], x)
 
 ec_theme <- hc_theme(
   chart = list(backgroundColor="#FFF", style=list(fontFamily="Arial, Helvetica, sans-serif")),
-  title = list(align="left", style=list(fontSize="18px", fontWeight="bold", color="black")),
-  subtitle = list(align="left", style=list(fontSize="11px", color="black")),
-  caption = list(align="left", style=list(fontSize="10px", color="black")),
+  title = list(align="left", style=list(fontSize="22px", fontWeight="bold", color="black")),
+  subtitle = list(align="left", style=list(fontSize="13px", color="black")),
+  caption = list(align="left", style=list(fontSize="11px", color="black")),
   legend = list(enabled = FALSE),
   tooltip = list(backgroundColor="#FFF", borderColor="#CCC", style=list(color="black")),
   plotOptions = list(sankey = list(dataLabels = list(style = list(color="black", textOutline="none", fontWeight="bold"))))
@@ -160,7 +165,7 @@ mid_totals <- bind_rows(
     transmute(mid_id = paste0(to_id, "_mid"),
               mid_label = to_label,
               weight = weight,
-              color  = "#D9D9D9")                # grey
+              color  = "#A3BCE0")                # grey
 ) %>%
   mutate(share = ifelse(total_hh_assets > 0, weight / total_hh_assets, 0))
 
@@ -189,7 +194,7 @@ right_totals <- right_flows %>%
 
 # ======================= 5) Nodes ============================================
 left_node <- list(list(
-  id="S1M_src", name="Households", column=0, color="#D9D9D9",
+  id="S1M_src", name="Households", column=0, color="#A3BCE0",
   dataLabels=list(style=list(color="black", textOutline="none"))
 ))
 
@@ -210,7 +215,7 @@ right_nodes <- lapply(seq_len(nrow(right_totals)), function(i) {
     id     = paste0(rw$to_id, "_dst"),
     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
     column = 2,
-    color  = "#D9D9D9",
+    color  = "#A3BCE0",
     dataLabels = list(style = list(color = "black", textOutline = "none"))
   )
 })
@@ -279,22 +284,43 @@ right_shares <- right_shares %>%
 
 
 # 4) Rebuild right-hand nodes WITH share in the label (and only once)
+# right_nodes <- lapply(seq_len(nrow(right_shares)), function(i) {
+#   rw <- right_shares[i, ]
+#   list(
+#     id     = paste0(rw$to_id, "_dst"),
+#     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
+#     column = 2,
+#     color  = "#A3BCE0",
+#     dataLabels = list(style = list(color = "black", textOutline = "none"))
+#   )
+# })
+
 right_nodes <- lapply(seq_len(nrow(right_shares)), function(i) {
   rw <- right_shares[i, ]
   list(
     id     = paste0(rw$to_id, "_dst"),
     name   = sprintf("%s — %.1f%% ", rw$to_label, 100 * rw$share),
     column = 2,
-    color  = "#D9D9D9",
-    dataLabels = list(style = list(color = "black", textOutline = "none"))
+    color  = "#A3BCE0",
+    dataLabels = list(
+      enabled = TRUE,
+      align   = "left",   # <— push label to the right of node
+      x       = 10,       # <— horizontal offset (pixels)
+      crop    = FALSE,    # <— do not crop outside plot area
+      overflow= "allow",  # <— allow drawing outside
+      style   = list(color = "black", textOutline = "none")
+    )
   )
 })
 
-
 # 5) Assemble nodes once (left + middle (with your mid_totals) + RIGHT just built)
 left_node <- list(list(
-  id="S1M_src", name="Households' financial savings", column=0, color="#D9D9D9",
-  dataLabels=list(style=list(color="black", textOutline="none"))
+  id="S1M_src", name="Households' financial savings", column=0, color="#A3BCE0",
+  dataLabels=list(align = "left",
+                  x = -10,
+                  crop = FALSE,
+                  overflow = "allow",
+                  style=list(color="black", textOutline="none"))
 ))
 
 mid_nodes <- lapply(seq_len(nrow(mid_totals)), function(i) {
@@ -332,7 +358,7 @@ mid_shares <- links_all %>%
 mid_nodes <- lapply(seq_len(nrow(mid_shares)), function(i) {
   m <- mid_shares[i, ]
   # color: S12 in yellow, direct mids in grey
-  col <- if (m$mid_id == "S12_mid") "#FFD724" else "#D9D9D9"
+  col <- if (m$mid_id == "S12_mid") "#FFD724" else "#A3BCE0"
   list(
     id     = m$mid_id,
     name   = sprintf("%s — %.1f%% ", m$mid_label, 100 * m$share),
@@ -364,6 +390,20 @@ col_captions <- list(
 # ======================= 8) Plot =============================================
 highchart() %>%
   hc_add_dependency("modules/sankey") %>%
+  hc_chart(spacingRight = 240) %>%
+  hc_plotOptions(
+    series = list(
+      clip = FALSE,                   # <— don’t clip series to plot area
+      dataLabels = list(
+        crop = FALSE, overflow = "allow"  # global safety
+      )
+    ),
+    sankey = list(
+      dataLabels = list(
+        style = list(color = "black", textOutline = "none")
+      )
+    )
+  ) %>%
   hc_size(width = 1000, height = 560) %>%
   hc_add_series(
     type  = "sankey",
@@ -387,15 +427,8 @@ highchart() %>%
     )
   ) %>%
   hc_title(text = " ") %>%
-  hc_subtitle(text = "Yellow = holdings via financial sector; Grey = direct holdings") %>%
+  hc_subtitle(text = "Blue = direct holdings; Yellow = holdings via financial sector ") %>%
   hc_caption(text = " ") %>%
   hc_add_theme(ec_theme) %>%
   hc_annotations(col_captions) %>%
   hc_exporting(enabled = TRUE, filename = "s1m_three_column_with_lookthrough")
-
-# ---- Safe export to HTML (avoids RStudio temp viewer issue)
-# htmlwidgets::saveWidget(
-#   widget = p,
-#   file   = "s1m_three_column_with_lookthrough.html",
-#   selfcontained = TRUE
-# )
