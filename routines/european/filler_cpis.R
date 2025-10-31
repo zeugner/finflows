@@ -3,11 +3,9 @@ library(MDstats); library(MD3)
 # Set data directory
 #data_dir= file.path(getwd(),'data')
 if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
-<<<<<<< HEAD
-source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
-=======
 
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
+source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
+
 gc()
 
 ## load filled iip bop
@@ -61,11 +59,11 @@ for (cty in AREA)
 #cpis[DE.I_A_D_T_T_BP6_USD...US.2023]
 str(cpis)
 
-<<<<<<< HEAD
+
 saveRDSvl(cpis,file='data/cpis_temp_first.rds'); gc()
-=======
+
 saveRDS(cpis,file='data/cpis_temp_first.rds'); gc()
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
+
 #saveRDSvl(cpis,file='data/cpis_temp_' %&% Sys.timo() %&% '.rds'); gc()
 #cpis=readRDS(file.path(data_dir,'cpis_temp_first.rds')); gc()
 
@@ -82,11 +80,10 @@ exr=merge(exra,exrs)
 cpis=cpis/exr
 #cpis["DE.I_A_D_T_T_BP6_USD.T.T.US.2023:"]
 
-<<<<<<< HEAD
+
 saveRDSvl(cpis,file='data/cpis_temp_exr.rds'); gc()
-=======
+
 saveRDS(cpis,file='data/cpis_temp_exr.rds'); gc()
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 #############################################################################
 # --- transformation into MEUR
@@ -98,11 +95,9 @@ cpis=as.md3(dcpis); rm(dcpis)
 gc()
 #cpis["DE.I_A_D_T_T_BP6_USD.T.T.US.2023:"]
 
-<<<<<<< HEAD
 saveRDSvl(cpis,file='data/cpis_temp_MEUR.rds'); gc()
-=======
+
 saveRDS(cpis,file='data/cpis_temp_MEUR.rds'); gc()
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 
 #############################################################################
 # --- adjust $INDICATOR to financial instrument 
@@ -155,11 +150,10 @@ dimnames(cpis)$COUNTERPART_SECTOR <- ifelse(
 gc()
 
 cpis["DE.F3.S1.S1.US.y2023:"]
-<<<<<<< HEAD
+
 saveRDSvl(cpis,file='data/cpis_temp_adj.rds'); gc()
-=======
+
 saveRDS(cpis,file='data/cpis_temp_adj.rds'); gc()
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 #cpis=readRDS(file.path(data_dir,'cpis_temp_adj.rds')); gc()
 
 #############################################################################
@@ -181,13 +175,12 @@ dimnames(cpis)
 cpis["DE.F3.S1.S1.US."] 
 
 
-<<<<<<< HEAD
 
 
 gc()
 
 saveRDSvl(cpis,file='data/cpis_temp_time.rds'); gc()
-=======
+
 #### with Stefan Z - impute NAs ?
 #tcpis=imputena(cpis["...S1.."])
 #cpis["DE.F3.S1.S1.US."] 
@@ -195,7 +188,6 @@ saveRDSvl(cpis,file='data/cpis_temp_time.rds'); gc()
 gc()
 
 saveRDS(cpis,file='data/cpis_temp_time.rds'); gc()
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 #cpis=readRDS(file.path(data_dir,'cpis_temp_time.rds')); gc()
 
 #############################################################################
@@ -243,25 +235,20 @@ for (i in instr)
   ll[i, , , ,"LE", "_P", , , usenames=TRUE, onlyna=TRUE] =liabcpis[,i,,,,]
 }
 
-<<<<<<< HEAD
 #special adjustment for S124
 ll["F52", , , "S124","LE", "_P", , , usenames=TRUE, onlyna=TRUE] =liabcpis[,'F5',S124,,,]
 
-=======
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
 #after
 cpis["DE.F3..S1.FR.2022q4"] 
 aa[F3.DE..S1.LE..2022q4.FR]  
 ll[F3.DE..S1.LE..2022q4.FR] 
 
-<<<<<<< HEAD
 saveRDSvl(aa,file.path(data_dir,'aa_iip_cpis.rds'))
 saveRDSvl(ll,file.path(data_dir,'ll_iip_cpis.rds'))
 
 saveRDSvl(aa,file.path(data_dir,'vintages/aa_iip_cpis_' %&% format(Sys.time(),'%F') %&% '_.rds'))
 saveRDSvl(ll,file.path(data_dir,'vintages/ll_iip_cpis_' %&% format(Sys.time(),'%F') %&% '_.rds'))
-=======
+
 
 saveRDS(aa,file='data/aa_iip_cpis.rds')
 saveRDS(ll,file='data/ll_iip_cpis.rds')
->>>>>>> 69799a0443e137102a23881f7bdfcaf5b6832798
