@@ -47,5 +47,7 @@ for(sector in ref_sectors) {
   cat("\n", paste(rep("-", 80), collapse=""), "\n")
 }
 
-saveRDS(aall, file.path('X:/Finflows/zeugner/data/aall_filled.rds'))
+if (!exists("data_dir")) data_dir = getwd()
+saveRDS(aall, file.path(data_dir, 'aall_filled.rds'))
+
 
