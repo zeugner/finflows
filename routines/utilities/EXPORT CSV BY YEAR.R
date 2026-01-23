@@ -7,7 +7,9 @@ library(data.table)
 library(bit64)  # For more efficient memory handling
 
 # Base output directory for CSV files
-csv_dir <- "CSVs"
+if (!exists("data_dir")) data_dir = getwd()
+csv_dir <- file.path(data_dir, "CSVs")
+
 
 cat("Starting optimized data export process with precise rounding...\n")
 
