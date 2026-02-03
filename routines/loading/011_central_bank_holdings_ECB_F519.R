@@ -18,7 +18,7 @@ years <- 1999:2024
 colnames(capital_ts)[2:ncol(capital_ts)] <- as.character(years)
 
 # Read capital keys
-capital_keys <- as.data.table(read.xlsx(ecb_file_path, sheet = "capital keys", startRow = 2))
+capital_keys <- as.data.table(read.xlsx(ecb_file_path, sheet = "capital keys", startRow = 1))
 colnames(capital_keys) <- c("REF_AREA", "ECB2013", "ECB", "2023", "2024")
 
 # 2. Extract total ECB capital values for each year
@@ -119,3 +119,4 @@ print("Processing complete!")
 print(paste("Quarters processed:", length(all_quarters)))
 print(paste("Countries processed:", nrow(capital_keys)))
 print(paste("Total observations:", nrow(result_dt)))
+
