@@ -10,10 +10,25 @@ if (!exists("data_dir")) data_dir = getwd()
 
 #### LOADING CPQ TOTALS
 cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.")
+cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.') 
+
 cpq_F3=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.") 
+cpq_F3=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.')
+
 cpq_F4=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4.")
+cpq_F4=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4.')
+
 cpq_F511=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511.")
+cpq_F511=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511.')
+
 cpq_F52=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F52.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F52.")
+cpq_F52=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F52.')
+
 
 ### create cpq raw 
 cpq=add.dim(cpq_F2M, .dimname = 'INSTR', .dimcodes = c('F2M', 'F3', 'F4', 'F511', 'F52'), .fillall = FALSE)
@@ -28,7 +43,13 @@ saveRDS(cpq, file=file.path(data_dir, 'cpq_new.rds'))
 
 #### LOADING CPQ FDI
 cpq_F3_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3_FDI.')
+
+cpq_F3_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3_FDI.')
 cpq_F4_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.")
+cpq_F4_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.')
+cpq_F511_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.')
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.")
 cpq_F511_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.')
 
 cpq_fdi=add.dim(cpq_F3_FDI, .dimname = 'INSTR', .dimcodes = c('F3', 'F4', 'F511'), .fillall = FALSE)
