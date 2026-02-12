@@ -6,14 +6,13 @@ library(dplyr)
 library(lubridate)
 library(stringr)
 
-data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
+if (!exists("data_dir")) data_dir = getwd()
 
 #temp load current aall version
 #aall=readRDS(file.path(data_dir,'aall_iip_cps_new.rds')); gc()
 
 
-file_path <- "\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/static/bdi_S12V.xlsx"
+file_path <- file.path(data_dir, "static/bdi_S12V.xlsx")
 
 raw_data <- read_excel(file_path, skip = 1)
 column_names <- colnames(raw_data)
