@@ -55,9 +55,21 @@ lct_q=copy(lct); frequency(lct_q)='Q'
 lc_q["EA18..."]=lc_q["EA19..."]<-lc_q["EA20..."]
 lct_q["EA18..."]=lct_q["EA19..."]<-lct_q["EA20..."]
 
+##############################################################################
+# ALIGN DIMENSIONS BEFORE SUBTRACTION
+# The arrays may have the same elements in each dimension but in different order.
+# Arithmetic operations work by position, so we must reorder to match.
+##############################################################################
+
+# Align lc_q dimensions to match la_q
+lc_q_aligned = lc_q[dimnames(la_q)$REF_AREA, dimnames(la_q)$INSTR, dimnames(la_q)$REF_SECTOR, dimnames(la_q)$TIME]
+
+# Align lct_q dimensions to match lat_q
+lct_q_aligned = lct_q[dimnames(lat_q)$REF_AREA, dimnames(lat_q)$INSTR, dimnames(lat_q)$REF_SECTOR, dimnames(lat_q)$TIME]
+
 # Calculate intrasector stocks and flows (unconsolidated - consolidated)
-intra_stock_assets <- la_q-lc_q
-intra_flows_assets <- lat_q-lct_q
+intra_stock_assets <- la_q - lc_q_aligned
+intra_flows_assets <- lat_q - lct_q_aligned
 
 # Get sector dimensions
 dim_sa=dimnames(intra_stock_assets)
