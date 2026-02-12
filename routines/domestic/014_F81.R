@@ -1,3 +1,9 @@
+# ==============================================================================
+# 014_F81.R
+# Filling of F81 (trade credits) into aall
+# Requires: 012_loading_F81_F89_F6.R to have been run first
+# ==============================================================================
+
 # Load required packages
 library(MDstats)
 library(MD3)
@@ -12,30 +18,14 @@ zerofiller=function(x, fillscalar=0){
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
 
+# --- Load previously saved data ---
 aall <- readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_f51m.rds"))
 
-tradecredits_al=mds('ECB/QSA/Q.N..W0+W1...N.A+L.LE.F81.T._Z.XDC._T.S.V.N._T')
-saveRDS(tradecredits_al, file.path(data_dir, 'tradecredits_al.rds'))
-bopf81q=mds('Estat/bop_iip6_q/Q.MIO_EUR.FA__D__F81+FA__O__F81+..S1.A_LE+L_LE.WRL_REST.')
-bopf81_a=mds('Estat/bop_iip6_q/A.MIO_EUR.FA__D__F81+FA__O__F81+..S1.A_LE+L_LE.WRL_REST.')
-saveRDS(bopf81q, file.path(data_dir, 'bopf81q.rds'))
-bopf81a=copy(bopf81_a); frequency(bopf81a)='Q'
-saveRDS(bopf81a, file.path(data_dir, 'bopf81a.rds'))
+tradecredits <- readRDS(file.path(data_dir, "tradecredits.rds"))
+bopf81q <- readRDS(file.path(data_dir, "bopf81q.rds"))
+bopf81a <- readRDS(file.path(data_dir, "bopf81a.rds"))
 
-names(dimnames(tradecredits_al)) =gsub("^COUNTER.*$","COUNTERPART_SECTOR",names(dimnames(tradecredits_al)))
-tradecredits_al=aperm(tradecredits_al,c("REF_AREA","REF_SECTOR","COUNTERPART_SECTOR","ACCOUNTING_ENTRY","TIME"))
-
-tradecredits=tradecredits_al[...A.]
-
-dimnames(tradecredits)$COUNTERPART_SECTOR = c(W0='S0' , W1='S2')[dimnames(tradecredits)$COUNTERPART_SECTOR]
-
-tradecredits[.S2.S0.] =tradecredits_al[.S1.W1.L.]
-tradecredits[.S2.S1.] =tradecredits_al[.S1.W1.L.]
-tradecredits[.S1.S1.] = tradecredits[.S1.S0.] -tradecredits[.S1.S2.] 
-tradecredits[.S0.S1.] = tradecredits[.S1.S1.] +tradecredits[.S2.S1.] 
-saveRDS(tradecredits, file.path(data_dir, 'tradecredits.rds'))
-gc()
-
+# --- Prepare working object ---
 tradecredits=add.dim(tradecredits,.dimname = 'FUNCTIONAL_CAT',.dimcodes = '_T')
 dimnames(tradecredits)[[1]]='_T'
 
@@ -76,12 +66,15 @@ af81['_O..S2..',onlyna=TRUE]<-bopf81a_liab["..L_LE.FA__O__F81.1998q4:"]
 af81['_T..S2..',onlyna=TRUE]<-af81['_D..S2..']+af81['_O..S2..']
 af81['_S..S2..',onlyna=TRUE]<-af81['_D..S2..']+af81['_O..S2..']
 
-af81['..S1..',onlyna=TRUE]<-af81['..S0..']-af81['..S2..']
+# Fill aall with af81 
+aall[F81....LE.., onlyna=TRUE] <- af81[....]
 
-af81['...S1.',onlyna=TRUE]<-af81['...S0.']-af81['...S2.']
+# Compute S1 residuals 
+# Assets 
+aall['F81..S1....', onlyna=TRUE] <- aall['F81..S0....'] - aall['F81..S2....']
 
-######FILLING
-aall[F81....LE..,onlyna=TRUE]<-af81[....]
+# Liabilities 
+aall['F81...S1...', onlyna=TRUE] <- aall['F81...S0...'] - aall['F81...S2...']
 
 aall[....._S.,onlyna=TRUE]<-aall[....._T.]
 
@@ -98,4 +91,4 @@ aall["F81...S11.LE..", onlyna=TRUE]<-aall["F81...S1.LE.."]
 #### all residual goes to S12O
 aall["F81...S12O.LE..", onlyna=TRUE]<-aall["F81...S1.LE.."]-aall["F81...S11.LE.."]-zerofiller(aall["F81...S13.LE.."])-zerofiller(aall["F81...S1M.LE.."])
 
-saveRDS(aall, file.path(data_dir, 'aall_f81.rds'))
+saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_f81.rds'))
