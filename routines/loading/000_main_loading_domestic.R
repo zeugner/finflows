@@ -1,5 +1,5 @@
 ################################################################################
-# MAIN LOADING SCRIPT - Finflows - Domestic
+# MAIN LOADING SCRIPT - Finflows - Domestic + Cross-Border
 ################################################################################
 
 # Load required packages
@@ -113,89 +113,143 @@ cat("", file = file.path(data_dir, "logs", "loading_log.txt"))
 
 # Define loading pipeline
 loading_plan <- list(
-  # Primary data sources
+
+  ##############################################################################
+  # DOMESTIC DATA SOURCES
+  ##############################################################################
+
+  # Primary data sources - ECB QSA
   ecb_qsa = list(
-    script = file.path(script_dir, "001_finflowers_loadQSAfromECB.R"),
+    script = file.path(script_dir, "loading/001_finflowers_loadQSAfromECB.R"),
     output = file.path(data_dir, "fflist.rds"),
-    name = "ECB QSA Financial Flows"
-  ),
-  
-  # Eurostat NASA data
-  nasa_data = list(
-    script = file.path(script_dir, "003_load_NASA.R"),
-    output = file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_assets.rds"),
-    name = "Eurostat NASA Annual Data"
-  ),
-  
-  # Eurostat NASQ data
-  nasq_data = list(
-    script = file.path(script_dir, "004_load_NASQ.R"),
-    output = file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"),
-    name = "Eurostat NASQ Quarterly Data"
-  ),
-  
-  # ECB BSI MFI data
-  bsi_mfi = list(
-    script = file.path(script_dir, "005_load_BSI_MFI.R"),
-    output = file.path(data_dir, "bsi_assets.rds"),
-    name = "ECB BSI MFI Holdings"
-  ),
-  
-  # ECB BSI Loans and Deposits
-  bsi_loans_deposits = list(
-    script = file.path(script_dir, "006_load_bsi_loans_dep.R"),
-    output = file.path(data_dir, "bsi_loans_dep.rds"),
-    name = "ECB BSI Loans and Deposits"
-  ),
-  
-  # Counterpart information
-  counterpart_info = list(
-    script = file.path(script_dir, "007_load_counterpart_info.R"),
-    output = file.path(data_dir, "cpq_new.rds"),
-    name = "Counterpart Information (NASA CP)"
-  ),
-  
-  # Securities Holdings Statistics
-  shs_data = list(
-    script = file.path(script_dir, "008_load_shs_s.R"),
-    output = file.path(data_dir, "ash.rds"),
-    name = "ECB Securities Holdings Statistics"
-  ),
-  
-  # Row equity processing
-  row_equity = list(
-    script = file.path(script_dir, "009_row_equity_processing.R"),
-    output = file.path(data_dir, "af51.rds"),
-    name = "Rest of World Equity Processing"
-  ),
-  
-  # Government F5 data
-  gov_f5 = list(
-    script = file.path(script_dir, "010_govF5.R"),
-    output = file.path(data_dir, "gov_equity.rds"),
-    name = "Government F5 Holdings"
-  ),
-  
-  # ECB Central Bank Holdings
-  ecb_capital = list(
-    script = file.path(script_dir, "011_central_bank_holdings_ECB_F519.R"),
-    output = file.path(data_dir, "ecb_capital_md3.rds"),
-    name = "ECB Central Bank Capital Holdings"
+    name = "ECB QSA Financial Flows",
+    phase = "Domestic"
   ),
   
   # Exchange rates data
   exchange_rates = list(
-    script = file.path(script_dir, "002_load_exchange_rates.R"),
+    script = file.path(script_dir, "loading/002_load_exchange_rates.R"),
     output = file.path(data_dir, "eurostat_f3_stocks.rds"),
-    name = "Exchange Rates Data"
+    name = "Exchange Rates Data",
+    phase = "Domestic"
+  ),
+  
+  # Eurostat NASA data
+  nasa_data = list(
+    script = file.path(script_dir, "loading/003_load_NASA.R"),
+    output = file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_assets.rds"),
+    name = "Eurostat NASA Annual Data",
+    phase = "Domestic"
+  ),
+  
+  # Eurostat NASQ data
+  nasq_data = list(
+    script = file.path(script_dir, "loading/004_load_NASQ.R"),
+    output = file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"),
+    name = "Eurostat NASQ Quarterly Data",
+    phase = "Domestic"
+  ),
+  
+  # ECB BSI MFI data
+  bsi_mfi = list(
+    script = file.path(script_dir, "loading/005_load_BSI_MFI.R"),
+    output = file.path(data_dir, "bsi_assets.rds"),
+    name = "ECB BSI MFI Holdings",
+    phase = "Domestic"
+  ),
+  
+  # ECB BSI Loans and Deposits
+  bsi_loans_deposits = list(
+    script = file.path(script_dir, "loading/006_load_bsi_loans_dep.R"),
+    output = file.path(data_dir, "bsi_loans_dep.rds"),
+    name = "ECB BSI Loans and Deposits",
+    phase = "Domestic"
+  ),
+  
+  # Counterpart information
+  counterpart_info = list(
+    script = file.path(script_dir, "loading/007_load_counterpart_info.R"),
+    output = file.path(data_dir, "cpq_new.rds"),
+    name = "Counterpart Information (NASA CP)",
+    phase = "Domestic"
+  ),
+  
+  # Securities Holdings Statistics
+  shs_data = list(
+    script = file.path(script_dir, "loading/008_load_shs_s.R"),
+    output = file.path(data_dir, "ash.rds"),
+    name = "ECB Securities Holdings Statistics",
+    phase = "Domestic"
+  ),
+  
+  # Row equity processing
+  row_equity = list(
+    script = file.path(script_dir, "loading/009_row_equity_processing.R"),
+    output = file.path(data_dir, "af51.rds"),
+    name = "Rest of World Equity Processing",
+    phase = "Domestic"
+  ),
+  
+  # Government F5 data
+  gov_f5 = list(
+    script = file.path(script_dir, "loading/010_govF5.R"),
+    output = file.path(data_dir, "gov_equity.rds"),
+    name = "Government F5 Holdings",
+    phase = "Domestic"
+  ),
+  
+  # ECB Central Bank Holdings
+  ecb_capital = list(
+    script = file.path(script_dir, "loading/011_central_bank_holdings_ECB_F519.R"),
+    output = file.path(data_dir, "ecb_capital_md3.rds"),
+    name = "ECB Central Bank Capital Holdings",
+    phase = "Domestic"
+  ),
+
+  ##############################################################################
+  # CROSS-BORDER DATA SOURCES
+  ##############################################################################
+
+  # F81, F89, F6 data
+  f81_f89_f6 = list(
+    script = file.path(script_dir, "loading/012_loading_F81_F89_F6.R"),
+    output = file.path(data_dir, "f81_f89_f6.rds"),
+    name = "F81, F89, F6 Data",
+    phase = "Cross-Border"
+  ),
+
+  # IIP / BOP data from Eurostat (external sector positions)
+  iip_bop = list(
+    script = file.path(script_dir, "loading/013_load_iip_bop.R"),
+    output = file.path(data_dir, "iip_bop.rds"),
+    name = "Eurostat IIP/BOP External Positions",
+    phase = "Cross-Border"
+  ),
+  
+  # CPIS data from IMF (bilateral portfolio positions)
+  cpis = list(
+    script = file.path(script_dir, "loading/014_load_cpis.R"),
+    output = file.path(data_dir, "cpisbuffer/allcresultslist.rds"),
+    name = "IMF CPIS Bilateral Portfolio Positions",
+    phase = "Cross-Border"
   )
 )
 
 # Execute data loading pipeline
 log_execution("MAIN", "INFO", "Starting data loading phase")
 
+current_phase <- ""
 for (data_source_name in names(loading_plan)) {
   data_source <- loading_plan[[data_source_name]]
+  
+  # Log phase changes
+  if (!is.null(data_source$phase) && data_source$phase != current_phase) {
+    current_phase <- data_source$phase
+    log_execution("PHASE", "INFO", sprintf("Starting %s loading", current_phase))
+    cat("\n", paste(rep("-", 60), collapse = ""), "\n")
+    cat("PHASE:", current_phase, "loading\n")
+    cat(paste(rep("-", 60), collapse = ""), "\n")
+  }
   
   if (confirm_data_load(data_source$name)) {
     if (!file.exists(data_source$script)) {
@@ -220,13 +274,13 @@ for (data_source_name in names(loading_plan)) {
 # Final loading summary
 log_execution("MAIN", "COMPLETED", "All data loading operations completed")
 
-cat("\n", paste(rep("=", 80), collapse=""), "\n")
+cat("\n", paste(rep("=", 80), collapse = ""), "\n")
 cat("DATA LOADING SUMMARY\n")
-cat(paste(rep("=", 80), collapse=""), "\n")
+cat(paste(rep("=", 80), collapse = ""), "\n")
 cat("Loading phase completed successfully!\n")
 cat("Check the logs directory for detailed execution logs.\n")
-cat("\nNext step: Run 000_main_filling.R to process and fill the loaded data.\n")
-cat(paste(rep("=", 80), collapse=""), "\n")
+cat("\nNext step: Run domestic/000_main_filling.R to process and fill the loaded data.\n")
+cat(paste(rep("=", 80), collapse = ""), "\n")
 
 ################################################################################
 # End of Loading Script
