@@ -10,7 +10,7 @@ cpa= readRDS(file.path(data_dir, "cpa_new.rds"))
 cpq= readRDS(file.path(data_dir, "cpq_new.rds"))
 cpq_fdi= readRDS(file.path(data_dir, "cpq_fdi_new.rds"))
 aall= readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_shss.rds"))
-
+gc()
 ### WORK ON DIMNAMES
 
 names(dimnames(cpa))[1]=names(dimnames(cpq))[5]=names(dimnames(cpq_fdi))[4]='STO'
