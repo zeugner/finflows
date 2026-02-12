@@ -3,9 +3,7 @@ library(MD3)
 
 # Set data directory
 #data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data'
-source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
-
+if (!exists("data_dir")) data_dir = getwd()
 
 
 ############################################################################################################################
@@ -15,7 +13,7 @@ source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows
 ############################################################################################################################
 ############################################################################################################################
 
-aall=readRDS(file.path(data_dir,'aall_domestic.rds')); gc()
+aall=readRDS(file.path(data_dir,'intermediate_domestic_data_files/aall_domestic.rds')); gc()
 aall[F.AT.S1.S2+S0.LE._T.2022q4]
 aall[F.AT.S2+S0.S1.LE._T.2022q4]
 
@@ -34,6 +32,12 @@ aall <- aperm(aall, c(2:6,1,7))
 gc()
 dimnames(aall)[[6]]
 dimnames(aall)$FUNCTIONAL_CAT[dimnames(aall)$FUNCTIONAL_CAT=='X_T'] = '_T'
+
+###to avoid "non unique values" error, we only keep one EA and EU element
+aall[.U2.....,onlyna=TRUE]<-aall[.EA.....]
+aall[.EU27.....,onlyna=TRUE]<-aall[.EU27_2020.....]
+
+aall=aall[.AT+BE+BG+CY+CZ+DE+DK+U2+EA18+EA19+EA20+EE+ES+FI+FR+HR+HU+IE+IT+LT+LU+LV+MT+NL+PL+PT+RO+SE+SI+SK+EL+UK+CH+NO+IS+TR+AL+RS+MK+U5+XK+MD+BA+ME+EU27+U4+U6+Z5+U3+U9+U8.....]
 
 #########################################
 #clean data 
@@ -57,23 +61,33 @@ attr(dall, 'dcsimp') = mydn
 aall=as.md3(dall)
 gc()
 
+# Add back FUNCTIONAL_CAT dimension (it was lost during data.table conversion)
+aall=add.dim(aall, .dimname = 'FUNCTIONAL_CAT', .dimcodes = c('_T'), .fillall = FALSE)
+
+aall <- aperm(aall, c(2, 3, 4, 5, 6, 1, 7))
+dimnames(aall)$FUNCTIONAL_CAT[dimnames(aall)$FUNCTIONAL_CAT=='X_T'] = '_T'
+
 #########################################
 #adjust iso code
 #########################################
+
+#ccode(dimnames(loans_bsi)[['REF_AREA']],2,'iso2m',leaveifNA=TRUE)
 
 dimnames(aall)[['REF_AREA']] = ccode(dimnames(aall)[['REF_AREA']],2,'iso2m'); gc()
 
 aall[F.AT.S1.S2+S0.LE._T.2022q4]
 aall[F.AT.S2+S0.S1.LE._T.2022q4]
 
-#what is saveRDSvl?
-saveRDSvl(aall,file=file.path(data_dir,'aall_temp.rds'))
-saveRDSvl(aall,file=file.path(data_dir,'vintages/aall_temp' %&% format(Sys.time(),'%F') %&% '_.rds'))
+
+saveRDS(aall,file=file.path(data_dir,'aall_temp.rds'))
+saveRDS(aall,file=file.path(data_dir,'vintages/aall_temp' %&% format(Sys.time(),'%F') %&% '_.rds'))
 
 ##############################################################
 ### load FDI Information from ECB QSA
 ##############################################################
-fnd=readRDS('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/trialarea/data/fndqsa.rds')
+source(file.path(script_dir, "european/fndloader0.R"))
+
+fnd=readRDS(file.path(data_dir, 'fndqsa.rds'))
 names(dimnames(fnd))[5] = 'INSTR'
 fnd=aperm(copy(fnd),c(5,2,3,1,4,6))
 
@@ -101,8 +115,8 @@ aall[..S2.S12R.F._D., usenames=TRUE, onlyna=TRUE] = fnd[..S0.S124.F.]+fnd[..S0.S
 gc()
 str(aall)
 
-saveRDSvl(aall,file=file.path(data_dir,'aall_intermediate.rds'))
-saveRDSvl(aall,file=file.path(data_dir,'vintages/aall_intermediate' %&% format(Sys.time(),'%F') %&% '_.rds'))
+saveRDS(aall,file=file.path(data_dir,'aall_intermediate.rds'))
+saveRDS(aall,file=file.path(data_dir,'vintages/aall_intermediate' %&% format(Sys.time(),'%F') %&% '_.rds'))
 
 ###############################################################
 # Add the new dimension COUNTERPART_AREA with W0, W1, W2 codes
@@ -140,8 +154,8 @@ gc()
 aall[F.AT.S1..LE._T.2022q4.]
 aall[F.AT..S1.LE._T.2022q4.]
 
-saveRDSvl(aall,file=file.path(data_dir,'aall_intermediate.rds'))
-saveRDSvl(aall,file=file.path(data_dir,'vintages/aall_intermediate' %&% format(Sys.time(),'%F') %&% '_.rds'))
+saveRDS(aall,file=file.path(data_dir,'aall_intermediate.rds'))
+saveRDS(aall,file=file.path(data_dir,'vintages/aall_intermediate' %&% format(Sys.time(),'%F') %&% '_.rds'))
 
 
 ##############################################################
@@ -160,7 +174,7 @@ saveRDSvl(aall,file=file.path(data_dir,'vintages/aall_intermediate' %&% format(S
 # F2M   AT    AT              S1 (S1M)            S12T         LE     _O            2024Q4  IT
 
 ####ASSETS
-## we want to keep aall for all domestic sectors, hence we exclude S2+S0
+## we want to keep aall for all domestic sectors, hence we exclude S2+S0 from REF_SECTOR
 gc()
 
 tempix=dimnames(aall)[[3]]
@@ -172,7 +186,7 @@ aa[F511.AT.S2+S1+S0.S2+S1+S0.LE._T.2022q4.]
 #should _not_ exist:
 aa[F511.AT.S2+S0.S1.LE..2022q4.WRL_REST]
 
-#S2 and S0 are no longer needed
+#S2 and S0 in COUNTERPART_SECTOR are no longer needed, relabel to S1
 aa[...S1....WRL_REST, usenames =FALSE, onlyna=TRUE]=aa[...S2....WRL_REST];gc()
 aa[...S1....W0, usenames =FALSE, onlyna=TRUE]=aa[...S0....W0];gc()
 
@@ -182,49 +196,39 @@ aa[F511.AT.S1.S2+S1+S0.LE._T.2022q4.]
 aa[F511.AT.S1.S1.LE._T.2022q4.]
 
 
-###replace with this erza
-
-# tempix=dimnames(aa)[[4]]
-# aa=copy(aa[,,,setdiff(tempix,c('S0','S2')),,,,])
-
-
 ####LIABILITIES
-## we want to keep aall for all domestic sectors, hence we exclude S2+S0
-
+## FIXED: Don't filter out S0/S2, keep everything and do relabeling in both dimensions
 gc()
 
-tempix=dimnames(aall)[[4]]
-ll=copy(aall[,,,setdiff(tempix,c('S0','S2')),,,,])
+ll=copy(aall)
 
-#should _not_  exist:
-ll[F511.AT.S1.S2.LE..2022q4.]
-#should exist:
-ll[F511.AT.S2.S1.LE..2022q4.WRL_REST]
+# Relabel S2→S1 in REF_SECTOR (position 3) for liabilities where counterpart is domestic
+ll[..S1.....WRL_REST, usenames=FALSE, onlyna=TRUE]=ll[..S2.....WRL_REST];gc()
+ll[..S1.....W0, usenames=FALSE, onlyna=TRUE]=ll[..S0.....W0];gc()
 
-#S2 and S0 are no longer needed
-ll[..S1.....WRL_REST, usenames =FALSE, onlyna=TRUE]=ll[..S2.....WRL_REST];gc()
-ll[..S1.....W0, usenames =FALSE, onlyna=TRUE]=ll[..S0.....W0];gc()
+# Relabel S2→S1 in COUNTERPART_SECTOR (position 4) for assets viewed as liabilities
+ll[...S1....WRL_REST, usenames=FALSE, onlyna=TRUE]=ll[...S2....WRL_REST];gc()
+ll[...S1....W0, usenames=FALSE, onlyna=TRUE]=ll[...S0....W0];gc()
 
-#should not exist for S2+S0:
-ll[F511.AT.S1.S2+S1+S0.LE._T.2022q4.]
-#should exist:
-ll[F511.AT.S1.S1.LE._T.2022q4.]
+#should exist - Test 1 (AT S12T assets vis-a-vis RoW):
+ll[F3.AT.S12T.S1.LE._T.2024q4.WRL_REST]
+#should exist - Test 3 (IT S11 liabilities vis-a-vis RoW):
+ll[F3.IT.S1.S11.LE._T.2024q4.WRL_REST]
 
 #switching structure of CP AREA and CP Sector for liabilities 
 ll=aperm(copy(ll), c(1,8,4,3,5,6,7,2))
 dim(ll)
 
+# After aperm, ll order is: INSTR, COUNTERPART_AREA, COUNTERPART_SECTOR, REF_SECTOR, STO, FUNCTIONAL_CAT, TIME, REF_AREA
+#should exist - Test 1 after aperm:
+ll[F3.WRL_REST.S1.S12T.LE._T.2024q4.AT]
+#should exist - Test 3 after aperm:
+ll[F3.WRL_REST.S11.S1.LE._T.2024q4.IT]
 
-#should not exist:
-ll[F511.WRL_REST.S1.S2.LE..2022q4.AT]
-#should  exist:
-ll[F511..S1.S1.LE..2022q4.AT]
 gc()
 
-saveRDSvl(aa,file.path(data_dir,'aa_prep.rds'))
-saveRDSvl(ll,file.path(data_dir,'ll_prep.rds'))
+saveRDS(aa,file.path(data_dir,'aa_prep.rds'))
+saveRDS(ll,file.path(data_dir,'ll_prep.rds'))
 
-saveRDSvl(aa,file.path(data_dir,'vintages/aa_prep' %&% format(Sys.time(),'%F') %&% '_.rds'))
-saveRDSvl(ll,file.path(data_dir,'vintages/ll_prep' %&% format(Sys.time(),'%F') %&% '_.rds'))
-          
-          
+saveRDS(aa,file.path(data_dir,'vintages/aa_prep' %&% format(Sys.time(),'%F') %&% '_.rds'))
+saveRDS(ll,file.path(data_dir,'vintages/ll_prep' %&% format(Sys.time(),'%F') %&% '_.rds'))
