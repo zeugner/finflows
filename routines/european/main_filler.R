@@ -6,10 +6,8 @@ library(MDstats); library(MD3)
 
 # Set data directory
 #data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
-#if (!exists("script_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/'
-
-script_dir <- "V:/Finflows/githubrepo/finflows/routines"
+if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines'
 
 # Check directories exist
 if (!dir.exists(script_dir)) {
@@ -70,7 +68,22 @@ run_script <- function(script_path) {
   })
 }
 
-
+# Interactive control function
+confirm_data_load <- function(data_name) {
+  if (!interactive()) {
+    cat("Non-interactive session detected, proceeding with data load\n")
+    return(TRUE)
+  }
+  
+  cat("\n========================================\n")
+  cat(sprintf("Do you want to run %s?\n", data_name))
+  cat("Type 'y' to run, or press Enter to skip: ")
+  
+  choice <- tolower(trimws(readline()))
+  cat(sprintf("You chose to %s this step\n", ifelse(choice == "y", "proceed with", "skip")))
+  cat("========================================\n")
+  return(choice == "y")
+}
 
 ################################################################################
 # Main Execution
@@ -84,41 +97,41 @@ cat("", file = file.path(data_dir, "logs", "execution_log.txt"))
 execution_plan <- list(
   # Data loading pipeline
   data_loading = list(
-    # preperation of aall_domestic to split into assets and liabilities
+    # Step 1: preparation of aall_domestic - split into assets and liabilities
     prep = list(
-      script = file.path(script_dir, "european/prep_aalldomestic.R"),
+      script = file.path(script_dir, "european/001_prep_aalldomestic.R"),
       output = file.path(data_dir, "ll_prep.rds"),
-      name = "prep all"
+      name = "Prep aall_domestic (split aa/ll)"
     ),
-    # IIP filler - first load aall_domestic and then fill with bop iip information from ESTAT
+    # Step 2: IIP filler - fill aa/ll with BOP IIP information from Eurostat
     iip = list(
-      script = file.path(script_dir, "european/filler_iip.R"),
+      script = file.path(script_dir, "european/002_filler_iip.R"),
       output = file.path(data_dir, "ll_iip_cps.rds"),
       name = "IIP filler"
     ),
-    # BSI filler - for F2 and F4
+    # Step 3: BSI filler - for F2 and F4
     bsi_ext = list(
-      script = file.path(script_dir, "european/filler_bsi.R"),
+      script = file.path(script_dir, "european/003_filler_bsi.R"),
       output = file.path(data_dir, "ll_iip_bsi.rds"),
       name = "BSI filler"
     ),
-    # SHSS filler
-    shss= list(
-      script = file.path(script_dir, "european/filler_shss.R"),
+    # Step 4: SHSS filler
+    shss = list(
+      script = file.path(script_dir, "european/004_filler_shss.R"),
       output = file.path(data_dir, "ll_iip_shss.rds"),
       name = "SHSS filler"
     ),
-    # cpis filler
-    cpis= list(
-      script = file.path(script_dir, "european/cpis_shss.R"),
+    # Step 5: CPIS filler
+    cpis = list(
+      script = file.path(script_dir, "european/filler_cpis.R"),
       output = file.path(data_dir, "ll_iip_cpis.rds"),
-      name = "SHSS filler"
+      name = "CPIS filler"
     )
   )
 )
 
 # Execute data loading pipeline
-log_execution("MAIN", "INFO", "Starting data loading phase")
+log_execution("MAIN", "INFO", "Starting european external sector filling phase")
 for (data_source in execution_plan$data_loading) {
   if (confirm_data_load(data_source$name)) {
     if (!file.exists(data_source$script)) {
@@ -130,7 +143,7 @@ for (data_source in execution_plan$data_loading) {
       stop(sprintf("Execution failed at script: %s", data_source$script))
     }
   } else {
-    log_execution(data_source$name, "SKIPPED", "User chose to skip loading")
+    log_execution(data_source$name, "SKIPPED", "User chose to skip")
   }
 }
 
