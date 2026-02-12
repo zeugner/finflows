@@ -1,3 +1,9 @@
+# ==============================================================================
+# 015_F89.R
+# Filling of F89 (other accounts) into aall
+# Requires: 012_loading_F81_F89_F6.R to have been run first
+# ==============================================================================
+
 # Load required packages
 library(MDstats)
 library(MD3)
@@ -12,34 +18,18 @@ zerofiller=function(x, fillscalar=0){
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
 
-aall <- readRDS(file.path(data_dir, "aall_f81.rds"))
+# --- Load previously saved data ---
+aall <- readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_f81.rds"))
 
-otheraccounts_al=mds('ECB/QSA/Q.N..W0+W1...N.A+L.LE.F89.T._Z.XDC._T.S.V.N._T')
-saveRDS(otheraccounts_al, file.path(data_dir, 'otheraccounts_al.rds'))
-bopf89q=mds('Estat/bop_iip6_q/Q.MIO_EUR.FA__O__F89..S1.A_LE+L_LE.WRL_REST.')
-bopf89_a=mds('Estat/bop_iip6_q/A.MIO_EUR.FA__O__F89..S1.A_LE+L_LE.WRL_REST.')
-saveRDS(bopf89q, file.path(data_dir, 'bopf89q.rds'))
+otheraccounts <- readRDS(file.path(data_dir, "otheraccounts.rds"))
+bopf89q <- readRDS(file.path(data_dir, "bopf89q.rds"))
+bopf89a <- readRDS(file.path(data_dir, "bopf89a.rds"))
 
-names(dimnames(otheraccounts_al)) =gsub("^COUNTER.*$","COUNTERPART_SECTOR",names(dimnames(otheraccounts_al)))
-otheraccounts_al=aperm(otheraccounts_al,c("REF_AREA","REF_SECTOR","COUNTERPART_SECTOR","ACCOUNTING_ENTRY","TIME"))
-
-otheraccounts=otheraccounts_al[...A.]
-
-dimnames(otheraccounts)$COUNTERPART_SECTOR = c(W0='S0' , W1='S2')[dimnames(otheraccounts)$COUNTERPART_SECTOR]
-otheraccounts[.S2.S0.] =otheraccounts_al[.S1.W1.L.]
-otheraccounts[.S2.S1.] =otheraccounts_al[.S1.W1.L.]
-otheraccounts[.S1.S1.] = otheraccounts[.S1.S0.] -otheraccounts[.S1.S2.] 
-otheraccounts[.S0.S1.] = otheraccounts[.S1.S1.] +otheraccounts[.S2.S1.] 
-saveRDS(otheraccounts, file.path(data_dir, 'otheraccounts.rds'))
-gc()
-
+# --- Prepare working object ---
 af89_=aall['F89....LE._T+_S+_O.1999q1:']
 otheraccounts=add.dim(otheraccounts,.dimname = 'FUNCTIONAL_CAT',.dimcodes = '_T')
 dimnames(otheraccounts)[[1]]='_T'
 af89=merge(otheraccounts, af89_,along = 'FUNCTIONAL_CAT')
-
-bopf89a=copy(bopf89_a); frequency(bopf89a)='Q'
-saveRDS(bopf89a, file.path(data_dir, 'bopf89a.rds'))
 
 names(dimnames(bopf89a))[1]=names(dimnames(bopf89q))[1]='REF_AREA'  
 names(dimnames(bopf89q))[2]=names(dimnames(bopf89a))[2]='REF_SECTOR'
@@ -67,12 +57,14 @@ af89['_O..S2..',onlyna=TRUE]<-bopf89a_liab["..L_LE.1998q4:"]
 af89['_T..S2..',onlyna=TRUE]<-af89['_O..S2..']
 af89['_S..S2..',onlyna=TRUE]<-af89['_O..S2..']
 
-af89['..S1..',onlyna=TRUE]<-af89['..S0..']-af89['..S2..']
-
-af89['...S1.',onlyna=TRUE]<-af89['...S0.']-af89['...S2.']
-
 ######FILLING
 aall[F89....LE..,onlyna=TRUE]<-af89[....]
+
+# Compute S1 residuals directly on aall (7 dimensions)
+# Assets (REF_SECTOR position 3)
+aall['F89..S1....', onlyna=TRUE] <- aall['F89..S0....'] - aall['F89..S2....']
+# Liabilities (COUNTERPART_SECTOR position 4)
+aall['F89...S1...', onlyna=TRUE] <- aall['F89...S0...'] - aall['F89...S2...']
 
 aall[....._S.,onlyna=TRUE]<-aall[....._T.]
 
@@ -89,4 +81,4 @@ aall["F89...S13.LE..", onlyna=TRUE]<-aall["F89...S1.LE.."]
 #### all residual goes to S12O
 aall["F89...S12O.LE..", onlyna=TRUE]<-aall["F89...S1.LE.."]-aall["F89...S11.LE.."]-zerofiller(aall["F89...S13.LE.."])-zerofiller(aall["F89...S1M.LE.."])-zerofiller(aall["F89...S12O.LE.."])-zerofiller(aall["F89...S12Q.LE.."])
 
-saveRDS(aall, file.path(data_dir, 'aall_f89.rds'))
+saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_f89.rds'))
