@@ -10,7 +10,7 @@ if (!require("MDecfin")) {
 
 # Set the project directories
 if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
-script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/'
+script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines'
 
 # Check directories exist
 if (!dir.exists(script_dir)) {
@@ -71,6 +71,23 @@ run_script <- function(script_path) {
   })
 }
 
+# Interactive control function
+confirm_data_load <- function(data_name) {
+  if (!interactive()) {
+    cat("Non-interactive session detected, proceeding with data load\n")
+    return(TRUE)
+  }
+  
+  cat("\n========================================\n")
+  cat(sprintf("Do you want to run %s?\n", data_name))
+  cat("Type 'y' to run, or press Enter to skip: ")
+  
+  choice <- tolower(trimws(readline()))
+  cat(sprintf("You chose to %s this step\n", ifelse(choice == "y", "proceed with", "skip")))
+  cat("========================================\n")
+  return(choice == "y")
+}
+
 # Dependency checking functions
 check_rds_exists <- function(file_path) {
   exists <- file.exists(file_path)
@@ -100,124 +117,140 @@ cat("", file = file.path(data_dir, "logs", "filling_log.txt"))
 filling_plan <- list(
   # Phase 1: Initial QSA Processing
   combine_qsa = list(
-    script = file.path(script_dir, "001_finflowers_combineQSA.R"),
+    script = file.path(script_dir, "domestic/001_finflowers_combineQSA.R"),
     input = file.path(data_dir, "fflist.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_qsa.rds"),
-    phase = "Initial Processing"
+    phase = "Initial Processing",
+    name = "Combine QSA"
   ),
   
   assumptions = list(
-    script = file.path(script_dir, "002_finflowers_EAtest.R"),
+    script = file.path(script_dir, "domestic/002_finflowers_EAtest.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_qsa.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_qsa_assumptions.rds"),
-    phase = "Initial Processing"
+    phase = "Initial Processing",
+    name = "EA Assumptions"
   ),
   
   # Phase 2: Exchange Rate Conversion
   exchange_conversion = list(
-    script = file.path(script_dir, "003_exchange_rates_rounding.R"),
+    script = file.path(script_dir, "domestic/003_exchange_rates_rounding.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_qsa_assumptions.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_rounded.rds"),
-    phase = "Currency Conversion"
+    phase = "Currency Conversion",
+    name = "Exchange Rate Conversion"
   ),
   
   # Phase 3: NASQ Processing
   nasq_processing = list(
-    script = file.path(script_dir, "004_nasq_treatment.R"),
+    script = file.path(script_dir, "domestic/004_nasq_treatment.R"),
     input = file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/nasq_processed_assets_stocks.rds"),
-    phase = "NASQ Processing"
+    phase = "NASQ Processing",
+    name = "NASQ Treatment"
   ),
   
   fill_nasq_s0 = list(
-    script = file.path(script_dir, "005_fill_nasq_s0_totals.R"),
+    script = file.path(script_dir, "domestic/005_fill_nasq_s0_totals.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_rounded.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_NASQ.rds"),
-    phase = "NASQ Processing"
+    phase = "NASQ Processing",
+    name = "Fill NASQ S0 Totals"
   ),
   
   # Phase 4: NASA Processing
   fill_nasa_s0 = list(
-    script = file.path(script_dir, "006_fill_nasa_s0_totals.R"),
+    script = file.path(script_dir, "domestic/006_fill_nasa_s0_totals.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_NASQ.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_NASA_S0.rds"),
-    phase = "NASA Processing"
+    phase = "NASA Processing",
+    name = "Fill NASA S0 Totals"
   ),
   
   nasa_intrasector = list(
-    script = file.path(script_dir, "007_NASA_fill_intrasector.R"),
+    script = file.path(script_dir, "domestic/007_NASA_fill_intrasector.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_NASA_S0.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_NASA_intrasector.rds"),
-    phase = "NASA Processing"
+    phase = "NASA Processing",
+    name = "NASA Intrasector Fill"
   ),
   
   # Phase 5: BSI Processing
   bsi_f5 = list(
-    script = file.path(script_dir, "008_BSI_F5_fill.R"),
+    script = file.path(script_dir, "domestic/008_BSI_F5_fill.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_NASA_intrasector.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_bsi_f5.rds"),
-    phase = "BSI Processing"
+    phase = "BSI Processing",
+    name = "BSI F5 Fill"
   ),
   
   bsi_loans_deposits = list(
-    script = file.path(script_dir, "009_BSI_F4_F2M_FILL.R"),
+    script = file.path(script_dir, "domestic/009_BSI_F4_F2M_FILL.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_bsi_f5.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_bsi_loans_deposits.rds"),
-    phase = "BSI Processing"
+    phase = "BSI Processing",
+    name = "BSI Loans and Deposits Fill"
   ),
   
   # Phase 6: Securities Holdings
   shss_fill = list(
-    script = file.path(script_dir, "010_SHSS_FILL_F3_F5.R"),
+    script = file.path(script_dir, "domestic/010_SHSS_FILL_F3_F5.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_bsi_loans_deposits.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_shss.rds"),
-    phase = "Securities Processing"
+    phase = "Securities Processing",
+    name = "SHSS Fill F3 F5"
   ),
   
   # Phase 7: Counterpart Processing
   fill_cp = list(
-    script = file.path(script_dir, "011_fill_CP.R"),
+    script = file.path(script_dir, "domestic/011_fill_CP.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_shss.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_cp.rds"),
-    phase = "Counterpart Processing"
+    phase = "Counterpart Processing",
+    name = "Fill Counterpart"
   ),
   
   # Phase 8: International Equity
   international_equity = list(
-    script = file.path(script_dir, "012_fill_international_equity_positions.R"),
+    script = file.path(script_dir, "domestic/012_fill_international_equity_positions.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_cp.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_equity_bilateral_imf_gov.rds"),
-    phase = "International Equity"
+    phase = "International Equity",
+    name = "International Equity Positions"
   ),
   
   # Phase 9: Domestic Unlisted Equity
   domestic_unlisted_equity = list(
-    script = file.path(script_dir, "013_fill_unlisted_equity_domestic.R"),
+    script = file.path(script_dir, "domestic/013_fill_unlisted_equity_domestic.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_equity_bilateral_imf_gov.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_f51m.rds"),
-    phase = "Domestic Equity"
+    phase = "Domestic Equity",
+    name = "Unlisted Equity Domestic"
   ),
   
   # Phase 10: Final Instruments
   f81_fill = list(
-    script = file.path(script_dir, "014_F81.R"),
+    script = file.path(script_dir, "domestic/014_F81.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_f51m.rds"),
     output = file.path(data_dir, "aall_f81.rds"),
-    phase = "Final Instruments"
+    phase = "Final Instruments",
+    name = "F81 Fill"
   ),
   
   f89_fill = list(
-    script = file.path(script_dir, "015_F89.R"),
+    script = file.path(script_dir, "domestic/015_F89.R"),
     input = file.path(data_dir, "aall_f81.rds"),
     output = file.path(data_dir, "aall_f89.rds"),
-    phase = "Final Instruments"
+    phase = "Final Instruments",
+    name = "F89 Fill"
   ),
   
   f6_fill = list(
-    script = file.path(script_dir, "016_F6.R"),
+    script = file.path(script_dir, "domestic/016_F6.R"),
     input = file.path(data_dir, "aall_f89.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_domestic_T_FND.rds"),
-    phase = "Final Instruments"
+    phase = "Final Instruments",
+    name = "F6 Fill"
   )
 )
 
@@ -232,13 +265,19 @@ for (step_name in names(filling_plan)) {
   if (step$phase != current_phase) {
     current_phase <- step$phase
     log_execution("PHASE", "INFO", sprintf("Starting %s", current_phase))
-    cat("\n", paste(rep("-", 60), collapse=""), "\n")
+    cat("\n", paste(rep("-", 60), collapse = ""), "\n")
     cat("PHASE:", current_phase, "\n")
-    cat(paste(rep("-", 60), collapse=""), "\n")
+    cat(paste(rep("-", 60), collapse = ""), "\n")
   }
   
   if (!file.exists(step$script)) {
     stop(sprintf("Script file not found: %s", step$script))
+  }
+  
+  # Interactive confirmation per step
+  if (!confirm_data_load(step$name)) {
+    log_execution(step_name, "SKIPPED", "User chose to skip")
+    next
   }
   
   need_to_run <- FALSE
@@ -286,9 +325,9 @@ for (step_name in names(filling_plan)) {
 # Final processing summary
 log_execution("MAIN", "COMPLETED", "All data processing operations completed successfully")
 
-cat("\n", paste(rep("=", 80), collapse=""), "\n")
+cat("\n", paste(rep("=", 80), collapse = ""), "\n")
 cat("DATA PROCESSING SUMMARY\n")
-cat(paste(rep("=", 80), collapse=""), "\n")
+cat(paste(rep("=", 80), collapse = ""), "\n")
 cat("Processing and filling phase completed successfully!\n")
 cat("\nFinal datasets created:\n")
 cat("- Main dataset: ", file.path(data_dir, "intermediate_domestic_data_files/aall_domestic_T_FND.rds"), "\n")
@@ -297,7 +336,9 @@ cat("- Trade credits: ", file.path(data_dir, "aall_f81.rds"), "\n")
 cat("- Other accounts: ", file.path(data_dir, "aall_f89.rds"), "\n")
 cat("\nCheck the logs directory for detailed execution logs.\n")
 cat("Total processing phases completed: 10\n")
-cat(paste(rep("=", 80), collapse=""), "\n")
+cat("\nNext step: Run european/main_filler.R to fill cross-border exposures.\n")
+cat(paste(rep("=", 80), collapse = ""), "\n")
 
 ################################################################################
 # End of Filling Script
+################################################################################
