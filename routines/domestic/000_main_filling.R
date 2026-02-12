@@ -10,7 +10,7 @@ if (!require("MDecfin")) {
 
 # Set the project directories
 if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
-script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/domestic/'
+script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/'
 
 # Check directories exist
 if (!dir.exists(script_dir)) {
@@ -301,8 +301,3 @@ cat(paste(rep("=", 80), collapse=""), "\n")
 
 ################################################################################
 # End of Filling Script
-<<<<<<< HEAD
-################################################################################
-=======
-################################################################################
->>>>>>> 55a5a789115f3c6e93936ceaded19180b9724739
