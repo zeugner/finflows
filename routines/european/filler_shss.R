@@ -1,10 +1,10 @@
 library(MDstats); library(MD3)
 
 # Set data directory
-#data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+data_dir= file.path(getwd(),'data')
+#if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
 
-source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
+#source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
 gc()
 
 ## load filled iip bop
@@ -53,9 +53,8 @@ tempshsea=ash['shs.EA19....LE..']; gc()
 ash['shss.EA19....LE..',usenames=TRUE, onlyna=TRUE]=tempshsea
 ash['.EA+EA19.W0.S11.S13.LE.F3.2019q4']
 
-saveRDSvl(ash,file.path(data_dir,'ash.rds'))
 
-saveRDS(ash,file='data/ash.rds')
+saveRDS(ash, file.path(data_dir, '.ash.rds'))
 
 
 ashs=ash
@@ -95,12 +94,8 @@ aa[F3.AT.S1..LE._T.2022q4.EA20+W2+WRL_REST]
 
 
 #ll was not adjusted but for naming consistency it is saved too
-saveRDSvl(aa,file.path(data_dir,'aa_iip_shss.rds'))
-saveRDSvl(ll,file.path(data_dir,'ll_iip_shss.rds'))
+saveRDS(aa,file.path(data_dir,'aa_iip_shss.rds'))
+saveRDS(ll,file.path(data_dir,'ll_iip_shss.rds'))
 
-saveRDSvl(aa,file.path(data_dir,'vintages/aa_iip_shss_' %&% format(Sys.time(),'%F') %&% '_.rds'))
-saveRDSvl(ll,file.path(data_dir,'vintages/ll_iip_shss_' %&% format(Sys.time(),'%F') %&% '_.rds'))
-
-saveRDS(aa,file='data/aa_iip_shss.rds')
-#ll was not adjusted but for naming consistency it is saved too
-saveRDS(ll,file='data/ll_iip_shss.rds')
+saveRDS(aa,file.path(data_dir,'vintages/aa_iip_shss_' %&% format(Sys.time(),'%F') %&% '_.rds'))
+saveRDS(ll,file.path(data_dir,'vintages/ll_iip_shss_' %&% format(Sys.time(),'%F') %&% '_.rds'))
