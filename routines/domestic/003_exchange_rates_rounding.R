@@ -168,13 +168,13 @@ saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_xrates.
 process_sector_chunk <- function(aall1, sectors) {
   # Process chunk: round values for specified sectors across all other dimensions
   # Dimensions order: INSTR, REF_AREA, REF_SECTOR, COUNTERPART_SECTOR, STO, CUST_BREAKDOWN, TIME
-  aall[TRUE, TRUE, sectors, TRUE, TRUE, TRUE, TRUE] = round(aall1[TRUE, TRUE, sectors, TRUE, TRUE, TRUE, TRUE])
+  aall[TRUE, TRUE, sectors, TRUE, TRUE, TRUE, TRUE] = round(aall[TRUE, TRUE, sectors, TRUE, TRUE, TRUE, TRUE])
   gc()  # Clean memory after processing chunk
   return(aall)
 }
 
 # Get list of all unique reference sectors
-ref_sectors <- dimcodes(aall1)$REF_SECTOR$code
+ref_sectors <- dimcodes(aall)$REF_SECTOR$code
 
 # Set chunk processing parameters
 chunk_size <- 2  # Process 2 sectors at a time
@@ -201,7 +201,7 @@ for(i in 1:n_chunks) {
 gc()
 
 # Verify results
-aall1[F2M..S1.S0.LE._T.2008q4]
-aall1[F6.EA19...LE._T.2018q4]
+aall[F2M..S1.S0.LE._T.2008q4]
+aall[F6.EA19...LE._T.2018q4]
 # Save final rounded data
 saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_rounded.rds'))
