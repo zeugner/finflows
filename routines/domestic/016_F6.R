@@ -39,7 +39,7 @@ af6['_O....'] <- NA
 af6['_O...S2.',onlyna=TRUE]<-bopf6q["..A_LE.1998q4:"]
 af6['_O...S2.',onlyna=TRUE]<-bopf6a["..A_LE.1998q4:"]
 
-af6['_T...S2.',onlyna=TRUE]<-af6['_O...S2.']
+
 af6['_S...S2.',onlyna=TRUE]<-af6['_O...S2.']
 
 ############LIABILITIES
@@ -53,24 +53,24 @@ af6['_O..S2..',onlyna=TRUE]<-bopf6q_liab["..L_LE.1998q4:"]
 
 af6['_O..S2..',onlyna=TRUE]<-bopf6a_liab["..L_LE.1998q4:"]
 
-af6['_T..S2..',onlyna=TRUE]<-af6['_O..S2..']
 af6['_S..S2..',onlyna=TRUE]<-af6['_O..S2..']
 
 ######FILLING
 aall[F6....LE..,onlyna=TRUE]<-af6[....]
-
+dimnames(aall)
 # Compute S1 residuals directly on aall (7 dimensions)
 # Assets (REF_SECTOR position 3)
-aall['F6..S1....', onlyna=TRUE] <- aall['F6..S0....'] - aall['F6..S2....']
+temp<- aall['F6..S0....'] - aall['F6..S2....']
+aall['F6..S1....', onlyna=TRUE] <-temp
 # Liabilities (COUNTERPART_SECTOR position 4)
-aall['F6...S1...', onlyna=TRUE] <- aall['F6...S0...'] - aall['F6...S2...']
-
+temp1 <- aall['F6...S0...'] - aall['F6...S2...']
+aall['F6...S1...', onlyna=TRUE]<-temp1
 # Set all F6 sectors to 0 where S0 counterpart is 0
 temp=aall["F6....LE.."]
 temp[temp[,"S0",,,]==0]=0
 temp[temp[,,"S0",,]==0]=0
 aall["F6....LE..", onlyna=TRUE]<-temp
-
+dimnames(aall)
 #### create object where we store ref sector S0 or S1
 F6_total<-aall[F6..S0..LE..]
 F6_total["...",onlyna=TRUE]<-aall[F6..S1..LE..]
@@ -85,5 +85,5 @@ aall[F6..S1M.S12Q.LE..,onlyna=TRUE]<-aall[F6..S1M.S1.LE..]-zerofiller(aall[F6..S
 saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_F6.rds'))
 
 aall[....._T.,onlyna=TRUE]<-aall[....._S.]
-
+dimnames(aall)
 saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_domestic.rds'))

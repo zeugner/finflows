@@ -12,25 +12,25 @@ aa=readRDS(file.path(data_dir,'aa_iip_cpis.rds')); gc()
 ll=readRDS(file.path(data_dir,'ll_iip_cpis.rds')); gc()
 gc()
 
-##--------------------------------------------------------------------
-## check for NAs in countries
-##--------------------------------------------------------------------
-
-if (any(sapply(aa,anyNA))) { warning('aa contains NAs in these columns: ', paste(names(aa)[sapply(aa,anyNA)],collapse=', '))}
-if (any(sapply(ll,anyNA))) { warning('ll contains NAs in these columns: ', paste(names(ll)[sapply(ll,anyNA)],collapse=', '))}
-gc()
-
-tempix=dimnames(aa)[[8]]
-aa=copy(aa[,,,,,,,setdiff(tempix,c('NA'))])
-
-tempix=dimnames(ll)[[2]]
-ll=copy(ll[,setdiff(tempix,c('NA')),,,,,,])
-
-if (any(sapply(aa,anyNA))) { warning('aa contains NAs in these columns: ', paste(names(aa)[sapply(aa,anyNA)],collapse=', '))}
-if (any(sapply(ll,anyNA))) { warning('ll contains NAs in these columns: ', paste(names(ll)[sapply(ll,anyNA)],collapse=', '))}
-gc()
-
-
+# ##--------------------------------------------------------------------
+# ## check for NAs in countries
+# ##--------------------------------------------------------------------
+# 
+# if (any(sapply(aa,anyNA))) { warning('aa contains NAs in these columns: ', paste(names(aa)[sapply(aa,anyNA)],collapse=', '))}
+# if (any(sapply(ll,anyNA))) { warning('ll contains NAs in these columns: ', paste(names(ll)[sapply(ll,anyNA)],collapse=', '))}
+# gc()
+# 
+# tempix=dimnames(aa)[[8]]
+# aa=copy(aa[,,,,,,,setdiff(tempix,c('NA'))])
+# 
+# tempix=dimnames(ll)[[2]]
+# ll=copy(ll[,setdiff(tempix,c('NA')),,,,,,])
+# 
+# if (any(sapply(aa,anyNA))) { warning('aa contains NAs in these columns: ', paste(names(aa)[sapply(aa,anyNA)],collapse=', '))}
+# if (any(sapply(ll,anyNA))) { warning('ll contains NAs in these columns: ', paste(names(ll)[sapply(ll,anyNA)],collapse=', '))}
+# gc()
+# 
+# 
 
 ##--------------------------------------------------------------------
 ## Tx7 Aggregate (sum over all functional categories -again- except F7)
@@ -126,36 +126,36 @@ saveRDSvl(ll,file.path(data_dir,'ll_iip_agg.rds'))
 saveRDSvl(aa,file.path(data_dir,'vintages/aa_iip_agg_' %&% format(Sys.time(),'%F') %&% '_.rds'))
 saveRDSvl(ll,file.path(data_dir,'vintages/ll_iip_agg_' %&% format(Sys.time(),'%F') %&% '_.rds'))
 
-##--------------------------------------------------------------------
-## Sector Aggregate !!!WORK IN PROGRESS!!!
-##--------------------------------------------------------------------
-
-##--------------------------------------------------------------------
-## Areas Aggregate
-##--------------------------------------------------------------------
-
-## load 
-# aa=readRDS(file.path(data_dir,'aa_iip_agg.rds')); gc()
-# ll=readRDS(file.path(data_dir,'ll_iip_agg.rds')); gc()
+# ##--------------------------------------------------------------------
+# ## Sector Aggregate !!!WORK IN PROGRESS!!!
+# ##--------------------------------------------------------------------
+# 
+# ##--------------------------------------------------------------------
+# ## Areas Aggregate
+# ##--------------------------------------------------------------------
+# 
+# ## load 
+# # aa=readRDS(file.path(data_dir,'aa_iip_agg.rds')); gc()
+# # ll=readRDS(file.path(data_dir,'ll_iip_agg.rds')); gc()
+# # gc()
+# 
+# ## counterpart areas
+# 
+# at_aa=aa[Fx7.AT.S1.S1.LE..2022q4.]
+# 
+# at_aa[.EXA]=NA;gc()
+# 
+# daa=as.data.table(at_aa,.simple=TRUE); gc()
+# dacast=dcast(daa, ... ~ COUNTERPART_AREA , id.vars=1:2, value.var = 'obs_value'); gc()
+# dacast[['EXA']]=apply(dacast[,c('NL','LU','FI','DE','ES','SK','EE','EL','IT','SI','LT','LV',
+#                                 'CY','MT','FR','BE','IE','PT')],1,sum,na.rm=TRUE);gc()
+# dacast2=copy(dacast[,intersect(c(colnames(daa),'EXA'),colnames(dacast)),with=FALSE]);gc()
+# colnames(dacast2)[NCOL(dacast2)]='obs_value';gc()
+# dacast2[,COUNTERPART_AREA:='EXA'];gc()
+# 
+# daa=rbind(daa,dacast2,fill=TRUE);gc()
+# at_aa=as.md3(daa);gc()
+# 
+# dim(at_aa)
 # gc()
-
-## counterpart areas
-
-at_aa=aa[Fx7.AT.S1.S1.LE..2022q4.]
-
-at_aa[.EXA]=NA;gc()
-
-daa=as.data.table(at_aa,.simple=TRUE); gc()
-dacast=dcast(daa, ... ~ COUNTERPART_AREA , id.vars=1:2, value.var = 'obs_value'); gc()
-dacast[['EXA']]=apply(dacast[,c('NL','LU','FI','DE','ES','SK','EE','EL','IT','SI','LT','LV',
-                                'CY','MT','FR','BE','IE','PT')],1,sum,na.rm=TRUE);gc()
-dacast2=copy(dacast[,intersect(c(colnames(daa),'EXA'),colnames(dacast)),with=FALSE]);gc()
-colnames(dacast2)[NCOL(dacast2)]='obs_value';gc()
-dacast2[,COUNTERPART_AREA:='EXA'];gc()
-
-daa=rbind(daa,dacast2,fill=TRUE);gc()
-at_aa=as.md3(daa);gc()
-
-dim(at_aa)
-gc()
 

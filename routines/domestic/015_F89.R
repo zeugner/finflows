@@ -39,9 +39,9 @@ af89['_O....'] <- NA
 ################ASSETS
 af89['_O...S2.',onlyna=TRUE]<-bopf89q["..A_LE.1998q4:"]
 af89['_O...S2.',onlyna=TRUE]<-bopf89a["..A_LE.1998q4:"]
+temp<-af89['_O...S2.']
 
-af89['_T...S2.',onlyna=TRUE]<-af89['_O...S2.']
-af89['_S...S2.',onlyna=TRUE]<-af89['_O...S2.']
+af89['_S...S2.',onlyna=TRUE]<-temp
 
 ############LIABILITIES
 bopf89q_liab=copy(bopf89q)
@@ -54,7 +54,6 @@ af89['_O..S2..',onlyna=TRUE]<-bopf89q_liab["..L_LE.1998q4:"]
 
 af89['_O..S2..',onlyna=TRUE]<-bopf89a_liab["..L_LE.1998q4:"]
 
-af89['_T..S2..',onlyna=TRUE]<-af89['_O..S2..']
 af89['_S..S2..',onlyna=TRUE]<-af89['_O..S2..']
 
 ######FILLING
@@ -62,10 +61,12 @@ aall[F89....LE..,onlyna=TRUE]<-af89[....]
 
 # Compute S1 residuals directly on aall (7 dimensions)
 # Assets (REF_SECTOR position 3)
-aall['F89..S1....', onlyna=TRUE] <- aall['F89..S0....'] - aall['F89..S2....']
+temp<-aall['F89..S0....'] - aall['F89..S2....']
+aall['F89..S1....', onlyna=TRUE] <- temp
+dimnames(aall)
 # Liabilities (COUNTERPART_SECTOR position 4)
-aall['F89...S1...', onlyna=TRUE] <- aall['F89...S0...'] - aall['F89...S2...']
-
+temp1 <- aall['F89...S0...'] - aall['F89...S2...']
+aall['F89...S1...', onlyna=TRUE] <-temp1
 aall[....._S.,onlyna=TRUE]<-aall[....._T.]
 
 # Set all F89 sectors to 0 where S0 counterpart is 0
@@ -80,5 +81,5 @@ aall["F89...S13.LE..", onlyna=TRUE]<-aall["F89...S1.LE.."]
 
 #### all residual goes to S12O
 aall["F89...S12O.LE..", onlyna=TRUE]<-aall["F89...S1.LE.."]-aall["F89...S11.LE.."]-zerofiller(aall["F89...S13.LE.."])-zerofiller(aall["F89...S1M.LE.."])-zerofiller(aall["F89...S12O.LE.."])-zerofiller(aall["F89...S12Q.LE.."])
-
+dimnames(aall)
 saveRDS(aall, file.path(data_dir, 'intermediate_domestic_data_files/aall_f89.rds'))

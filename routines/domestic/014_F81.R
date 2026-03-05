@@ -62,8 +62,7 @@ af81['_O..S2..',onlyna=TRUE]<-bopf81q_liab["..L_LE.FA__O__F81.1998q4:"]
 
 af81['_D..S2..',onlyna=TRUE]<-bopf81a_liab["..L_LE.FA__D__F81.1998q4:"]
 af81['_O..S2..',onlyna=TRUE]<-bopf81a_liab["..L_LE.FA__O__F81.1998q4:"]
-
-af81['_T..S2..',onlyna=TRUE]<-af81['_D..S2..']+af81['_O..S2..']
+dimnames(af81)
 af81['_S..S2..',onlyna=TRUE]<-af81['_D..S2..']+af81['_O..S2..']
 
 # Fill aall with af81 
@@ -71,11 +70,12 @@ aall[F81....LE.., onlyna=TRUE] <- af81[....]
 
 # Compute S1 residuals 
 # Assets 
-aall['F81..S1....', onlyna=TRUE] <- aall['F81..S0....'] - aall['F81..S2....']
+temp<- aall['F81..S0....'] - aall['F81..S2....']
+aall['F81..S1....', onlyna=TRUE] <- temp
 
 # Liabilities 
-aall['F81...S1...', onlyna=TRUE] <- aall['F81...S0...'] - aall['F81...S2...']
-
+temp1 <- aall['F81...S0...'] - aall['F81...S2...']
+aall['F81...S1...', onlyna=TRUE] <-temp1
 aall[....._S.,onlyna=TRUE]<-aall[....._T.]
 
 # Set all F81 sectors to 0 where S0 counterpart is 0
@@ -84,10 +84,10 @@ temp[temp[,"S0",,,]==0]=0
 temp[temp[,,"S0",,]==0]=0
 
 aall["F81....LE..", onlyna=TRUE]<-temp
-
+dimnames(aall)
 #### countries with nothing filled, everything goes to S11
 aall["F81...S11.LE..", onlyna=TRUE]<-aall["F81...S1.LE.."]
-
+dimnames(aall)
 #### all residual goes to S12O
 aall["F81...S12O.LE..", onlyna=TRUE]<-aall["F81...S1.LE.."]-aall["F81...S11.LE.."]-zerofiller(aall["F81...S13.LE.."])-zerofiller(aall["F81...S1M.LE.."])
 

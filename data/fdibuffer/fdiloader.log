@@ -1,0 +1,90 @@
+1399646 2520721 74.8 19.3 75826964 150352824 4049.6 1147.2 1502248 2643420 80.3 20.2 
+Querying reporting country list from OECD FDI...
+          used (Mb) gc trigger   (Mb) max used (Mb)
+Ncells 1404711 75.1   60661572 3239.7  1404711 75.1
+Vcells 2551999 19.5  120282260  917.7  2551999 19.5
+
+Loading FDI data for  47  reporting countries x  6  dataflows
+
+___  2026-03-04 22:00:05.652092 : country  19 / 47 :  FRA  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+
+ 2026-03-04 22:00:30.791096 FDI loading results
+  I = loaded from OECD
+  L = loaded from local cache
+  0 = no series available from OECD
+  X = server loading error
+
+         pos_aggr pos_ctry pos_ind flow_aggr flow_ctry flow_ind
+BEL      NA       NA       NA      NA        NA        NA      
+CHL      NA       NA       NA      NA        NA        NA      
+FIN      NA       NA       NA      NA        NA        NA      
+GRC      NA       NA       NA      NA        NA        NA      
+IRL      NA       NA       NA      NA        NA        NA      
+NOR      NA       NA       NA      NA        NA        NA      
+SVK      NA       NA       NA      NA        NA        NA      
+SAU      NA       NA       NA      NA        NA        NA      
+HUN      NA       NA       NA      NA        NA        NA      
+NLD      NA       NA       NA      NA        NA        NA      
+AUS      NA       NA       NA      NA        NA        NA      
+AUT      NA       NA       NA      NA        NA        NA      
+CAN      NA       NA       NA      NA        NA        NA      
+COL      NA       NA       NA      NA        NA        NA      
+CRI      NA       NA       NA      NA        NA        NA      
+CZE      NA       NA       NA      NA        NA        NA      
+DNK      NA       NA       NA      NA        NA        NA      
+EST      NA       NA       NA      NA        NA        NA      
+FRA      "I"      "X"      "X"     "I"       "X"       "X"     
+DEU      NA       NA       NA      NA        NA        NA      
+ISL      NA       NA       NA      NA        NA        NA      
+ISR      NA       NA       NA      NA        NA        NA      
+ITA      NA       NA       NA      NA        NA        NA      
+JPN      NA       NA       NA      NA        NA        NA      
+KOR      NA       NA       NA      NA        NA        NA      
+LVA      NA       NA       NA      NA        NA        NA      
+LTU      NA       NA       NA      NA        NA        NA      
+LUX      NA       NA       NA      NA        NA        NA      
+MEX      NA       NA       NA      NA        NA        NA      
+NZL      NA       NA       NA      NA        NA        NA      
+POL      NA       NA       NA      NA        NA        NA      
+PRT      NA       NA       NA      NA        NA        NA      
+SVN      NA       NA       NA      NA        NA        NA      
+ESP      NA       NA       NA      NA        NA        NA      
+SWE      NA       NA       NA      NA        NA        NA      
+CHE      NA       NA       NA      NA        NA        NA      
+TUR      NA       NA       NA      NA        NA        NA      
+GBR      NA       NA       NA      NA        NA        NA      
+USA      NA       NA       NA      NA        NA        NA      
+G20XOECD NA       NA       NA      NA        NA        NA      
+ARG      NA       NA       NA      NA        NA        NA      
+BRA      NA       NA       NA      NA        NA        NA      
+CHN      NA       NA       NA      NA        NA        NA      
+IND      NA       NA       NA      NA        NA        NA      
+IDN      NA       NA       NA      NA        NA        NA      
+RUS      NA       NA       NA      NA        NA        NA      
+ZAF      NA       NA       NA      NA        NA        NA      
+
+Summary per dataflow:
+   pos_aggr : loaded  1  from OECD,  0  from cache,  0  empty,  0  errors
+   pos_ctry : loaded  0  from OECD,  0  from cache,  0  empty,  1  errors
+   pos_ind : loaded  0  from OECD,  0  from cache,  0  empty,  1  errors
+   flow_aggr : loaded  1  from OECD,  0  from cache,  0  empty,  0  errors
+   flow_ctry : loaded  0  from OECD,  0  from cache,  0  empty,  1  errors
+   flow_ind : loaded  0  from OECD,  0  from cache,  0  empty,  1  errors
+
+Failed queries:
+   FRA  -  pos_ctry 
+   FRA  -  pos_ind 
+   FRA  -  flow_ctry 
+   FRA  -  flow_ind 
+To retry, delete their cache files and re-run this script.
