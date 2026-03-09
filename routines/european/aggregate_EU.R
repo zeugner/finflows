@@ -3,7 +3,7 @@ library(MDstats); library(MD3)
 # Set data directory
 setwd("V:/FinFlows/githubrepo/finflows")
 data_dir= file.path(getwd(),'data')
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/data/'
+if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
 
 aa=readRDS(file.path(data_dir,'aa_iip_cpis.rds')); gc()
 ll=readRDS(file.path(data_dir,'ll_iip_cpis.rds')); gc()

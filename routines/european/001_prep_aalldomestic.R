@@ -174,42 +174,59 @@ gc()
 
 ## Step 1: Map COUNTERPART_SECTOR S0/S2 from W2 to W0/WRL_REST
 aa = copy(aall)
-aa[...S0....W0,       usenames=TRUE, onlyna=TRUE] <- aa[...S0....W2]
-aa[...S2....WRL_REST, usenames=TRUE, onlyna=TRUE] <- aa[...S2....W2]
+aa_W <- aa[..S0+S2.....]
 
-aa[..S0.....W0,       usenames=TRUE, onlyna=TRUE] <- aa[..S0.....W2]
-aa[..S2.....WRL_REST, usenames=TRUE, onlyna=TRUE] <- aa[..S2.....W2]
+
+aa[...S1....W0,       usenames=TRUE, onlyna=TRUE] <- aa[...S0....W2]; gc()
+aa[...S1....WRL_REST, usenames=TRUE, onlyna=TRUE] <- aa[...S2....W2]; gc()
+aa[...S1....W2, usenames=TRUE, onlyna=TRUE] <- aa[...S1....W2]; gc()
+
+
+
+names(dimnames(aa_W))[2] = 'TEMP_AREA'
+names(dimnames(aa_W))[8] = 'REF_AREA'
+names(dimnames(aa_W))[2] = 'COUNTERPART_AREA'
+
+aa_W[..S1.....W0]<-aa_W[..S0.....W2]; gc()
+aa_W[..S1.....WRL_REST]<-aa_W[..S2.....W2]; gc()
+
+
+aa[..S1....., usenames=TRUE, onlyna=TRUE]<-aa_W[..S1.....]
+
 
 
 gc()
 
+aa[.WRL_REST+W0+W2.S1.S11.LE._T.2022q4.AT]
+aa[.AT.S11.S1.LE._T.2022q4.WRL_REST+W0+W2]
+aa[.AT.S1.S11.LE._T.2022q4.WRL_REST+W0+W2]
 
 
 
-## Step 2: Exclude S0/S2 from REF_SECTOR (not needed for asset perspective)
-###tempix = dimnames(aa)[[3]]
-###aa = aa[,, setdiff(tempix, c('S0', 'S2')),,,,,]
-gc()
-
-## Step 3: Relabel COUNTERPART_SECTOR S2→S1 at WRL_REST, S0→S1 at W0
-aa[...S1....WRL_REST, usenames=FALSE, onlyna=TRUE] = aa[...S2....WRL_REST]; gc()
-aa[...S1....W0,       usenames=FALSE, onlyna=TRUE] = aa[...S0....W0];       gc()
-
-aa[..S1.....WRL_REST, usenames=FALSE, onlyna=TRUE] = aa[..S2.....WRL_REST]; gc()
-aa[..S1.....W0,       usenames=FALSE, onlyna=TRUE] = aa[..S0.....W0];       gc()
-
-
-aa[F.AT.S1.S11+S12K+S1+S1M.LE._T.2022q4.W0+W2+WRL_REST]
-aa[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
-
-aa[...S2....WRL_REST] = aa[..S2.....WRL_REST]  <-NA
-
-aa[F.AT.S1.S11+S12K+S1+S1M.LE._T.2022q4.W0+W2+WRL_REST]
-aa[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
-
-dimnames(aa)
-
-aa=aa[..S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S0+S1+S12K+S12R+S12+S125+S126+S127+S128+S129+S14+S15+S122+S123+S12P+S125A+S1311+S1P+S12M+S1V+S1Z+S11_S14_S15+S12V+S1X.S1M+S11+S12O+S12Q+S124+S13+S1+S12K+S0+S12R+S121+S12T+S12+S125+S126+S127+S128+S129+S14+S15+S122+S123+S125A+S12P+S1311+S1P+S12M+S1V+S11_S14_S15+S1X+S1Z....]
+# ## Step 2: Exclude S0/S2 from REF_SECTOR (not needed for asset perspective)
+# ###tempix = dimnames(aa)[[3]]
+# ###aa = aa[,, setdiff(tempix, c('S0', 'S2')),,,,,]
+# gc()
+# 
+# ## Step 3: Relabel COUNTERPART_SECTOR S2→S1 at WRL_REST, S0→S1 at W0
+# aa[...S1....WRL_REST, usenames=FALSE, onlyna=TRUE] <- aa[...S2....WRL_REST]; gc()
+# aa[...S1....W0,       usenames=FALSE, onlyna=TRUE] <- aa[...S0....W0];       gc()
+# 
+# aa[..S1.....WRL_REST, usenames=FALSE, onlyna=TRUE] <- aa[..S2.....WRL_REST]; gc()
+# aa[..S1.....W0,       usenames=FALSE, onlyna=TRUE] <- aa[..S0.....W0];       gc()
+# 
+# 
+# aa[F.AT.S1.S11+S12K+S1+S1M.LE._T.2022q4.W0+W2+WRL_REST]
+# aa[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
+# 
+# aa[...S2....WRL_REST] = aa[..S2.....WRL_REST]  <-NA
+# 
+# aa[F.AT.S1.S11+S12K+S1+S1M.LE._T.2022q4.W0+W2+WRL_REST]
+# aa[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
+# 
+# dimnames(aa)
+# 
+# aa=aa[..S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S0+S1+S12K+S12R+S12+S125+S126+S127+S128+S129+S14+S15+S122+S123+S12P+S125A+S1311+S1P+S12M+S1V+S1Z+S11_S14_S15+S12V+S1X.S1M+S11+S12O+S12Q+S124+S13+S1+S12K+S0+S12R+S121+S12T+S12+S125+S126+S127+S128+S129+S14+S15+S122+S123+S125A+S12P+S1311+S1P+S12M+S1V+S11_S14_S15+S1X+S1Z....]
 
 ##############################################################
 ####                   LIABILITIES (ll)                   ####
