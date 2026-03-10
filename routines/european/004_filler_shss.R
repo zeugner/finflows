@@ -53,7 +53,7 @@ ash['shss.EA19....LE..',usenames=TRUE, onlyna=TRUE]=tempshsea
 ash['.EA+EA19.W0.S11.S13.LE.F3.2019q4']
 
 
-saveRDS(ash, file.path(data_dir, '.ash.rds'))
+saveRDS(ash, file.path(data_dir, 'ash.rds'))
 
 
 ashs=ash

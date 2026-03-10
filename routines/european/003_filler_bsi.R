@@ -42,6 +42,7 @@ aa[F4.AT.S12T..LE._T.2022q4.]
 
 # Load deposits data
 
+
 deposits_bsi = readRDS(file.path(data_dir, "bsi_deposits.rds")); gc()
 
 dim(deposits_bsi)
