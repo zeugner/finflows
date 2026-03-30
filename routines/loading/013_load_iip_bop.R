@@ -1,49 +1,47 @@
-
 library(MDstats); library(MD3)
 `%&%` = function (..., collapse = NULL, recycle0 = FALSE)  .Internal(paste0(list(...), collapse, recycle0))
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
-# 
-# #### EU and EA balance of payments exposure  ####
-# 
-# countries=c("EA19","EA20","EU27_2020","EU28")
-# sectors=c("S1","S121","S122", "S123", "S12K","S12M","S12T","S13","S1P","S1V","S1N","S11","S124","S12Q","S1M")
-# 
-# allsecload=function(countries,cpsto='S1.NSA.ASS.',dataflow='bop_eu6_q') {
-#   ll=paste0("Estat/",dataflow,"/Q.MIO_EUR..",sectors,".",cpsto,".",countries)
-#   message(Sys.timo() , ': loading ',countries,'...')
-#   lapply(as.list(ll), \(x) try(mds(x,drop=FALSE),silent=TRUE))
-# }
-# bop_iip= mds('ESTAT/bop_eu6_q/Q.MIO_EUR..S1+S121+S122+S123+S12K+S12M+S12T+S13+S1P+S1V+S1N+S11+S124+S12Q+S1M.S1.NSA.ASS..EA19+EA20+EU27_2020+EU28')
-#   
-#   
-#   function(countries,cpsto='S1.NSA.ASS.',dataflow='bop_eu6_q') 
-# 
-# combineloadedbits = function(loadedbitslist) {
-#   resmd3=loadedbitslist[[1]][[1]]
-#   for (i in seq_along(loadedbitslist)) {
-#     for (j in seq_along(loadedbitslist[[i]])) {
-#       message(i,'  ',j)
-#       if (!is(loadedbitslist[[i]][[j]],'try-error')) { resmd3=merge(resmd3,loadedbitslist[[i]][[j]])}
-#     }
-#   }
-#   return(resmd3)
-# }
-# 
-# 
-# euaout = lapply(as.list(countries),allsecload,cpsto='S1.NSA.ASS.')
-# euaba=combineloadedbits(euaout)
-# euaba2=drop(euaba)
-# 
-# save.image('C:/USers/Public/finflowsbuffer/boploadedstuffagg.rda')
-# 
-# eulout = lapply(as.list(countries), function(x) allsecload(x,cpsto='S1.NSA.LIAB.'))
-# eulba=combineloadedbits(eulout)
-# eulba2=drop(eulba)
-# save.image('C:/USers/Public/finflowsbuffer/boploadedstuffagg.rda')
-# 
-# iamd3eu=merge(euaba2,eulba2,along='STO',newcodes=c('ASS','LIAB'))
+
+##############################################################
+## Shared helper: combine a nested list of mds() results   ##
+## loadedbitslist is a list of lists (one per country),    ##
+## each inner list containing one result per sector.       ##
+## Fixed vs original: (1) initialisation now skips         ##
+## try-error objects; (2) first element is not merged      ##
+## into itself a second time.                              ##
+##############################################################
+
+combineloadedbits = function(loadedbitslist) {
+  # Flatten nested list (country x sector) into a single list
+  flat = unlist(loadedbitslist, recursive = FALSE)
+  
+  # Keep only successful mds() results
+  ok = Filter(function(x) !is(x, 'try-error'), flat)
+  
+  n_total  = length(flat)
+  n_failed = n_total - length(ok)
+  if (n_failed > 0) message('combineloadedbits: ', n_failed, '/', n_total, ' calls failed and were skipped')
+  if (length(ok) == 0L) stop('combineloadedbits: all ', n_total, ' mds() calls failed — nothing to combine')
+  
+  # Initialise with the first valid result, then merge the rest one by one
+  resmd3 = ok[[1]]
+  if (length(ok) > 1L) {
+    for (i in seq(2L, length(ok))) {
+      message(i, '/', length(ok))
+      resmd3 = merge(resmd3, ok[[i]])
+    }
+  }
+  return(resmd3)
+}
+
+
+##############################################################
+#### EU and EA balance of payments exposure (aggregates)  ####
+#### Source: Eurostat bop_eu6_q                           ####
+#### No currency dimension — values always in MIO_EUR     ####
+##############################################################
 
 #NO it did not work. Let us load EVERYTHING
 # it takes time but it's a way to avoid loading issues
@@ -57,7 +55,10 @@ saveRDS(iamd3eu, file.path(data_dir, 'bop_cps_euea.rds'))
 
 gc()
 
-#### Balance of payments + IIP of the EU institutions - quarterly data #### 
+##############################################################
+#### Balance of payments + IIP of the EU institutions     ####
+#### quarterly data                                       ####
+##############################################################
 
 #euibopraw=MDstats:::.mdEstat('Estat/bop_euins6_q'); gc()
 euibopraw=mds('Estat/bop_euins6_q'); gc()
@@ -68,7 +69,11 @@ euiiipraw=MDstats:::.mdEstat('Estat/bop_euins6_iip'); gc()
 dim(euiiipraw)
 saveRDS(euiiipraw, file.path(data_dir, 'iip_eui.rds'))
 
-#### bilateral exposure transactions #### 
+##############################################################
+#### Bilateral BOP flows — individual countries           ####
+#### Source: Eurostat bop_c6_q                            ####
+#### MIO_EUR hardcoded in query string                    ####
+##############################################################
 
 countries=c("BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE")
 sectors=c("S1","S121","S122","S123","S12T","S13","S1P","S1V")
@@ -78,19 +83,6 @@ allsecload=function(countries,cpsto='S1.ASS',dataflow='bop_c6_q') {
   message(Sys.timo() , ': loading ',countries,'...')
   lapply(as.list(ll), \(x) try(mds(x,drop=FALSE),silent=TRUE))
 }
-
-
-combineloadedbits = function(loadedbitslist) {
-  resmd3=loadedbitslist[[1]][[1]]
-  for (i in seq_along(loadedbitslist)) {
-    for (j in seq_along(loadedbitslist[[i]])) {
-      message(i,'  ',j)
-      if (!is(loadedbitslist[[i]][[j]],'try-error')) { resmd3=merge(resmd3,loadedbitslist[[i]][[j]])}
-    }
-  }
-  return(resmd3)
-}
-
 
 aout = lapply(as.list(countries),allsecload,cpsto='S1.ASS')
 aia=combineloadedbits(aout)
@@ -107,10 +99,14 @@ iamd3=merge(aia2,lia2,along='STO',newcodes=c('ASS','LIAB'))
 
 saveRDS(iamd3, file.path(data_dir, 'bop_cps.rds'))
 
-
 gc()
 
-#### annual bilateral exposure stocks #### 
+##############################################################
+#### Annual bilateral IIP stocks                          ####
+#### Source: Eurostat bop_iip6_q (annual frequency)      ####
+#### MIO_EUR hardcoded in query string                    ####
+##############################################################
+
 countries=c("EA19","EA20","EU27_2020","EU28","BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE")
 sectors=c("S1","S11","S121","S12T","S12K", "S13", "S124", "S12O", "S12Q", "S12M", "S1M")
 
@@ -119,19 +115,6 @@ allsecload=function(countries,cpsto='S1.A_LE',dataflow='bop_iip6_q') {
   message(Sys.timo() , ': loading ',countries,'...')
   lapply(as.list(ll), \(x) try(mds(x,drop=FALSE),silent=TRUE))
 }
-
-
-combineloadedbits = function(loadedbitslist) {
-  resmd3=loadedbitslist[[1]][[1]]
-  for (i in seq_along(loadedbitslist)) {
-    for (j in seq_along(loadedbitslist[[i]])) {
-      message(i,'  ',j)
-      if (!is(loadedbitslist[[i]][[j]],'try-error')) { resmd3=merge(resmd3,loadedbitslist[[i]][[j]])}
-    }
-  }
-  return(resmd3)
-}
-
 
 aout = lapply(as.list(countries),allsecload,cpsto='S1.A_LE')
 aaia=combineloadedbits(aout)
@@ -148,8 +131,12 @@ iamd3=merge(aaia2,llia2,along='STO',newcodes=c('A_LE','L_LE'))
 
 saveRDS(iamd3, file.path(data_dir, 'iip_cps_annual.rds'))
 
+##############################################################
+#### Quarterly bilateral IIP stocks                       ####
+#### Source: Eurostat bop_iip6_q (quarterly frequency)   ####
+#### MIO_EUR hardcoded in query string                    ####
+##############################################################
 
-#### quarterly bilateral exposure stocks #### 
 countries=c("EA19","EA20","EU27_2020","EU28","BE","BG","CZ","DK","DE","EE","IE","EL","ES","FR","HR","IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT","RO","SI","SK","FI","SE")
 sectors=c("S1","S11","S121","S12T","S12K", "S13", "S124", "S12O", "S12Q", "S12M", "S1M")
 
@@ -158,19 +145,6 @@ allsecload=function(countries,cpsto='S1.A_LE',dataflow='bop_iip6_q') {
   message(Sys.timo() , ': loading ',countries,'...')
   lapply(as.list(ll), \(x) try(mds(x,drop=FALSE),silent=TRUE))
 }
-
-
-combineloadedbits = function(loadedbitslist) {
-  resmd3=loadedbitslist[[1]][[1]]
-  for (i in seq_along(loadedbitslist)) {
-    for (j in seq_along(loadedbitslist[[i]])) {
-      message(i,'  ',j)
-      if (!is(loadedbitslist[[i]][[j]],'try-error')) { resmd3=merge(resmd3,loadedbitslist[[i]][[j]])}
-    }
-  }
-  return(resmd3)
-}
-
 
 aout = lapply(as.list(countries),allsecload,cpsto='S1.A_LE')
 aia=combineloadedbits(aout)
@@ -186,5 +160,3 @@ save.image('C:/USers/Public/finflowsbuffer/bopiiploadedstuff.rda')
 iamd3=merge(aia2,lia2,along='STO',newcodes=c('A_LE','L_LE'))
 
 saveRDS(iamd3, file.path(data_dir, 'iip_cps.rds'))
-
-

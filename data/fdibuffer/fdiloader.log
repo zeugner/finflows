@@ -1,0 +1,552 @@
+1118005 1885409 59.8 14.4 3710107 11308138 198.2 86.3 1118832 1885978 59.8 14.4 
+          used (Mb) gc trigger  (Mb) max used (Mb)
+Ncells 1118065 59.8    3710107 198.2  1118065 59.8
+Vcells 1885688 14.4   11308138  86.3  1885688 14.4
+
+Loading FDI data for  47  reporting countries x  6  dataflows
+
+___  2026-03-13 10:14:28.257233 : country  1 / 47 :  BEL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 17 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 17 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 17 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 17 )
+
+___  2026-03-13 12:25:22.136941 : country  2 / 47 :  CHL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 15 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 15 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 16 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 16 )
+
+___  2026-03-13 14:08:26.081952 : country  3 / 47 :  FIN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-13 16:04:42.120587 : country  4 / 47 :  GRC  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-13 17:44:29.415682 : country  5 / 47 :  IRL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 13 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 13 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+
+___  2026-03-13 19:17:35.737731 : country  6 / 47 :  NOR  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 18 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 18 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-13 20:52:51.571539 : country  7 / 47 :  SVK  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 10 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 10 )
+
+___  2026-03-13 22:18:22.119906 : country  8 / 47 :  SAU  ___
+   pos_aggr : querying OECD... OK ( 1 x 1 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 1 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-13 22:18:44.651707 : country  9 / 47 :  HUN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 17 )
+   pos_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   flow_aggr : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 17 )
+
+___  2026-03-13 23:50:56.23546 : country  10 / 47 :  NLD  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   flow_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+
+___  2026-03-14 00:36:39.10387 : country  11 / 47 :  AUS  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 16 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 16 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 16 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 16 )
+
+___  2026-03-14 02:11:44.28749 : country  12 / 47 :  AUT  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 13 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 13 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+
+___  2026-03-14 03:42:37.944633 : country  13 / 47 :  CAN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 14 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 13 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+
+___  2026-03-14 05:12:49.026639 : country  14 / 47 :  COL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+
+___  2026-03-14 07:14:25.34752 : country  15 / 47 :  CRI  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 8 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 8 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 8 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 8 )
+
+___  2026-03-14 08:02:54.978 : country  16 / 47 :  CZE  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 09:27:20.233513 : country  17 / 47 :  DNK  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 10:53:24.478151 : country  18 / 47 :  EST  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   pos_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   flow_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+
+___  2026-03-14 13:33:10.303175 : country  19 / 47 :  FRA  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 20 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+
+___  2026-03-14 15:50:23.637777 : country  20 / 47 :  DEU  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+
+___  2026-03-14 17:36:45.090414 : country  21 / 47 :  ISL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 19:03:26.706265 : country  22 / 47 :  ISR  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 20:21:17.349259 : country  23 / 47 :  ITA  ___
+   pos_aggr : cache... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : cache... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : cache... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : cache... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : cache... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : cache... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 20:21:19.929576 : country  24 / 47 :  JPN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 11 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 11 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+
+___  2026-03-14 21:24:45.967485 : country  25 / 47 :  KOR  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-14 22:45:02.045092 : country  26 / 47 :  LVA  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 19 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 19 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 19 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 19 )
+
+___  2026-03-15 00:54:17.389279 : country  27 / 47 :  LTU  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 20 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+
+___  2026-03-15 03:12:58.589479 : country  28 / 47 :  LUX  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 13 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 13 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-15 04:37:21.081888 : country  29 / 47 :  MEX  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   pos_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... ERROR:  Error in .char2timoguessfurhter(.recycle(xstring, frq, force = TRUE)) : 
+  cannot mix stuff when I need to guess
+ 
+
+___  2026-03-15 06:35:03.094242 : country  30 / 47 :  NZL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-15 07:54:04.081436 : country  31 / 47 :  POL  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 14 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 14 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+
+___  2026-03-15 09:39:46.393925 : country  32 / 47 :  PRT  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 20 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 20 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 20 )
+
+___  2026-03-15 12:01:24.774377 : country  33 / 47 :  SVN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 16 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 14 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+
+___  2026-03-15 13:24:06.64862 : country  34 / 47 :  ESP  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-15 15:03:13.143323 : country  35 / 47 :  SWE  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-15 16:27:05.725137 : country  36 / 47 :  CHE  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 11 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 11 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+
+___  2026-03-15 17:53:56.090051 : country  37 / 47 :  TUR  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 12 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 12 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 12 )
+
+___  2026-03-15 19:28:01.629117 : country  38 / 47 :  GBR  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 11 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 11 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 11 )
+
+___  2026-03-15 20:42:52.748759 : country  39 / 47 :  USA  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 2 x 1 x 1 x 14 )
+   pos_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 1 x 1 x 14 )
+   flow_ind : querying OECD... OK ( 1 x 3 x 1 x 2 x 2 x 3 x 1 x 1 x 272 x 1 x 87 x 1 x 14 )
+
+___  2026-03-15 21:55:03.282621 : country  40 / 47 :  G20XOECD  ___
+   pos_aggr : querying OECD... OK ( 1 x 1 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 1 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:55:25.601239 : country  41 / 47 :  ARG  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:55:50.487518 : country  42 / 47 :  BRA  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:56:18.360317 : country  43 / 47 :  CHN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:56:42.187651 : country  44 / 47 :  IND  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:57:07.184723 : country  45 / 47 :  IDN  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:57:31.73326 : country  46 / 47 :  RUS  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 1 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+___  2026-03-15 21:57:56.486253 : country  47 / 47 :  ZAF  ___
+   pos_aggr : querying OECD... OK ( 1 x 3 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   pos_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   pos_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_aggr : querying OECD... OK ( 1 x 4 x 1 x 1 x 2 x 3 x 1 x 1 x 1 x 1 x 1 x 1 x 20 )
+   flow_ctry : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+   flow_ind : querying OECD... ERROR:  Error in .stackedsdmx(mycode, justxml = TRUE, verbose = verbose, startPeriod = startPeriod,  : 
+  Could not fetch data f 
+
+
+ 2026-03-15 21:58:24.737842 FDI loading results
+  I = loaded from OECD
+  L = loaded from local cache
+  0 = no series available from OECD
+  X = server loading error
+
+         pos_aggr pos_ctry pos_ind flow_aggr flow_ctry flow_ind
+BEL      "I"      "I"      "I"     "I"       "I"       "I"     
+CHL      "I"      "I"      "I"     "I"       "I"       "I"     
+FIN      "I"      "I"      "I"     "I"       "I"       "I"     
+GRC      "I"      "I"      "I"     "I"       "I"       "I"     
+IRL      "I"      "I"      "I"     "I"       "I"       "I"     
+NOR      "I"      "I"      "I"     "I"       "I"       "I"     
+SVK      "I"      "I"      "I"     "I"       "I"       "I"     
+SAU      "I"      "X"      "X"     "I"       "X"       "X"     
+HUN      "I"      "I"      "X"     "X"       "X"       "I"     
+NLD      "I"      "I"      "I"     "I"       "X"       "X"     
+AUS      "I"      "I"      "I"     "I"       "I"       "I"     
+AUT      "I"      "I"      "I"     "I"       "I"       "I"     
+CAN      "I"      "I"      "I"     "I"       "I"       "I"     
+COL      "I"      "I"      "I"     "I"       "I"       "I"     
+CRI      "I"      "I"      "I"     "I"       "I"       "I"     
+CZE      "I"      "I"      "I"     "I"       "I"       "I"     
+DNK      "I"      "I"      "I"     "I"       "I"       "I"     
+EST      "I"      "X"      "X"     "I"       "X"       "X"     
+FRA      "I"      "I"      "I"     "I"       "I"       "I"     
+DEU      "I"      "I"      "I"     "I"       "I"       "I"     
+ISL      "I"      "I"      "I"     "I"       "I"       "I"     
+ISR      "I"      "I"      "I"     "I"       "I"       "I"     
+ITA      "L"      "L"      "L"     "L"       "L"       "L"     
+JPN      "I"      "I"      "I"     "I"       "I"       "I"     
+KOR      "I"      "I"      "I"     "I"       "I"       "I"     
+LVA      "I"      "I"      "I"     "I"       "I"       "I"     
+LTU      "I"      "I"      "I"     "I"       "I"       "I"     
+LUX      "I"      "I"      "I"     "I"       "I"       "I"     
+MEX      "I"      "I"      "X"     "I"       "I"       "X"     
+NZL      "I"      "I"      "I"     "I"       "I"       "I"     
+POL      "I"      "I"      "I"     "I"       "I"       "I"     
+PRT      "I"      "I"      "I"     "I"       "I"       "I"     
+SVN      "I"      "I"      "I"     "I"       "I"       "I"     
+ESP      "I"      "I"      "I"     "I"       "I"       "I"     
+SWE      "I"      "I"      "I"     "I"       "I"       "I"     
+CHE      "I"      "I"      "I"     "I"       "I"       "I"     
+TUR      "I"      "I"      "I"     "I"       "I"       "I"     
+GBR      "I"      "I"      "I"     "I"       "I"       "I"     
+USA      "I"      "I"      "I"     "I"       "I"       "I"     
+G20XOECD "I"      "X"      "X"     "I"       "X"       "X"     
+ARG      "I"      "X"      "X"     "I"       "X"       "X"     
+BRA      "I"      "X"      "X"     "I"       "X"       "X"     
+CHN      "I"      "X"      "X"     "I"       "X"       "X"     
+IND      "I"      "X"      "X"     "I"       "X"       "X"     
+IDN      "I"      "X"      "X"     "I"       "X"       "X"     
+RUS      "I"      "X"      "X"     "I"       "X"       "X"     
+ZAF      "I"      "X"      "X"     "I"       "X"       "X"     
+
+Summary per dataflow:
+   pos_aggr : loaded  46  from OECD,  1  from cache,  0  empty,  0  errors
+   pos_ctry : loaded  36  from OECD,  1  from cache,  0  empty,  10  errors
+   pos_ind : loaded  34  from OECD,  1  from cache,  0  empty,  12  errors
+   flow_aggr : loaded  45  from OECD,  1  from cache,  0  empty,  1  errors
+   flow_ctry : loaded  34  from OECD,  1  from cache,  0  empty,  12  errors
+   flow_ind : loaded  34  from OECD,  1  from cache,  0  empty,  12  errors
+
+Failed queries:
+   SAU  -  pos_ctry 
+   EST  -  pos_ctry 
+   G20XOECD  -  pos_ctry 
+   ARG  -  pos_ctry 
+   BRA  -  pos_ctry 
+   CHN  -  pos_ctry 
+   IND  -  pos_ctry 
+   IDN  -  pos_ctry 
+   RUS  -  pos_ctry 
+   ZAF  -  pos_ctry 
+   SAU  -  pos_ind 
+   HUN  -  pos_ind 
+   EST  -  pos_ind 
+   MEX  -  pos_ind 
+   G20XOECD  -  pos_ind 
+   ARG  -  pos_ind 
+   BRA  -  pos_ind 
+   CHN  -  pos_ind 
+   IND  -  pos_ind 
+   IDN  -  pos_ind 
+   RUS  -  pos_ind 
+   ZAF  -  pos_ind 
+   HUN  -  flow_aggr 
+   SAU  -  flow_ctry 
+   HUN  -  flow_ctry 
+   NLD  -  flow_ctry 
+   EST  -  flow_ctry 
+   G20XOECD  -  flow_ctry 
+   ARG  -  flow_ctry 
+   BRA  -  flow_ctry 
+   CHN  -  flow_ctry 
+   IND  -  flow_ctry 
+   IDN  -  flow_ctry 
+   RUS  -  flow_ctry 
+   ZAF  -  flow_ctry 
+   SAU  -  flow_ind 
+   NLD  -  flow_ind 
+   EST  -  flow_ind 
+   MEX  -  flow_ind 
+   G20XOECD  -  flow_ind 
+   ARG  -  flow_ind 
+   BRA  -  flow_ind 
+   CHN  -  flow_ind 
+   IND  -  flow_ind 
+   IDN  -  flow_ind 
+   RUS  -  flow_ind 
+   ZAF  -  flow_ind 
+To retry, delete their cache files and re-run this script.

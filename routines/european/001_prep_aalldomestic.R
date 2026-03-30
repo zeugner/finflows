@@ -258,6 +258,8 @@ ll[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
 
 gc()
 
+
+
 saveRDS(aa, file.path(data_dir, 'aa_prep.rds'))
 saveRDS(ll, file.path(data_dir, 'll_prep.rds'))
 

@@ -1,14 +1,14 @@
 library(MDstats); library(MD3)
 
 # Set data directory
-data_dir= file.path(getwd(),'data')
+if (!exists("data_dir")) data_dir = getwd()
 
 
 
 ## load filled iip bop
 ## split of assets and liabilities of banks
-aa=readRDS(file.path(data_dir,'aa_iip_cps_final.rds')); gc()
-ll=readRDS(file.path(data_dir,'ll_iip_cps_final.rds')); gc()
+aa=readRDS(file.path(data_dir,'aa_iip_cps.rds')); gc()
+ll=readRDS(file.path(data_dir,'ll_iip_cps.rds')); gc()
 
 # Load loans data
 

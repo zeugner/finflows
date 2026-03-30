@@ -1,7 +1,7 @@
 library(MDstats); library(MD3)
 
 # Set data directory - guarded so it won't override when called from main_filler.R
-if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+if (!exists("data_dir")) data_dir = getwd()
 
 #source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
 gc()
