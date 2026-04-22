@@ -89,9 +89,12 @@ if (diff(cmp1)<.1 & diff(cmp2)>.2) {
   
   #xcp=copy(cpinfo)#this is just for demonstration, use the real array loaded from nasa_10_f_bs instead
   cpa=copy(cpa[.....MIO_EUR..])
-  temp2=copy(cpa[.S2...ASS..])
-  cpa[.S2...ASS..]=cpa[.S2...LIAB..]
-  cpa[.S2...LIAB..] = temp2
+  temp2=copy(cpa[.S2.S1..ASS..])
+  cpa[.S2.S1..ASS..]=cpa[.S2.S1..LIAB..]
+  cpa[.S2.S1..LIAB..] = temp2
   
 }
+
+dimnames(cpa)[['GEO']] = ccode(dimnames(cpa)[['GEO']],2,'iso2m',leaveifNA=TRUE); gc()
+
 saveRDS(cpa, file=file.path(data_dir, 'cpa_new.rds'))
