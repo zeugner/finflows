@@ -20,8 +20,8 @@ dimnames(loans_bsi)[['REF_AREA']] = ccode(dimnames(loans_bsi)[['REF_AREA']],2,'i
 dimnames(loans_bsi)[['COUNTERPART_AREA']] = ccode(dimnames(loans_bsi)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 
 ###  manual allocation of EA to EA20 
-dimnames(loans_bsi)$REF_AREA[dimnames(loans_bsi)$REF_AREA=='EA'] ='EA20'
-dimnames(loans_bsi)$COUNTERPART_AREA[dimnames(loans_bsi)$COUNTERPART_AREA=='EA'] ='EA20'
+dimnames(loans_bsi)$REF_AREA[dimnames(loans_bsi)$REF_AREA=='U5'] ='EA20'
+dimnames(loans_bsi)$COUNTERPART_AREA[dimnames(loans_bsi)$COUNTERPART_AREA=='U5'] ='EA20'
 
 
 #check
@@ -50,8 +50,8 @@ dimnames(deposits_bsi)[['REF_AREA']] = ccode(dimnames(deposits_bsi)[['REF_AREA']
 dimnames(deposits_bsi)[['COUNTERPART_AREA']] = ccode(dimnames(deposits_bsi)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 
 ###  manual allocation of EA to EA20 
-dimnames(deposits_bsi)$REF_AREA[dimnames(deposits_bsi)$REF_AREA=='EA'] ='EA20'
-dimnames(deposits_bsi)$COUNTERPART_AREA[dimnames(deposits_bsi)$COUNTERPART_AREA=='EA'] ='EA20'
+dimnames(deposits_bsi)$REF_AREA[dimnames(deposits_bsi)$REF_AREA=='U5'] ='EA20'
+dimnames(deposits_bsi)$COUNTERPART_AREA[dimnames(deposits_bsi)$COUNTERPART_AREA=='U5'] ='EA20'
 
 
 names(dimnames(deposits_bsi))[names(dimnames(deposits_bsi))=="REF_SECTOR"] <- 'COUNTERPART_SECTOR'
