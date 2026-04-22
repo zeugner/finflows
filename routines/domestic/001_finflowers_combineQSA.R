@@ -208,6 +208,7 @@ aall['F89',,'S0',,,,] = lll$Ladj$F89
 
 # set order for sectors 
 sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K+S12R',split='\\+')[[1L]]
+sinstr=setdiff(dimnames(aall)[[1]],'F2M')
 aall[..S2....]=NA; aall[...S2...]=NA
 aall[..S12R....]=NA; aall[...S12R...]=NA
 dall=as.data.table(aall,na.rm=TRUE, .simple=TRUE)
@@ -216,8 +217,8 @@ ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
 ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
 attr(dall,'dcstruct') = ddn
 aall=as.md3(dall)
-aall[..S2....] = aall[..S0....] - aall[..S1....]
-aall[...S2...] = aall[...S0...] - aall[...S1...]
+aall[sinstr %&% "..S2...."] = aall[sinstr %&% "..S0...."] - aall[sinstr %&% "..S1...."]
+aall[sinstr %&% "...S2..."] = aall[sinstr %&% "...S0..."] - aall[sinstr %&% "...S1..."]
 aall[..S12R....] = aall[..S124....]+aall[..S12O....]+aall[..S12Q....]
 aall[...S12R...] = aall[...S124...]+aall[...S12O...]+aall[...S12Q...]
 
