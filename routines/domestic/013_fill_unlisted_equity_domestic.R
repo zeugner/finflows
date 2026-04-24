@@ -120,6 +120,12 @@ aall[F51+F511+F51M..S12T.S12O.LE._S.2022q4]  # CHECK: View components before
 aall[F51M..S12T.S12O..., onlyna=TRUE] <- aall[F51..S12T.S12O...] - zerofiller(aall[F511..S12T.S12O...])
 aall[F51+F511+F51M..S12T.S12O.LE._S.2023q4]  # CHECK: Verify calculation
 
+
+##### from here on
+
+
+
+
 ###########################  ATTENTION MAYBE SHIFT LATER ############# QUITE STRONG ASSUMPTION...
 ### COMPUTE S12T HOLDINGS OF F51M IN S11 (NFC) LIABILITIES
 # Now we can finally compute the residual and obtain S12T holdings of F51M in S11 (NFC) liabilities!

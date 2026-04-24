@@ -86,7 +86,7 @@ aall['F2M',,,,,,]  = lll$A$F2M[N..W2...N.A..F2M._Z._Z.XDC._T.S.V.N..]  # Fill wi
 aall['F2M',,,'S12K',,,]  = lll$L$F2M[.W2...]  # Special handling for MFIs (banks) with domestic scope
 
 aall['F2M',,,'S0',,,]  = lll$A$F2M[N..W0..S1.N.A..F2M._Z._Z.XDC._T.S.V.N..]  # World scope data for total economy
-aall['F2M',,,'S0',,,] = lll$A$F2M[.W0..S1...]  # OLD
+#aall['F2M',,,'S0',,,] = lll$A$F2M[.W0..S1...]  # OLD
 
 
 # Split flows and stocks for total economy
@@ -208,6 +208,7 @@ aall['F89',,'S0',,,,] = lll$Ladj$F89
 
 # set order for sectors 
 sorder=strsplit('S121+S12T+S124+S12O+S12Q+S13+S11+S1M+S2+S0+S1+S12K+S12R',split='\\+')[[1L]]
+sinstr=setdiff(dimnames(aall)[[1]],'F2M')
 aall[..S2....]=NA; aall[...S2...]=NA
 aall[..S12R....]=NA; aall[...S12R...]=NA
 dall=as.data.table(aall,na.rm=TRUE, .simple=TRUE)
@@ -216,8 +217,9 @@ ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
 ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
 attr(dall,'dcstruct') = ddn
 aall=as.md3(dall)
-aall[..S2....] = aall[..S0....] - aall[..S1....]
-aall[...S2...] = aall[...S0...] - aall[...S1...]
+sinstr_str = paste(sinstr, collapse = "+")
+aall[sinstr_str %&% "..S2...."] = aall[sinstr_str %&% "..S0...."] - aall[sinstr_str %&% "..S1...."]
+aall[sinstr_str %&% "...S2..."] = aall[sinstr_str %&% "...S0..."] - aall[sinstr_str %&% "...S1..."]
 aall[..S12R....] = aall[..S124....]+aall[..S12O....]+aall[..S12Q....]
 aall[...S12R...] = aall[...S124...]+aall[...S12O...]+aall[...S12Q...]
 

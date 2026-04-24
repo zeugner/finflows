@@ -120,10 +120,61 @@ assetfiller = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST",
   }
 }
 
+
+# #sz start 
+# astfiller2 = function(bopeu,le='F',cparea=c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+#                                              "EXT_EU28",  "BG", "BR", "CA", "CH", "NA",
+#                                              "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+#                                              "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US","CN_X_HK"),
+#                        sss=c("S1", "S121", "S122", "S123", "S12K", "S12M", "S12T", "S13", "S1P", "S11", "S1V", "S124", "S12Q", "S1M")) {
+#   aaF = bopeu[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
+#   
+#   
+#   aa['F',,sss,'S1',le,'_T',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA",          ]
+#   aa['F',,sss,'S1',le,'_P',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F",    ]
+#   aa['F',,sss,'S1',le,'_O',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F",    ]
+#   aa['F',,sss,'S1',le,'_D',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F",    ]
+#   aa['F',,sss,'S1',le,'_R',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__R__F",    ]
+#   aa['F2',,sss,'S1',le,'_R',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__R__F2",   ]
+#   aa['F3',,sss,'S1',le,'_R',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__R__F3",   ]
+#   aa['F',,sss,'S1',le,'_F',,cparea,   usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__F__F7",   ]
+#   aa['F2',,sss,'S1',le,'_O',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F2",   ]
+#   aa['F3',,sss,'S1',le,'_D',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F3",   ]
+#   aa['F3',,sss,'S1',le,'_P',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F3",   ]
+#   aa['F4',,sss,'S1',le,'_D',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F4",   ]
+#   aa['F4',,sss,'S1',le,'_O',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F4",   ]
+#   aa['F5',,sss,'S1',le,'_P',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F5",   ]
+#   aa['F51',,sss,'S1',le,'_P',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F51",  ]
+#   aa['F52',,sss,'S1',le,'_P',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F52",  ]
+#   aa['F511',,sss,'S1',le,'_D',,cparea,usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F511", ]
+#   aa['F511',,sss,'S1',le,'_P',,cparea,usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F511", ]
+#   aa['F51M',,sss,'S1',le,'_D',,cparea,usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F51M", ]
+#   aa['F51M',,sss,'S1',le,'_P',,cparea,usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__P__F512", ]
+#   aa['F51M',,sss,'S1',le,'_O',,cparea,usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F519", ]
+#   aa['F6',,sss,'S1',le,'_O',,cparea,  usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F6",   ]
+#   aa['F81',,sss,'S1',le,'_D',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__D__F81",  ]
+#   aa['F81',,sss,'S1',le,'_O',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F81",  ]
+#   aa['F89',,sss,'S1',le,'_O',,cparea, usenames=TRUE, onlyna=TRUE] <<- aaF[,cparea,,"FA__O__F89",  ]
+#   
+#  return(invisible(TRUE))  
+# }
+# 
+# aa0=copy(aa)
+# 
+# astfiller2(bopeu["...ASS.."],'F',c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
+#                                     "EXT_EU28",  "BG", "BR", "CA", "CH", "NA",
+#                                     "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
+#                                     "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US","CN_X_HK"))
+# aa2 = copy(aa)
+# aa=copy(aa0)
+# #sz end
+
 assetfiller(bopeu["...ASS.."],'F',c("EXT_EA19", "EXT_EA20", "WRL_REST", "EU27", "EXT_EU27", "EU28",
                                     "EXT_EU28",  "BG", "BR", "CA", "CH", "NA",
                                     "CZ", "DK", "EUI", "HK", "HR", "HU", "IN", "JP",
                                     "OFFSHO", "PL", "RO", "RU", "SE", "GB", "US","CN_X_HK"))
+#sz: now compare aa to aa2
+#aa2[.EA20.S1.S1.F..2022q4.EXT_EA20] 'should be teh same as 
 aa[.EA20.S1.S1.F..2022q4.EXT_EA20]
 
 saveRDS(aa, file.path(data_dir, 'aa_bop_cps_eu_temp.rds'))
@@ -189,6 +240,8 @@ dimnames(iip)[['REF_AREA']] = ccode(dimnames(iip)[['REF_AREA']],2,'iso2m'); gc()
 dimnames(iip)[['COUNTERPART_AREA']] = ccode(dimnames(iip)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 dimnames(iip)$REF_SECTOR[dimnames(iip)$REF_SECTOR=='S12M'] = 'S12R'
 
+
+
 assetfiller = function(iip,le='LE',cparea=c("EXT_EA19", "WRL_REST", "BG", "BR", "CA", "CH",
                                           "CN_X_HK", "CZ", "DK", "EUI", "EXT_EU27", "HK",
                                           "HR", "HU", "IN", "JP", "OFFSHO", "PL",
@@ -204,33 +257,33 @@ assetfiller = function(iip,le='LE',cparea=c("EXT_EA19", "WRL_REST", "BG", "BR", 
   aaF = iip[dimnames(aa)$REF_AREA,,sss,,time(aa)]; gc()
   for (cp in cparea) {
     message(cp)
-    aa['F',  ,sss,'S1',le,'_T',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA",          ]); gc()
-    aa['F',  ,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F",    ]); gc()
-    aa['F',  ,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F",    ]); gc()
-    aa['F',  ,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F",    ]); gc()
-    aa['F',  ,sss,'S1',le,'_R',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F",    ]); gc()
-    aa['F',  ,sss,'S1',le,'_F',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7",   ]); gc()
-    aa['F2',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2",   ]); gc()
-    aa['F2',,sss,'S1',le,'_R',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2",   ]); gc()
-    aa['F3', ,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3",   ]); gc()
-    aa['F3', ,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3",   ]); gc()
-    aa['F3', ,sss,'S1',le,'_R',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3",   ]); gc()
-    aa['F4', ,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4",   ]); gc()
-    aa['F4', ,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4",   ]); gc()
-    aa['F52',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52",  ]); gc()
-    aa['F5', ,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F5",   ]); gc()
-    aa['F51',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51",  ]); gc()
-    aa['F511',,sss,'S1',le,'_D',,cp,usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
-    aa['F5', ,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F5",   ]); gc()
-    aa['F51',,sss,'S1',le,'_P',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51",  ]); gc()
-    aa['F511',,sss,'S1',le,'_P',,cp,usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
-    aa['F51M',,sss,'S1',le,'_D',,cp,usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51M", ]); gc()
-    aa['F51M',,sss,'S1',le,'_P',,cp,usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()  # fixed: removed leading dot
-    aa['F51M',,sss,'S1',le,'_O',,cp,usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
-    aa['F6', ,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6",   ]); gc()
-    aa['F81',,sss,'S1',le,'_D',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81",  ]); gc()
-    aa['F81',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81",  ]); gc()
-    aa['F89',,sss,'S1',le,'_O',,cp, usenames=FALSE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89",  ]); gc()
+    aa['F',  ,sss,'S1',le,'_T',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA",          ]); gc()
+    aa['F',  ,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F",    ]); gc()
+    aa['F',  ,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F",    ]); gc()
+    aa['F',  ,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F",    ]); gc()
+    aa['F',  ,sss,'S1',le,'_R',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F",    ]); gc()
+    aa['F',  ,sss,'S1',le,'_F',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__F__F7",   ]); gc()
+    aa['F2',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F2",   ]); gc()
+    aa['F2',,sss,'S1',le,'_R',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F2",   ]); gc()
+    aa['F3', ,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F3",   ]); gc()
+    aa['F3', ,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F3",   ]); gc()
+    aa['F3', ,sss,'S1',le,'_R',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__R__F3",   ]); gc()
+    aa['F4', ,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F4",   ]); gc()
+    aa['F4', ,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F4",   ]); gc()
+    aa['F52',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F52",  ]); gc()
+    aa['F5', ,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F5",   ]); gc()
+    aa['F51',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51",  ]); gc()
+    aa['F511',,sss,'S1',le,'_D',,cp,usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F511", ]); gc()
+    aa['F5', ,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F5",   ]); gc()
+    aa['F51',,sss,'S1',le,'_P',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F51",  ]); gc()
+    aa['F511',,sss,'S1',le,'_P',,cp,usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F511", ]); gc()
+    aa['F51M',,sss,'S1',le,'_D',,cp,usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F51M", ]); gc()
+    aa['F51M',,sss,'S1',le,'_P',,cp,usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__P__F512", ]); gc()  # fixed: removed leading dot
+    aa['F51M',,sss,'S1',le,'_O',,cp,usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F519", ]); gc()
+    aa['F6', ,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F6",   ]); gc()
+    aa['F81',,sss,'S1',le,'_D',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__D__F81",  ]); gc()
+    aa['F81',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F81",  ]); gc()
+    aa['F89',,sss,'S1',le,'_O',,cp, usenames=TRUE, onlyna=TRUE] <<- as.array(aaF[,cp,,"FA__O__F89",  ]); gc()
   }
 }
 
@@ -246,6 +299,7 @@ assetfiller(iip["A_LE....."],'LE',c("EXT_EA19", "WRL_REST", "BG", "BR", "CA", "C
                                     "MX", "NO", "SA", "TR", "ZA"))
 aa[.AT.S1.S1.LE..2022q4.WRL_REST]
 gc()
+
 
 aa[.EA20......WRL_REST] <- aa[.EA20......EXT_EA20]
 aa[.EA19......WRL_REST] <- aa[.EA19......EXT_EA19]
@@ -456,15 +510,15 @@ saveRDS(ll,file.path(data_dir,'vintages/ll_iip_cps_' %&% format(Sys.time(),'%F')
 ####                   BASED ON F21+F2M                   ####
 ####                                                      ####
 ##############################################################
-zerofiller=function(x, fillscalar=0){
-  temp=copy(x)
-  temp[onlyna=TRUE]=fillscalar
-  temp
-}
-
-#zerofiller only used for F21
-aa[F2.......WRL_REST, usenames=TRUE, onlyna=TRUE] = zerofiller(aa[F21.......WRL_REST])+aa[F2M.......WRL_REST]
-ll[F2.WRL_REST......, usenames=TRUE, onlyna=TRUE] = zerofiller(ll[F21.WRL_REST......])+ll[F2M.WRL_REST......]
+# zerofiller=function(x, fillscalar=0){
+#   temp=copy(x)
+#   temp[onlyna=TRUE]=fillscalar
+#   temp
+# }
+# 
+# #zerofiller only used for F21 
+# aa[F2.......WRL_REST, usenames=TRUE, onlyna=TRUE] = zerofiller(aa[F21.......WRL_REST])+aa[F2M.......WRL_REST]
+# ll[F2.WRL_REST......, usenames=TRUE, onlyna=TRUE] = zerofiller(ll[F21.WRL_REST......])+ll[F2M.WRL_REST......]
 
 gc()
 ##############################################################
