@@ -217,9 +217,14 @@ ddn$REF_SECTOR = ddn$REF_SECTOR[sorder,]
 ddn$COUNTERPART_SECTOR = ddn$COUNTERPART_SECTOR[sorder,]
 attr(dall,'dcstruct') = ddn
 aall=as.md3(dall)
+<<<<<<< HEAD
 sinstr_str = paste(sinstr, collapse = "+")
 aall[sinstr_str %&% "..S2...."] = aall[sinstr_str %&% "..S0...."] - aall[sinstr_str %&% "..S1...."]
 aall[sinstr_str %&% "...S2..."] = aall[sinstr_str %&% "...S0..."] - aall[sinstr_str %&% "...S1..."]
+=======
+aall[sinstr %&% "..S2...."] = aall[sinstr %&% "..S0...."] - aall[sinstr %&% "..S1...."]
+aall[sinstr %&% "...S2..."] = aall[sinstr %&% "...S0..."] - aall[sinstr %&% "...S1..."]
+>>>>>>> f55887bf1cfac16c1298286e6e92e55225f65c0d
 aall[..S12R....] = aall[..S124....]+aall[..S12O....]+aall[..S12Q....]
 aall[...S12R...] = aall[...S124...]+aall[...S12O...]+aall[...S12Q...]
 

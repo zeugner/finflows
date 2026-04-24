@@ -61,6 +61,7 @@ names(dimnames(bbsi))[[6]] = 'COUNTERPART_SECTOR'
 # Compute S1 (0000) as sum of MFI (1000) and non-MFI (2000)
 # Needed because 0000 has no data for domestic counterpart area (U6)
 if (all(c("1000", "2000") %in% dimnames(bbsi)[[6]])) {
+<<<<<<< HEAD
   bbsi[.....0000.,onlyna=TRUE] <- bbsi[.....1000.] + bbsi[.....2000.]
 }
 
@@ -71,6 +72,14 @@ if (all(c("1000", "2000") %in% dimnames(bbsi)[[6]])) {
 #   bbsi[.....0000., onlyna=TRUE] <- s1_computed
 #   rm(s1_computed)
 # }
+=======
+  s1_computed <- bbsi[.....1000.] + bbsi[.....2000.]
+  dimnames(s1_computed)[[6]] <- "0000"
+  bbsi[.....0000., onlyna=TRUE] <- s1_computed
+  rm(s1_computed)
+}
+
+>>>>>>> f55887bf1cfac16c1298286e6e92e55225f65c0d
 
 # Apply sector dictionary: subset to dictionary sectors and rename codes
 bbsi=bbsi[,,,,,names(dictbsisec),]

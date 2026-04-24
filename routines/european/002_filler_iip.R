@@ -510,6 +510,7 @@ saveRDS(ll,file.path(data_dir,'vintages/ll_iip_cps_' %&% format(Sys.time(),'%F')
 ####                   BASED ON F21+F2M                   ####
 ####                                                      ####
 ##############################################################
+<<<<<<< HEAD
 # zerofiller=function(x, fillscalar=0){
 #   temp=copy(x)
 #   temp[onlyna=TRUE]=fillscalar
@@ -519,8 +520,19 @@ saveRDS(ll,file.path(data_dir,'vintages/ll_iip_cps_' %&% format(Sys.time(),'%F')
 # #zerofiller only used for F21 
 # aa[F2.......WRL_REST, usenames=TRUE, onlyna=TRUE] = zerofiller(aa[F21.......WRL_REST])+aa[F2M.......WRL_REST]
 # ll[F2.WRL_REST......, usenames=TRUE, onlyna=TRUE] = zerofiller(ll[F21.WRL_REST......])+ll[F2M.WRL_REST......]
+=======
+#zerofiller=function(x, fillscalar=0){
+ # temp=copy(x)
+  #temp[onlyna=TRUE]=fillscalar
+  #temp
+#}
 
-gc()
+#zerofiller only used for F21
+#aa[F2.......WRL_REST, usenames=TRUE, onlyna=TRUE] = zerofiller(aa[F21.......WRL_REST])+aa[F2M.......WRL_REST]
+#ll[F2.WRL_REST......, usenames=TRUE, onlyna=TRUE] = zerofiller(ll[F21.WRL_REST......])+ll[F2M.WRL_REST......]
+>>>>>>> f55887bf1cfac16c1298286e6e92e55225f65c0d
+
+#gc()
 ##############################################################
 ##############################################################
 
