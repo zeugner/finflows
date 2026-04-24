@@ -9,9 +9,14 @@ library(MD3)
 if (!exists("data_dir")) data_dir = getwd()
 
 #### LOADING CPQ TOTALS
-cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.')
-helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.")
-cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.') 
+
+nasq_10_f_cp=mds('Estat/nasq_10_f_cp/')
+dimnames(nasq_10_f_cp)
+cpq_F2M=nasq_10_f_cp[]
+
+cpq_F2M=MDstats::mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.')
+# helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.")
+# cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.') 
 
 cpq_F3=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.')
 helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.") 
@@ -33,7 +38,7 @@ cpq_F52=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F52.')
 ### create cpq raw 
 cpq=add.dim(cpq_F2M, .dimname = 'INSTR', .dimcodes = c('F2M', 'F3', 'F4', 'F511', 'F52'), .fillall = FALSE)
 gc()
-
+cpq['F2M......']<-cpq_F2M['.....']
 cpq['F3......']<-cpq_F3['.....']
 cpq['F4......']<-cpq_F4['.....']
 cpq['F511......']<-cpq_F511['.....']
@@ -43,11 +48,13 @@ saveRDS(cpq, file=file.path(data_dir, 'cpq_new.rds'))
 
 #### LOADING CPQ FDI
 cpq_F3_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3_FDI.')
-
+helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3_FDI.")
 cpq_F3_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3_FDI.')
+
 cpq_F4_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.')
 helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.")
 cpq_F4_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F4_FDI.')
+
 cpq_F511_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.')
 helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.")
 cpq_F511_FDI=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F511_FDI.')
@@ -89,9 +96,12 @@ if (diff(cmp1)<.1 & diff(cmp2)>.2) {
   
   #xcp=copy(cpinfo)#this is just for demonstration, use the real array loaded from nasa_10_f_bs instead
   cpa=copy(cpa[.....MIO_EUR..])
-  temp2=copy(cpa[.S2...ASS..])
-  cpa[.S2...ASS..]=cpa[.S2...LIAB..]
-  cpa[.S2...LIAB..] = temp2
+  temp2=copy(cpa[.S2.S1..ASS..])
+  cpa[.S2.S1..ASS..]=cpa[.S2.S1..LIAB..]
+  cpa[.S2.S1..LIAB..] = temp2
   
 }
+
+dimnames(cpa)[['GEO']] = ccode(dimnames(cpa)[['GEO']],2,'iso2m',leaveifNA=TRUE); gc()
+
 saveRDS(cpa, file=file.path(data_dir, 'cpa_new.rds'))
