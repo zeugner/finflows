@@ -14,10 +14,10 @@ lat = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidat
 la_l = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_LIAB.rds"))
 lat_l = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_flows_LIAB.rds"))
 
-names(dimnames(la))[[1]] = names(dimnames(lat))[[1]] = names(dimnames(la_l))[[1]] = names(dimnames(lat_l))[[1]] = 'REF_AREA'
+names(dimnames(la))[[3]] = names(dimnames(lat))[[3]] = names(dimnames(la_l))[[3]] = names(dimnames(lat_l))[[3]] = 'REF_AREA'
 names(dimnames(la))[[2]] = names(dimnames(lat))[[2]] = names(dimnames(la_l))[[2]] = names(dimnames(lat_l))[[2]] = 'INSTR'
-names(dimnames(la))[[3]] = names(dimnames(lat))[[3]] = 'REF_SECTOR'
-names(dimnames(la_l))[[3]] = names(dimnames(lat_l))[[3]] = 'COUNTERPART_SECTOR'
+names(dimnames(la))[[1]] = names(dimnames(lat))[[1]] = 'REF_SECTOR'
+names(dimnames(la_l))[[1]] = names(dimnames(lat_l))[[1]] = 'COUNTERPART_SECTOR'
 
 ####### RENAME SECTORS AND INSTRUMENTS!
 
@@ -59,10 +59,10 @@ lal_q=copy(la_l); frequency(lal_q)='Q'
 latl_q=copy(lat_l); frequency(latl_q)='Q'
 
 ####EA18=EA19=EA20
-la_q["EA18..."]=la_q["EA19..."]<-la_q["EA20..."]
-lat_q["EA18..."]=lat_q["EA19..."]<-lat_q["EA20..."]
-lal_q["EA18..."]=lal_q["EA19..."]<-lal_q["EA20..."]
-latl_q["EA18..."]=latl_q["EA19..."]<-latl_q["EA20..."]
+la_q["..EA18.",onlyna=TRUE]<-la_q["..EA19.",onlyna=TRUE]<-la_q["..EA20.",onlyna=TRUE]<-la_q["..EA21."]
+lat_q["..EA18.",onlyna=TRUE]<-lat_q["..EA19.",onlyna=TRUE]<-lat_q["..EA20.",onlyna=TRUE]<-lat_q["..EA21."]
+lal_q["..EA18.",onlyna=TRUE]<-lal_q["..EA19.",onlyna=TRUE]<-lal_q["..EA20.",onlyna=TRUE]<-lal_q["..EA21."]
+latl_q["..EA18.",onlyna=TRUE]<-latl_q["..EA19.",onlyna=TRUE]<-latl_q["..EA20.",onlyna=TRUE]<-latl_q["..EA21."]
 
 aall[...S0.LE._T., onlyna=TRUE] <- la_q["...1999q4:"]
 aall[...S0.F._T., onlyna=TRUE] <- lat_q["...1999q4:"]

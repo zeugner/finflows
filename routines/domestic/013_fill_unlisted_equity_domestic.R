@@ -45,6 +45,10 @@ aall[F519..S121.S2.LE._O.,onlyna=TRUE]<-ecb_capital_md3
 aall[F519.DE.S121.S2.LE._O.2024q4]
 
 gc()
+dimnames(aall)
+
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._S.2023q4]
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._T.2023q4]
 
 ### unflagging necessary to get the "obs_status" away
 aall=unflag(aall)
@@ -54,10 +58,15 @@ aallcast=dcast(aall_S, ... ~ FUNCTIONAL_CAT, id.vars=1:8, value.var = 'obs_value
 gc()
 
 # Use _T when available, otherwise calculate sum
+components <- aallcast[, c('_D','_P','_O')]
+all_na <- rowSums(is.na(components)) == ncol(components)
+sum_components <- rowSums(components, na.rm=TRUE)
+sum_components[all_na] <- NA_real_
+
 aallcast[['_S']] <- ifelse(
-  !is.na(aallcast[['_T']]), 
-  aallcast[['_T']],  # Use existing _T when available
-  rowSums(aallcast[,c('_D','_P','_O')], na.rm=TRUE)  # Calculate from components when _T is missing
+  !is.na(aallcast[['_T']]),
+  aallcast[['_T']],
+  sum_components
 )
 gc()
 
@@ -71,9 +80,14 @@ aall_S=rbind(aall_S,aallcast2,fill=TRUE)
 gc()     
 aall_M=as.md3(aall_S)
 gc()
+
 aall=copy(aall_M)
 
 gc()
+
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._S.2023q4]
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._T.2023q4]
+
 
 aall[F51M....LE..,onlyna=TRUE]=aall[F512....LE..]+aall[F519....LE..]
 aall[F51....LE..,onlyna=TRUE]=aall[F511....LE..]+aall[F51M....LE..]
@@ -120,11 +134,58 @@ aall[F51+F511+F51M..S12T.S12O.LE._S.2022q4]  # CHECK: View components before
 aall[F51M..S12T.S12O..., onlyna=TRUE] <- aall[F51..S12T.S12O...] - zerofiller(aall[F511..S12T.S12O...])
 aall[F51+F511+F51M..S12T.S12O.LE._S.2023q4]  # CHECK: Verify calculation
 
+### S12Q liabilities, assumptions: not held by S11, S124, S1M, note: S12T can exist for FR, NL, BE 
 
-##### from here on
+aall[F51M.EA20+CZ.S0+S1+S2.S12Q.LE._S.2023q4]
+#f51m.s1.s12q only there for some countries (no germany, no ea20!)
+#so we have to fill s2.s12q first - bop_iip, then residual
+
+s12q_foreign_liab <-mds('Estat/bop_iip6_q/Q.MIO_EUR.FA__D__F51M+FA__O__F519+FA__P__F512.S12Q.S1.L_LE.EXT_EA20+WRL_REST.')
+s12q_foreign_liab[..F51M.]<-s12q_foreign_liab[..FA__D__F51M.]+s12q_foreign_liab[..FA__O__F519.]+s12q_foreign_liab[..FA__O__F519.]
+
+#s12q_foreign_liab[.WRL_REST..2012q4]
+
+# s12q_foreign_liab[DE+EA20..2024q4]
+
+names(dimnames(s12q_foreign_liab))[1] = 'REF_AREA'
+names(dimnames(s12q_foreign_liab))[2] = 'COUNTERPART_AREA'
+names(dimnames(s12q_foreign_liab))[3] = 'INSTR'
+dimnames(s12q_foreign_liab)
+
+aall[F51M.EA20.S2.S12Q.LE._S., onlyna=TRUE]<-s12q_foreign_liab[EA20.EXT_EA20.F51M.]
+aall[F51M.EA20.S2.S12Q.LE._T., onlyna=TRUE]<-s12q_foreign_liab[EA20.EXT_EA20.F51M.]
+aall[F51M.EA20.S2.S12Q.LE._D., onlyna=TRUE]<-s12q_foreign_liab[EA20.EXT_EA20.F51M.]
+
+aall[F51M..S2.S12Q.LE._S., onlyna=TRUE]<-s12q_foreign_liab[.WRL_REST.F51M.]
+aall[F51M..S2.S12Q.LE._T., onlyna=TRUE]<-s12q_foreign_liab[.WRL_REST.F51M.]
+aall[F51M..S2.S12Q.LE._D., onlyna=TRUE]<-s12q_foreign_liab[.WRL_REST.F51M.]
+
+aall[F51M..S1.S12Q.LE.., onlyna=TRUE] <- aall[F51M..S0.S12Q.LE..] - aall[F51M..S2.S12Q.LE..]
+
+aall[F51M.EA20+CZ.S0+S1+S2.S12Q.LE._S.2023q4]
+#liab of s12q
+aall[F51M.CZ..S12Q.LE._S.2023q4]
+aall[F51M.EA20..S12Q.LE._S.2023q4]
+aall[F51M..S12O.S12Q..., onlyna=TRUE] <- aall[F51M..S1.S12Q...] - aall[F51M..S12Q.S12Q...] - zerofiller(aall[F51M..S13.S12Q...]) - zerofiller(aall[F51M..S1M.S12Q...]) - zerofiller(aall[F51M..S11.S12Q...]) - zerofiller(aall[F51M..S121.S12Q...]) - zerofiller(aall[F51M..S12T.S12Q...]) - zerofiller(aall[F51M..S124.S12Q...])
+
+aall[F51M.CZ+EA20.S12O.S12Q.LE._S.2023q4]
+### now we fill all liabilities of S2
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._S.2023q4]
+aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._T.2023q4]
+
+###ISSUE HERE! UNFORTUNATELY FROM QSA, F51M.S1.S0.FND IS FULL OF ZEROS...
+### THIS REFLECTS INTO F51M.S1.S2.FND AND THEREFORE INTO F51M.S1.S2._S AND F51M.S1.S2._T
+### BUT THESE ZEROS ARE NOT REAL. SO WE HAVE TO REPLACE THEM WITH EUROSTAT IIP BOP!!!
 
 
 
+
+### S12T assets, assumptions: only holds unlisted equity issued by S12O, S11, and S12T, maybe S13 for some bad banks
+# For banks where S12T.S12O not present
+
+aall[F51M..S12T.S12O..., onlyna=TRUE] = aall[F51M..S12T.S1...]  - zerofiller(aall[F51M..S12T.S12T...]) - zerofiller(aall[F51M..S12T.S11...]) 
+
+#MFIs only holds unlisted equity issued by OFIs, NFCS, and other MFIs
 
 ###########################  ATTENTION MAYBE SHIFT LATER ############# QUITE STRONG ASSUMPTION...
 ### COMPUTE S12T HOLDINGS OF F51M IN S11 (NFC) LIABILITIES
@@ -253,7 +314,6 @@ aall[F51M..S12T.S12Q+S12T+S1+S12O+S11.LE._S.2022q4]  # CHECK: View before calcul
 aall[F51M..S12T.S12Q..., onlyna=TRUE] <- aall[F51M..S12T.S1...] - 
   zerofiller(aall[F51M..S12T.S12T...]) - zerofiller(aall[F51M..S12T.S11...]) - zerofiller(aall[F51M..S12T.S12O...])
 aall[F51M..S12T.S12Q.LE..][which(aall[F51M..S12T.S12Q.LE..]<0)]<-0
-
 ###  S12T.S13 (Government) Calculation
 # Any remainder after accounting for all financial and non-financial sectors
 # goes to government sector holdings

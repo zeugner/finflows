@@ -12,11 +12,10 @@ if (!exists("data_dir")) data_dir = getwd()
 
 nasq_10_f_cp=mds('Estat/nasq_10_f_cp/')
 dimnames(nasq_10_f_cp)
-cpq_F2M=nasq_10_f_cp[]
 
-cpq_F2M=MDstats::mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.')
-# helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.")
-# cpq_F2M=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F22_F29.') 
+cpq_F2M=nasq_10_f_cp[MIO_EUR...STK+TRN..F22_F29..]
+dimnames(cpq_F2M)
+
 
 cpq_F3=mds('Estat/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.')
 helpmds("ESTAT/nasq_10_f_cp/Q.MIO_EUR...STK+TRN..F3.") 

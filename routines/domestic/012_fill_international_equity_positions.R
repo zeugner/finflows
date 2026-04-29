@@ -20,7 +20,8 @@ country_map <- c(
   "GRC" = "GR", "HRV" = "HR", "HUN" = "HU", "IRL" = "IE",
   "ITA" = "IT", "LTU" = "LT", "LUX" = "LU", "LVA" = "LV",
   "MLT" = "MT", "NLD" = "NL", "POL" = "PL", "PRT" = "PT",
-  "ROU" = "RO", "SVK" = "SK", "SVN" = "SI", "SWE" = "SE"
+  "ROU" = "RO", "SVK" = "SK", "SVN" = "SI", "SWE" = "SE",
+  "G163" = "EA20"
 )
 
 ####### FUNCTIONAL CATEGORY DIMENSION
@@ -73,31 +74,20 @@ aall[F52..S13..LE._T.,onlyna=TRUE]<-gov_equity["F52..."]
 
 
 ################## ASSETS - PORTFOLIO INVESTMENT (_P) ############
-
 ### Total equity (F5) by sector - ASSETS
-aall[F5..S1Z.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S1Z.1999q4:"] # Other sectors (S1Z)
-aall[F5..S12R.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S12R.1999q4:"] # Other Financial Corporations
-aall[F5..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5.1999q4:"] # Total economy
-aall[F5..S122.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S122.1999q4:"] # Deposit-taking Corporations, Except Central Bank
-aall[F5..S11_S14_S15.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S1V.1999q4:"] # Nonfinancial Corporations, Households, and NPISHs
-aall[F5..S121.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S121.1999q4:"] # Central Bank
-aall[F5..S13.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S13.1999q4:"] # General Government
-aall[F5..S1X.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S1X.1999q4:"] # Monetary Authorities
-
+aall[F5..S1Z.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S1Z_MV.1999q4:"] # Other sectors (S1Z)
+aall[F5..S12R.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S12R_MV.1999q4:"] # Other Financial Corporations
+aall[F5..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_MV.1999q4:"] # Total economy
+aall[F5..S122.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S122_MV.1999q4:"] # Deposit-taking Corporations, Except Central Bank
+aall[F5..S11_S14_S15.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S1V_MV.1999q4:"] # Nonfinancial Corporations, Households, and NPISHs
+aall[F5..S121.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S121_MV.1999q4:"] # Central Bank
+aall[F5..S13.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F5_S13_MV.1999q4:"] # General Government
 ################## ASSETS - PORTFOLIO INVESTMENT (_P) ############
-
 ### Equity securities (F51) - ASSETS
-aall[F51..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F51.1999q4:"] # Total F51
-
-### Listed shares (F511) - ASSETS
-aall[F511..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F511.1999q4:"] # Total F511
-
-### Unlisted shares (F512) - ASSETS
-aall[F512..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F512.1999q4:"] # Total F512
-
+aall[F51..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F51_MV.1999q4:"] # Total F51
 ### Investment fund shares (F52) - ASSETS
-aall[F52..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F52.1999q4:"] # Total F52
-aall[F52..S123.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F52_S123.1999q4:"] # Money market funds
+aall[F52..S1.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F52_MV.1999q4:"] # Total F52
+aall[F52..S123.S2.LE._P., onlyna=TRUE]<-af5_eur[".P_F52_S123_MV.1999q4:"] # Money market funds
 
 ### Compute S12 (Financial Corporations) as sum of components - ASSETS
 aall[F5..S12.S2.LE._P.]<- aall[F5..S12R.S2.LE._P.] + 
@@ -106,29 +96,19 @@ aall[F5..S12.S2.LE._P.]<- aall[F5..S12R.S2.LE._P.] +
 
 
 ################## LIABILITIES - PORTFOLIO INVESTMENT (_P) ############
-
 ### Total equity (F5) by sector - LIABILITIES
-aall[F5..S2.S1P.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S1Z.1999q4:"] # Other sectors (S1Z)
-aall[F5..S2.S12R.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S12R.1999q4:"] # Other Financial Corporations
-aall[F5..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5.1999q4:"] # Total economy
-aall[F5..S2.S122.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S122.1999q4:"] # Deposit-taking Corporations, Except Central Bank
-aall[F5..S2.S11_S14_S15.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S1V.1999q4:"] # Nonfinancial Corporations, Households, and NPISHs
-aall[F5..S2.S121.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S121.1999q4:"] # Central Bank
-aall[F5..S2.S13.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S13.1999q4:"] # General Government
-aall[F5..S2.S1X.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S1X.1999q4:"] # Monetary Authorities
-
+aall[F5..S2.S1P.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S1Z_MV.1999q4:"] # Other sectors (S1Z)
+aall[F5..S2.S12R.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S12R_MV.1999q4:"] # Other Financial Corporations
+aall[F5..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_MV.1999q4:"] # Total economy
+aall[F5..S2.S122.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S122_MV.1999q4:"] # Deposit-taking Corporations, Except Central Bank
+aall[F5..S2.S11_S14_S15.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S1V_MV.1999q4:"] # Nonfinancial Corporations, Households, and NPISHs
+aall[F5..S2.S121.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S121_MV.1999q4:"] # Central Bank
+aall[F5..S2.S13.LE._P., onlyna=TRUE]<-lf5_eur[".P_F5_S13_MV.1999q4:"] # General Government
 ### Equity securities (F51) - LIABILITIES
-aall[F51..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F51.1999q4:"] # Total F51
-
-### Listed shares (F511) - LIABILITIES
-aall[F511..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F511.1999q4:"] # Total F511
-
-### Unlisted shares (F512) - LIABILITIES
-aall[F512..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F512.1999q4:"] # Total F512
-
+aall[F51..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F51_MV.1999q4:"] # Total F51
 ### Investment fund shares (F52) - LIABILITIES
-aall[F52..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F52.1999q4:"] # Total F52
-aall[F52..S2.S123.LE._P., onlyna=TRUE]<-lf5_eur[".P_F52_S123.1999q4:"] # Money market funds
+aall[F52..S2.S1.LE._P., onlyna=TRUE]<-lf5_eur[".P_F52_MV.1999q4:"] # Total F52
+aall[F52..S2.S123.LE._P., onlyna=TRUE]<-lf5_eur[".P_F52_S123_MV.1999q4:"] # Money market funds
 
 ### Compute S12 (Financial Corporations) as sum of components - LIABILITIES
 aall[F5..S2.S12.LE._P.]<- aall[F5..S2.S12R.LE._P.] + 
@@ -140,14 +120,14 @@ aall[F5..S2.S12.LE._P.]<- aall[F5..S2.S12R.LE._P.] +
 
 ### Other equity (F519) - ASSETS (NEW: not available in old IMF data)
 # Fill total economy level since sectoral breakdown is not available
-aall[F519..S1.S2.LE._O., onlyna=TRUE]<-af5_eur[".O_F519.1999q4:"] # Total economy
+aall[F519..S1.S2.LE._O., onlyna=TRUE]<-af5_eur[".O_F519_MV.1999q4:"] # Total economy
 
 
 ################## LIABILITIES - OTHER INVESTMENT (_O) ############
 
 ### Other equity (F519) - LIABILITIES
 # Note: Sectoral breakdown not available in new IMF data, filling only total economy
-aall[F519..S2.S1.LE._O., onlyna=TRUE]<-lf5_eur[".O_F519.1999q4:"] # Total economy
+aall[F519..S2.S1.LE._O., onlyna=TRUE]<-lf5_eur[".O_F519_MV.1999q4:"] # Total economy
 
 gc()
 

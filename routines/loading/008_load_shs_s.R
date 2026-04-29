@@ -116,4 +116,4 @@ ash=ash['......._Z.']; gc()
 ##--------------------------------------------------------------------
 
 saveRDS(ash, file=file.path(data_dir, 'ash_'%&%format(Sys.Date(),("%F"))%&%'.rds'))
-
+saveRDS(ash, file=file.path(data_dir, 'ash.rds'))

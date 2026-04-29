@@ -10,7 +10,7 @@ otheq_al=mds('ECB/QSA/Q.N..W0+W1+W2...N.A+L.LE.F512+F519._Z._Z.XDC..S.V.N._T')
 saveRDS(otheq_al, file=file.path(data_dir, 'otheq_al.rds'))
 
 # Load existing processed data
-#otheq_al <- readRDS(file.path(data_dir, 'otheq_al.rds'))
+otheq_al <- readRDS(file.path(data_dir, 'otheq_al.rds'))
 names(dimnames(otheq_al)) =gsub("^INSTR.*$","INSTR",names(dimnames(otheq_al)))
 names(dimnames(otheq_al)) =gsub("^COUNTER.*$","COUNTERPART_SECTOR",names(dimnames(otheq_al)))
 otheq_al=aperm(otheq_al,c("INSTR","REF_AREA","REF_SECTOR","COUNTERPART_SECTOR","ACCOUNTING_ENTRY","TIME"))
@@ -54,8 +54,8 @@ bopf51m_a=mds('Estat/bop_iip6_q/A.MIO_EUR.FA__D__F519+FA__O__F519+FA__D__F512+FA
 
 bopf51ma=copy(bopf51m_a); frequency(bopf51ma)='Q'
 saveRDS(bopf51ma, file=file.path(data_dir, 'bopf51ma.rds'))
-
-af51[FND..S2..F51M.]<-af51[FND..S0..F51M.]
+### this created issues!!!
+#af51[FND..S2..F51M.]<-af51[FND..S0..F51M.]
 
 names(dimnames(bopf51ma))[1]=names(dimnames(bopf51mq))[1]='REF_AREA'
 names(dimnames(bopf51mq))[2]='REF_SECTOR'
@@ -110,6 +110,7 @@ af51["_P...S2.F52.",onlyna=TRUE]<-bopf51ma_liab["..L_LE.FA__P__F52.1998q4:"]
 
 saveRDS(af51, file=file.path(data_dir, 'af51m_INT.rds'))
 
+af51[FND..S2..F51M.]<-af51[FND..S0..F51M.]
 ### ATTENTION here some S2 are bigger than S0... so we impose the max between the difference and 0
 # Calculate the differences first
 af51["_T+_F+_O+_P+_R...S1..", onlyna=TRUE] <- af51["_T+_F+_O+_P+_R...S0.."] - af51["_T+_F+_O+_P+_R...S2.."]
@@ -158,5 +159,5 @@ names(dimnames(af51))[5]='INSTR'
 
 af51["_T.....",onlyna=TRUE]<-af51["_S....."]
 af51=af51["_T+FND+_O+_P....."]
-
+af51[".CZ.S2+S0.S1.F51M.2022q4"]
 saveRDS(af51, file=file.path(data_dir, 'af51.rds'))

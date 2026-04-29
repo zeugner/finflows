@@ -13,11 +13,15 @@ if (!exists("data_dir")) data_dir = getwd()
 
 
 # Country codes for IMF data
-ccc='AUT+BEL+BGR+CYP+CZE+DEU+DNK+EST+ESP+FIN+FRA+GBR+GRC+HRV+HUN+IRL+ITA+LTU+LUX+LVA+MLT+NLD+POL+PRT+ROU+SWE+SVN+SVK'
+ccc='AUT+BEL+BGR+CYP+CZE+DEU+DNK+EST+ESP+FIN+FRA+GBR+GRC+HRV+HUN+IRL+ITA+LTU+LUX+LVA+MLT+NLD+POL+PRT+ROU+SWE+SVN+SVK+G163'
+#G163 is euro area!
 
 # Load IMF data
-af5 = mds('IMF/BOP/' %&% ccc %&% '.A_NFA_T.O_F519+P_F5+P_F51+P_F52+P_F52_S123+P_F5_S121+P_F5_S122+P_F5_S12R+P_F5_S13+P_F5_S1V+P_F5_S1Z.USD.Q',startPeriod = "1999q4")
-lf5 = mds('IMF/BOP/' %&% ccc %&% '.L_NIL_T.O_F519+P_F5+P_F51+P_F52+P_F52_S123+P_F5_S121+P_F5_S122+P_F5_S12R+P_F5_S13+P_F5_S1V+P_F5_S1Z.USD.Q',startPeriod = "1999q4")
+af5 = mds('IMF/IIP/' %&% ccc %&% '.A_P.O_F519_MV+P_F5_MV+P_F51_MV+P_F52_MV+P_F52_S123_MV+P_F5_S121_MV+P_F5_S122_MV+P_F5_S12R_MV+P_F5_S13_MV+P_F5_S1V_MV+P_F5_S1Z_MV.USD.Q',startPeriod = "1999q4")
+lf5 = mds('IMF/IIP/' %&% ccc %&% '.L_P.O_F519_MV+P_F5_MV+P_F51_MV+P_F52_MV+P_F52_S123_MV+P_F5_S121_MV+P_F5_S122_MV+P_F5_S12R_MV+P_F5_S13_MV+P_F5_S1V_MV+P_F5_S1Z_MV.USD.Q',startPeriod = "1999q4")
+
+af5[G163.P_F5_MV.]
+af5[CZE..2022q4]
 
 #### Save the two data sources
 saveRDS(af5, file.path(data_dir, 'af5.rds'))
@@ -32,3 +36,5 @@ lf5_eur=lf5/usd_eur
 
 saveRDS(af5_eur, file.path(data_dir, 'af5_eur.rds'))
 saveRDS(lf5_eur, file.path(data_dir, 'lf5_eur.rds'))
+
+
