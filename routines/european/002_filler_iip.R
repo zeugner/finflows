@@ -232,8 +232,10 @@ saveRDS(ll, file.path(data_dir, 'll_bop_cps_eu_temp.rds'))
 
 iipq=readRDS(file.path(data_dir,'iip_cps.rds'))
 iipa=readRDS(file.path(data_dir,'iip_cps_annual.rds'))
-frequency(iipa)='Q'
-iip=merge(iipq,iipa,along='STO')
+dimnames(iipa)
+iipa_a=iipa[".....1999+2000+2001+2002+2003+2004+2005+2006+2007+2008+2009+2010+2011+2012+2013+2014+2015+2016+2017+2018+2019+2020+2021+2022+2023+2024+2025"]
+frequency(iipa_a)='Q'
+iip=merge(iipq,iipa_a,along='STO')
 dimnames(iip)
 names(dimnames(iip))[2:4] = c('REF_AREA','COUNTERPART_AREA','REF_SECTOR')
 dimnames(iip)[['REF_AREA']] = ccode(dimnames(iip)[['REF_AREA']],2,'iso2m'); gc()

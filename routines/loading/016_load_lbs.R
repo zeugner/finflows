@@ -12,7 +12,7 @@
 # Reporting country . Counterparty sector . Counterparty country . Position type
 #
 # 1  FREQ:              Q (Quarterly)
-# 2  L_MEASURE:         B (Break in stocks, i.e valuation effects) ; F (Flows); G (Growth); S (Stocks)
+# 2  L_MEASURE:         B (Break in stocks, i.e valuation effects) ; F (FX and break adjusted change); G (Growth); S (Stocks)
 # 3  L_POSITION:        C ("Claims" -  assets); L (Liabilities)
 # 4  L_INSTR:           A ("All" - F); B ("Credit" - F3+F4); D (F3); G (F2M+F4); I (F7+F89);
 #                      M (F3S); U (Unallocated)
@@ -21,8 +21,8 @@
 # 7  L_PARENT_CTY:      varies, 5J for total, iso2
 # 8  L_REP_BANK_TYPE:   A (All); B (Foreign); D (Domestic); S (Foreign subs.)
 # 9  L_REP_CTY:         varies, 5A for total, 5C for EA, otherwise iso2
-# 10 L_CP_SECTOR:       A (S1); B (S12T/S122?); C (S11); F (non bank S12); G (S13)
-#                       H (S1M); M (S12K); plus other arbitrary categories
+# 10 L_CP_SECTOR:       A (S1); B (S12K); C (S11); F (S12 excl. S12K); G (S13)
+#                       H (S1M); M (S121); plus other arbitrary categories
 # 11 L_CP_COUNTRY:      iso2, and various aggregates - 5C (EA); 5J (All)
 # 12 L_POS_TYPE:        A (All); N (Cross-border); R (Local); U (Unallocated)
 # -----------------------------------------------------------
@@ -39,7 +39,7 @@ cat(gc(), '\n')
 
 # --- Dataflow definition (single dataflow) ---
 dfprefix <- "BIS/WS_LBS_D_PUB"
-vdimsel  <- ".S..A+B+D+G+I+M.TO1.A.5J.A.%s...A+N+R"   # %s = slot 9 L_REP_CTY
+vdimsel  <- ".S..A+D+G+I+M.TO1.A.5J.A.%s...A+N+R"   # %s = slot 9 L_REP_CTY
 
 
 

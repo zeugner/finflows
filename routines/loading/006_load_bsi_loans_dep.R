@@ -75,7 +75,6 @@ if (all(c("1000", "2000") %in% dimnames(bbsi)[[6]])) {
   dimnames(s1_computed)[[6]] <- "0000"
   bbsi[.....0000., onlyna=TRUE] <- s1_computed
   rm(s1_computed)
-}
 
 
 # Apply sector dictionary: subset to dictionary sectors and rename codes

@@ -13,6 +13,8 @@ if (loaddata) {
   govqsl=mds('ECB/QSA/Q.N..W2+W0+W1..S13.N.A.LE.F511._Z._Z.XDC._T.S.V.N._T', labels=FALSE)
   goviipq=mds('ESTAT/bop_iip6_q/Q.MIO_EUR.FA__D__F5+FA__P__F5+FA__O__F519.S13.S1.A_LE+L_LE.WRL_REST.', labels=TRUE)
   goviipa=mds('ESTAT/bop_iip6_q/A.MIO_EUR.FA__D__F5+FA__P__F5+FA__O__F519.S13.S1.A_LE+L_LE.WRL_REST.', labels=TRUE)
+  goveaiipass=mds('ESTAT/bop_eu6_q/Q.EA19+EA20+EA21.EXT_EA19+EXT_EA20+EXT_EA21.S1.S13.ASS.NSA.FA__D__F51M+FA__O__F519.', labels=TRUE)
+  goveaiipliab=mds('ESTAT/bop_eu6_q/EA19+EA20+EA21.EXT_EA19+EXT_EA20+EXT_EA21.S1.S13.LIAB.NSA.FA__D__F51M+FA__O__F519.', labels=TRUE)
   gov5raw=mds('ESTAT/gov_10q_ggfa/Q.F5..STK...NCO+CO.MIO_EUR.', labels=TRUE)
   govcp=mds('ESTAT/nasa_10_f_cp/A.STK..S13.F5.ASS.MIO_EUR.')
   xrraw=mds('Eurostat/NASQ_10_F_BS/Q.MIO_EUR+MIO_NAC.S13.LIAB.F3.')
