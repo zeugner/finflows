@@ -30,9 +30,9 @@ saveRDS(lf5, file.path(data_dir, 'lf5.rds'))
 #### EXCHANGE RATE!
 usd_eur = mds('ECB/EXR/Q.USD.EUR.SP00.E')
 #####conversion in euros
-af5_eur=af5/usd_eur
-lf5_eur=lf5/usd_eur
-
+#####conversion in euros (millions)
+af5_eur=af5/(usd_eur*1e6)
+lf5_eur=lf5/(usd_eur*1e6)
 
 saveRDS(af5_eur, file.path(data_dir, 'af5_eur.rds'))
 saveRDS(lf5_eur, file.path(data_dir, 'lf5_eur.rds'))

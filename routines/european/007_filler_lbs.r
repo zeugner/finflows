@@ -105,42 +105,73 @@ alllbs["...S12T..."] <- alllbs["...S12K..."] - alllbs["...S121..."]
 alllbs[".F3L....."] <- NA
 alllbs[".F3L....."] <- alllbs[".F3....."] - alllbs[".F3S....."]
 
-# alllbs[".F2M_F4+F+F3+F3_F4.5A.S1.HU.N.2022q4"]
-# Remember that F2+F4
+# alllbs[".F2_F4+F+F3+F3_F4.5A.S1.HU.N.2022q4"]
+# Remember that F2_F4=F2+F4
 # Assume that all loans are held against "non-banks"
 alllbs["A.F4..S1..."] <- NA
 alllbs["A.F4..S1..."] <- alllbs["A.F2_F4..S1_ext_S12K..."]
 alllbs["A.F2..S1..."] <- NA
-alllbs["A.F2..S1..."] <- alllbs["A.F2_F4..S1..."] - alllbs["A.F4..S1..."]
+alllbs["A.F2..S1..."] <- alllbs["A.F2_F4..S1..."] - alllbs["A.F2_F4..S1_ext_S12K..."]
+# Banks only hold loans vs Households
+alllbs["A.F4..S1M..."] <- NA
+alllbs["A.F4..S1M..."] <- alllbs["A.F2_F4..S1M..."]
+# Banks only hold loans vs NFCs
+alllbs["A.F4..S11..."] <- NA
+alllbs["A.F4..S11..."] <- alllbs["A.F2_F4..S11..."]
+# Banks only hold loans vs GOV
+alllbs["A.F4..S13..."] <- NA
+alllbs["A.F4..S13..."] <- alllbs["A.F2_F4..S13..."]
+# Banks only hold deposits vs Banks
+alllbs["A.F2..S12K..."] <- NA
+alllbs["A.F2..S12K..."] <- alllbs["A.F2_F4..S12K..."]
+alllbs["A.F2..S121..."] <- NA
+alllbs["A.F2..S121..."] <- alllbs["A.F2_F4..S121..."]
+alllbs["A.F2..S12T..."] <- NA
+alllbs["A.F2..S12T..."] <- alllbs["A.F2_F4..S12T..."]
+
 # Assume that banks don't hold any loans on the liability side (only deposits)
-alllbs["L.F2..S1..."] <- NA
-alllbs["L.F2..S1..."] <- alllbs["L.F2_F4..S1..."]
+alllbs["L.F2....."] <- NA
+alllbs["L.F2....."] <- alllbs["L.F2_F4....."]
 
-## Calculate other sectors as such too!!
+### Start filling (only _T and _O=_T for cross-border F2, F4 only)
+# recall 6th dimension: A (all), R (local), N (cross-border)
 
-### Start filling (only _O=_T in this case)
+aa["F+F2+F4.AT.S12K.S1.LE._T+_O.2022q4.BE"] # should be NA
 
-aa["..S12K..LE._O..W0", usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..A.1998q4:"]
-aa["..S12K..LE._T..W0", usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..A.1998q4:"]
-aa["..S12K..LE._O..W2", usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..R.1998q4:"]
-aa["..S12K..LE._T..W2", usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..R.1998q4:"]
+
+# Fill totals first
+aa["..S12K..LE._T..W0", usenames=TRUE, onlyna=TRUE] <- alllbs["A....W0.A.1998q4:"]
+aa["..S12K..LE._T..W2", usenames=TRUE, onlyna=TRUE] <- alllbs["A....W0.R.1998q4:"]
 
 # Create list of cross-border counterpart areas
-all_ca <- dimnames(alllbs)$COUNTERPART_AREA
-ca_vec <- all_ca[!all_ca %in% c("W0", "W2")]
+all_ca <- dimnames(aa)$COUNTERPART_AREA
+ca_vec <- all_ca[!all_ca %in% c("W0", "W2","WRL_REST")]
 ca_string <- paste(ca_vec, collapse = "+")
 
-aa[paste("..S12K..LE._O..",ca_string), usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..N.1998q4:"]
-aa[paste("..S12K..LE._T..",ca_string), usenames=TRUE, onlyna=TRUE] <- alllbs["A...S1_ext_S12K..N.1998q4:"]
+# LBS doesn't distinguish between functional categories
+aa[paste("..S12K..LE._T..",ca_string), usenames=TRUE, onlyna=TRUE] <- alllbs["A.....N.1998q4:"]
+# But we can assume _T=_O for F2 and F4
+aa[paste("F2..S12K..LE._O..",ca_string), usenames=TRUE, onlyna=TRUE] <- alllbs["A.....N.1998q4:"]
+aa[paste("F4..S12K..LE._O..",ca_string), usenames=TRUE, onlyna=TRUE] <- alllbs["A.....N.1998q4:"]
+# Run separately for WRL_REST, as it is not the dimnames of LBS
+aa["..S12K..LE._T..WRL_REST", usenames=TRUE, onlyna=TRUE] <- alllbs["A....W0.N.1998q4:"]
+aa["F2..S12K..LE._O..WRL_REST", usenames=TRUE, onlyna=TRUE] <- alllbs["A....W0.N.1998q4:"]
+aa["F4..S12K..LE._O..WRL_REST", usenames=TRUE, onlyna=TRUE] <- alllbs["A....W0.N.1998q4:"]
+
+
+aa["F+F2+F4.AT.S12K.S1.LE._T+_O.2022q4.BE"] # should be filled now
 
 # do the same for liabilities
 
-ll[".W0..S12K.LE._O..", usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..A.1998q4:"]
-ll[".W0..S12K.LE._T..", usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..A.1998q4:"]
-ll[".W2..S12K.LE._O..", usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..R.1998q4:"]
-ll[".W2..S12K.LE._T..", usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..R.1998q4:"]
-ll[paste(ca_string,"...S12K.LE._O.."), usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..N.1998q4:"]
-ll[paste(ca_string,"...S12K.LE._T.."), usenames=TRUE, onlyna=TRUE] <- alllbs["L...S1_ext_S12K..N.1998q4:"]
+ll["F+F2.BE.S1.S12K.LE._T+_O.2022q4.AT"]
+
+ll[".W0..S12K.LE._T..", usenames=TRUE, onlyna=TRUE] <- alllbs["L.....A.1998q4:"]
+ll[".W2..S12K.LE._T..", usenames=TRUE, onlyna=TRUE] <- alllbs["L.....R.1998q4:"]
+ll[paste(ca_string,"F2...S12K.LE._O.."), usenames=TRUE, onlyna=TRUE] <- alllbs["L.....N.1998q4:"]
+ll[paste(ca_string,"F4...S12K.LE._O.."), usenames=TRUE, onlyna=TRUE] <- alllbs["L.....N.1998q4:"]
+ll[paste(ca_string,"...S12K.LE._T.."), usenames=TRUE, onlyna=TRUE] <- alllbs["L.....N.1998q4:"]
+
+ll["F+F2.BE.S1.S12K.LE._T+_O.2022q4.AT"] # should be filled now
 
 ## Export 
 gc()

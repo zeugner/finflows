@@ -77,6 +77,8 @@ gov5[..S128_S129.S13.NCO.,onlyna=TRUE] = gov5[..S128_S129.S1311.NCO.]
 
 gov5[..S12.S13.NCO.,onlyna=TRUE] = gov5[..S12.S1311.NCO.]+gov5[..S12.S1314.NCO.]
 gov5[..S12.S13.NCO.,onlyna=TRUE] = gov5[..S12.S1311.NCO.]
+# note S12 negative for Spain between 2022q3 and 2024q2
+
 
 gov5[..S11.S13.NCO.,onlyna=TRUE]   = gov5[..S0.S13.NCO.] - gov5[..S2.S13.NCO.] - gov5[..S14_S15.S13.NCO.] - gov5[..S13.S13.NCO.] - gov5[..S12.S13.NCO.]
 

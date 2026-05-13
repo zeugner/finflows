@@ -14,11 +14,15 @@ zerofiller=function(x, fillscalar=0){
   temp
 }
 
+# Toggle: set to TRUE to apply LP balancing, FALSE to skip
+APPLY_F51M_BALANCING <- TRUE
+
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
 if (!exists("script_dir")) script_dir = getwd()
 # Load the main aall matrix containing financial accounts data
 aall=readRDS(file.path(data_dir, 'intermediate_domestic_data_files/aall_equity_bilateral_imf_gov.rds'))
+aall["F51M+F512+F519....LE.."][which(aall["F51M+F512+F519....LE.."]<0)] <- 0
 gc()
 
 aall[F5....LE._D.,onlyna=TRUE]=aall[F51....LE._D.]+zerofiller(aall[F52....LE._D.])
@@ -103,7 +107,7 @@ aall["F51M..S1+S2+S0.S121+S12Q+S124+S1M.LE._T.", onlyna=TRUE]<-interpol_liab
 
 aall["F51M..S12T.S1...",  onlyna=TRUE]<-aall["F51M..S12T.S0..."]-aall["F51M..S12T.S2..."]
 aall["F51M..S1.S2..."]<-aall["F51M..S1.S0..."]-aall["F51M..S1.S1..."]
-aall["F51M..S2.S12K...",  onlyna=TRUE]<-aall["F51M..S2.S12T..."]-aall["F51M..S2.S121..."]
+aall["F51M..S2.S12K...",  onlyna=TRUE]<-aall["F51M..S2.S12T..."]+aall["F51M..S2.S121..."]
 
 ### FILL COUNTERPART S1 (DOMESTIC ECONOMY) AS RESIDUAL FOR ALL OTHER SECTORS
 #aall["F51M...S1...",  onlyna=TRUE]<-aall["F51M...S0..."]-aall["F51M...S2..."] #later
@@ -116,6 +120,10 @@ gc()
 # Therefore, set all F51M stocks where S1M is the issuing sector to zero
 aall["F51M..S0+S1+S11+S12T+S2+S1M.S1M.LE._S.2023q4"]  # CHECK: View before
 aall["F51M...S1M...",  onlyna=TRUE] <- 0
+
+
+### Maximise 
+
 
 ################## FIRST STEP: MFI (S12T) HOLDINGS #################
 # Check current data availability for MFIs vis-à-vis various sectors
@@ -137,6 +145,8 @@ aall[F511..S12T+S12K.S12O.LE._S.2023q4]  # CHECK: Verify after filling
 aall[F51+F511+F51M..S12T.S12O.LE._S.2022q4]  # CHECK: View components before
 aall[F51M..S12T.S12O..., onlyna=TRUE] <- aall[F51..S12T.S12O...] - zerofiller(aall[F511..S12T.S12O...])
 aall[F51+F511+F51M..S12T.S12O.LE._S.2023q4]  # CHECK: Verify calculation
+# MT has negative F51 so negative F51M as well
+aall[F51M..S12T.S12O...][which(aall[F51M..S12T.S12O...]<0)] <- 0
 
 ### S12Q liabilities, assumptions: not held by S11, S124, S1M, note: S12T can exist for FR, NL, BE 
 
@@ -165,6 +175,28 @@ aall[F51M..S2.S12Q.LE._T., onlyna=TRUE]<-s12q_foreign_liab[.WRL_REST.F51M.]
 aall[F51M..S2.S12Q.LE._D., onlyna=TRUE]<-s12q_foreign_liab[.WRL_REST.F51M.]
 
 aall[F51M..S1.S12Q.LE.., onlyna=TRUE] <- aall[F51M..S0.S12Q.LE..] - aall[F51M..S2.S12Q.LE..]
+aall[F51M..S1.S12Q.LE..][which(aall[F51M..S1.S12Q.LE..]<0)] <- 0 
+
+
+# also, solve occasionnal problem with S12O.S12Q: S1 too low (S2 too high?)
+# Quick fix: lower bound of S1.S12Q is sum of sectors
+
+# Primitive solution, improve later
+x <- as.data.table(aall[F51M..S1.S12Q...])
+
+test <- copy(x)
+
+test[, obs_value := pmax(
+  x$obs_value,
+  as.data.table(aall[F51M..S12Q.S12Q...])$obs_value + as.data.table(zerofiller(aall[F51M..S121.S12Q...]))$obs_value
+  + as.data.table(zerofiller(aall[F51M..S11.S12Q...]))$obs_value + as.data.table(zerofiller(aall[F51M..S13.S12Q...]))$obs_value + as.data.table(zerofiller(aall[F51M..S12T.S12Q...]))$obs_value
+  + as.data.table(zerofiller(aall[F51M..S124.S12Q...]))$obs_value + as.data.table(zerofiller(aall[F51M..S1M.S12Q...]))$obs_value
+  + as.data.table(zerofiller(aall[F51M..S12O.S12Q...]))$obs_value)]
+
+test <- as.md3(test)
+
+aall[F51M..S1.S12Q...] <- test["..."]
+
 
 aall[F51M.EA20+CZ.S0+S1+S2.S12Q.LE._S.2023q4]
 #liab of s12q
@@ -173,6 +205,7 @@ aall[F51M.EA20..S12Q.LE._S.2023q4]
 aall[F51M..S12O.S12Q..., onlyna=TRUE] <- aall[F51M..S1.S12Q...] - aall[F51M..S12Q.S12Q...] - zerofiller(aall[F51M..S13.S12Q...]) - 
   zerofiller(aall[F51M..S1M.S12Q...]) - zerofiller(aall[F51M..S11.S12Q...]) - zerofiller(aall[F51M..S121.S12Q...]) - 
   zerofiller(aall[F51M..S12T.S12Q...]) - zerofiller(aall[F51M..S124.S12Q...])
+
 
 aall[F51M.CZ+EA20.S12O.S12Q.LE._S.2023q4]
 ### now we fill all liabilities of S2
@@ -295,6 +328,14 @@ print(aall["F51M.EA19+EA20+EA21.S1+S1M+S11+S124+S12O+S12Q.S2.LE._T.2022"])
 ### now fill s1 as residuals
 aall["F51M...S1...",  onlyna=TRUE]<-aall["F51M...S0..."]-aall["F51M...S2..."] 
 
+
+## Cap S2 at S0 - This causes issues mostly for IE and SK only 
+# aall["F51M..S2...."][which(aall["F51M..S1...."]<0)] <- aall["F51M..S0...."]
+# aall["F51M...S2..."][which(aall["F51M...S1..."]<0)] <- aall["F51M...S0..."]
+
+aall["F51M...S1.LE.."][which(aall["F51M...S1.LE.."]<0)] <- 0 
+aall["F51M..S1..LE.."][which(aall["F51M..S1..LE.."]<0)] <- 0
+
 aall["F51M..S12K.S1...",  onlyna=TRUE]<-aall["F51M..S12T.S1..."]+aall["F51M..S121.S1..."] 
 aall["F51M..S12K.S2...",  onlyna=TRUE]<-aall["F51M..S12K.S0..."]+aall["F51M..S12K.S1..."]
 aall["F51M.CZ.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S0+S2+S1.LE._S.2023q4"]
@@ -320,12 +361,15 @@ aall[F51M..S124.S11..., onlyna=TRUE] = aall[F51M..S124.S1...]  - aall[F51M..S124
 aall[F519+F512+F51M.CZ.S1M+S0.S11+S0+S12O.LE._T.2023q4]
 
 aall[F519..S1M.S11...] = aall[F519..S1M.S0...] * (aall[F519..S0.S11...] / (aall[F519..S0.S11...] + aall[F519..S0.S12O...]))
+aall[F519..S1M.S12O...] = aall[F519..S1M.S0...] * (aall[F519..S0.S12O...] / (aall[F519..S0.S11...] + aall[F519..S0.S12O...]))
+
 aall[F519.CZ.S1M.S11.LE._T.2023q4]
 
 aall[F512.CZ.S1M+S0+S2+S1.S1+S0+S2+S11+S12O.LE._T.2023q4]
 ## ATTENTION NO F512 PORTFOLIO FOR EURO AREA
 
-aall[F512..S2.S11+S12O.LE._T.]<-bopf51mq_liab[.S11+S12O.L_LE.FA__P__F512.]
+aall[F512..S2.S11.LE._T.]<-bopf51mq[.S11.L_LE.FA__P__F512.]
+aall[F512..S2.S12O.LE._T.]<-bopf51mq[.S12O.L_LE.FA__P__F512.]
 aall[F512..S2.S11+S12O.LE._P.]<-aall[F512..S2.S11+S12O.LE._T.]
 aall[F512..S2.S11+S12O.LE._S.]<-aall[F512..S2.S11+S12O.LE._T.]
 
@@ -336,11 +380,19 @@ aall[F512..S1M.S2.LE._S.]<-aall[F512..S1M.S2.LE._T.]
 aall[F512..S1.S11+S12O.LE..]<-aall[F512..S0.S11+S12O.LE..]-aall[F512..S0.S11+S12O.LE..]
 aall[F512..S1M.S1.LE..]<-aall[F512..S1M.S0.LE..]-aall[F512..S1M.S2.LE..]
 
-aall[F512..S1M.S11...] = aall[F512..S1M.S1...] * (aall[F512..S1.S11...] / (aall[F512..S1.S11...] + aall[F512..S1.S12O...]))
+# aall[F512..S1M.S11...] = aall[F512..S1M.S1...] * (aall[F512..S1.S11...] / (aall[F512..S1.S11...] + aall[F512..S1.S12O...]))
 #use S0 for those for which we do not have info on S2 (therefore S1)
-aall[F512..S1M.S11..., onlyna=TRUE] <- aall[F512..S1M.S0...] * (aall[F512..S0.S11...] / (aall[F512..S0.S11...] + 
-                                                                                           aall[F512..S0.S12O...]))
-aall[F51M..S1M.S11...]<- aall[F512..S1M.S11...]+ aall[F519..S1M.S11...]
+#### Gabor: I drop this to ensure F51M.S1M.S11 + F51M.S1M.S12O <= F51M.S1M.S1 but can add back later 
+aall[F512..S1M.S11...] <- aall[F512..S1M.S0...] * (aall[F512..S0.S11...] / (aall[F512..S0.S11...]  + aall[F512..S0.S12O...]))
+aall[F512..S1M.S12O...] <- aall[F512..S1M.S0...] * (aall[F512..S0.S12O...] / (aall[F512..S0.S11...]  + aall[F512..S0.S12O...]))
+
+# old version                                                                                                                                                                                  aall[F512..S0.S12O...]))
+# aall[F51M..S1M.S11...]<- aall[F512..S1M.S11...]+ aall[F519..S1M.S11...]
+
+# this adjustment ensures values are <= total  
+aall[F51M..S1M.S11...]<- ((aall[F512..S1M.S11...] + aall[F519..S1M.S11...])/(aall[F512..S1M.S0...]+aall[F519..S1M.S0...]))*aall[F51M..S1M.S1...]
+aall[F51M..S1M.S12O...]<- ((aall[F512..S1M.S12O...] + aall[F519..S1M.S12O...])/(aall[F512..S1M.S0...]+aall[F519..S1M.S0...]))*aall[F51M..S1M.S1...]
+
 
 aall[F51M.CZ+EA20.S1M.S11.LE._T.2023q4]
 
@@ -369,12 +421,36 @@ aall[F51M..S2.S11.LE._S.]<-aall[F51M..S2.S11.LE._T.]
 aall[F51M..S1.S11.LE..]<-aall[F51M..S0.S11.LE..]-aall[F51M..S2.S11.LE..]
 
 aall[F51M..S12T+S12Q.S11...,onlyna=TRUE]<-0
+
+## Gabor ##
+# also, solve problem with S13.S11: F5 calculated residually - S2 too low (iip as fallback), other sectors too low (e.g negative S12 for spain)
+# Quick fix: cap S13.S11 at S13.S1 minues others
+
+# Primitive solution, improve later
+x <- as.data.table(aall[F51M..S13.S11...])
+
+test <- copy(x)
+
+test[, obs_value := pmin(
+  x$obs_value,
+  as.data.table(aall[F51M..S13.S1...])$obs_value - as.data.table(aall[F51M..S13.S13...])$obs_value - as.data.table(zerofiller(aall[F51M..S13.S121...]))$obs_value
+  - as.data.table(zerofiller(aall[F51M..S13.S12T...]))$obs_value - as.data.table(zerofiller(aall[F51M..S13.S124...]))$obs_value - as.data.table(zerofiller(aall[F51M..S13.S12Q...]))$obs_value
+  - as.data.table(zerofiller(aall[F51M..S13.S1M...]))$obs_value   - as.data.table(zerofiller(aall[F51M..S13.S12O...]))$obs_value
+)]
+
+test <- as.md3(test)
+
+aall[F51M..S13.S11...] <- test["..."]
+
+## Gabor ##
+
+
 # ok now liabilities of s11 for real
 aall[F51M.CZ+EA20.S1+S0+S2+S11+S1M+S121+S12T+S124+S12Q+S12O+S13.S11.LE._T.2023q4]
 aall[F51M..S12O.S11...] <- aall[F51M..S1.S11...] - aall[F51M..S11.S11...] - aall[F51M..S1M.S11...] -aall[F51M..S121.S11...] -
   aall[F51M..S124.S11...] - aall[F51M..S13.S11...] - zerofiller(aall[F51M..S12T.S11...])-zerofiller(aall[F51M..S12Q.S11...])
 
-### attention: s12O.S11 is negative
+### attention: s12O.S11 is negative - this is because S1 is negative - S2 higher than SO
 
 ## assets of s11: s12o is residual
 aall[F51M..S11.S1M+S13+S12T+S124+S12Q+S121...,onlyna=TRUE]<-0
@@ -393,25 +469,87 @@ aall[F51M..S2.S12T.LE._T.]<-bopf51mq[".S12T.L_LE.FA__D__F51M."]+zerofiller(bopf5
   zerofiller(bopf51mq[".S12T.L_LE.FA__P__F512."])
 aall[F51M..S2.S12T.LE._S.]<-aall[F51M..S2.S12T.LE._T.]
 # 
+
+
+
 aall[F51M..S1.S12T.LE..]<-aall[F51M..S0.S12T.LE..]-aall[F51M..S2.S12T.LE..]
+aall[F51M..S1.S12T.LE..][which(aall[F51M..S1.S12T.LE..]<0)] <- 0
+
+# also, solve problem with S12O.S12T: S1 too low (S2 too high?)
+# Quick fix: lower bound of S1.S12T is sum of sectors
+
+# Primitive solution, improve later
+x <- as.data.table(aall[F51M..S1.S12T...])
+
+test <- copy(x)
+
+test[, obs_value := pmax(
+  x$obs_value,
+  as.data.table(aall[F51M..S12T.S12T...])$obs_value + as.data.table(zerofiller(aall[F51M..S121.S12T...]))$obs_value
+  + as.data.table(zerofiller(aall[F51M..S11.S12T...]))$obs_value + as.data.table(zerofiller(aall[F51M..S13.S12T...]))$obs_value + as.data.table(zerofiller(aall[F51M..S12Q.S12T...]))$obs_value
+  + as.data.table(zerofiller(aall[F51M..S124.S12T...]))$obs_value + as.data.table(zerofiller(aall[F51M..S1M.S12T...]))$obs_value
+)]
+
+test <- as.md3(test)
+
+aall[F51M..S1.S12T...] <- test["..."]
 
 
 aall[F51M..S12O.S12T...]<- aall[F51M..S1.S12T...] - aall[F51M..S12T.S12T...] - zerofiller(aall[F51M..S11.S12T...]) -
-  zerofiller(aall[F51M..S1M.S12T...]) - zerofiller(aall[F51M..S13.S12T...]) - zerofiller(aall[F51M..S12O.S12T...]) -
-  zerofiller(aall[F51M..S12Q.S12T...]) - zerofiller(aall[F51M..S124.S12T...]) 
+  zerofiller(aall[F51M..S1M.S12T...]) - zerofiller(aall[F51M..S13.S12T...]) - zerofiller(aall[F51M..S12Q.S12T...]) - 
+  zerofiller(aall[F51M..S124.S12T...]) 
+
+## attention - some countries negative as S1 is negative (S2 larger than S0)
   
 aall[F51M.CZ.S12O.S12T.LE._T.2023q4]
 
 ## s13 assets: RESIDUAL IS S12O
-aall[F51M..S13.S12O...]<- aall[F51M..S13.S1...] - aall[F51M..S13.S13...] - zerofiller(aall[F51M..S13.S11...]) -
-  zerofiller(aall[F51M..S13.S121...]) - zerofiller(aall[F51M..S13.S12Q...]) - zerofiller(aall[F51M..S13.S11...]) -
-  zerofiller(aall[F51M..S13.S124...]) - zerofiller(aall[F51M..S13.S12T...]) 
-aall[F51M.CZ.S13.S12O.LE._T.2023q4]
+
+
+aall[F51M..S13.S12O...] <- aall[F51M..S13.S1...] - aall[F51M..S13.S13...] - zerofiller(aall[F51M..S13.S11...]) -
+  zerofiller(aall[F51M..S13.S121...]) - zerofiller(aall[F51M..S13.S12Q...]) - zerofiller(aall[F51M..S13.S124...]) - 
+  zerofiller(aall[F51M..S13.S12T...])  - zerofiller(aall[F51M..S13.S1M...])
+aall["F51M.CZ.S13.S12O.LE._T+_S.2023q4"]
 
 #### S12O LIABILITIES: residual is S13
 
 
+#### Balancing algorithm, make sure toggle is ON at the beginning of code
 
+if (APPLY_F51M_BALANCING) {
+  
+  source(file.path(script_dir, "utilities/F51M_balancing.R"))
+  
+  eu_countries <- c(
+    "BE","BG","CZ","DK","DE","EE","IE","GR","ES","FR","HR",
+    "IT","CY","LV","LT","LU","HU","MT","NL","AT","PL","PT",
+    "RO","SI","SK","FI","SE"
+  )
+  
+  # generate all quarterly periods from 1999q4 to latest available
+  # adjust end period as needed
+  start_year <- 1999; start_q <- 4
+  end_year   <- 2024; end_q   <- 4
+  
+  all_periods <- c()
+  for (yr in start_year:end_year) {
+    for (q in 1:4) {
+      if (yr == start_year && q < start_q) next
+      if (yr == end_year   && q > end_q)   next
+      all_periods <- c(all_periods, sprintf("%dq%d", yr, q))
+    }
+  }
+  
+  aall <- balance_f51m(
+    aall       = aall,
+    countries  = eu_countries,
+    periods    = all_periods,
+    w_disc     = 100,   # priority on row/col closure
+    w_pen      = 1,     # regularisation toward observed values
+    verbose    = FALSE  # set TRUE for per-country-period output
+  )
+  
+}
   
 #### FROM NOW ON: OLD SCRIPT
 
