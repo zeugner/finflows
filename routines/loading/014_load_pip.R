@@ -6,14 +6,16 @@
 # Safe to interrupt and re-run: cached countries are skipped.
 # -----------------------------------------------------------
 
+if (!exists("data_dir")) data_dir = getwd()
+
 rm(list = ls())
 gc(full = TRUE, reset = TRUE)
 library(MDstats); library(MD3)
 defaultcountrycode(NULL)
 
 # --- Setup buffer directory and log ---
-if (!dir.exists('data/pipbuffer')) dir.create('data/pipbuffer', recursive = TRUE)
-sink('data/pipbuffer/piploader.log', append = FALSE)
+if (!dir.exists(file.path(data_dir,"pipbuffer"))) dir.create(file.path(data_dir,"pipbuffer"), recursive = TRUE)
+sink(file.path(data_dir,"pipbuffer","piploader.log"), append = FALSE)
 cat(gc(), '\n')
 
 # --- Indicators to request ---
@@ -22,12 +24,12 @@ vindicators <- "P_TOTINV_P_USD+P_F51_P_USD+P_F3_P_USD+P_F3_S_P_USD+P_F3_L_P_USD"
 
 # --- Get list of reporting countries ---
 # Query: all countries, assets, debt total, sector=S1, counterpart_country=USA, all freq
-if (!file.exists('data/pipbuffer/whatctries_pip.rds')) {
+if (!file.exists(file.path(data_dir,"pipbuffer","whatctries_pip.rds"))) {
   cat('Querying reporting country list from IMF/PIP...\n')
   whatctries <- mds('IMF/PIP/.A.P_F3_P_USD.S1..USA.', labels = FALSE)
-  saveRDS(whatctries, 'data/pipbuffer/whatctries_pip.rds')
+  saveRDS(whatctries, file.path(data_dir,"pipbuffer","whatctries_pip.rds"))
 } else {
-  whatctries <- readRDS('data/pipbuffer/whatctries_pip.rds')
+  whatctries <- readRDS(file.path(data_dir,"pipbuffer","whatctries_pip.rds"))
 }
 ccc <- dimcodes(whatctries)[[1]]
 rm(whatctries); gc(full = TRUE, reset = TRUE)
@@ -44,7 +46,7 @@ for (cc in ccc[, 1]) {
   cat('\n___ ', as.character(Sys.time()), ': country ',
       match(cc, ccc[, 1]), '/', NROW(ccc), ': ', cc, ' ___')
   
-  cachefile <- 'data/pipbuffer/pip_' %&% cc %&% '.rds'
+  cachefile <- file.path(data_dir, "pipbuffer", paste0("pip_", cc, ".rds"))
   
   if (file.exists(cachefile)) {
     # --- Load dims from cache (read, record dims, free immediately) ---
@@ -106,7 +108,7 @@ statustable <- data.frame(
   stringsAsFactors = FALSE
 )
 print(statustable)
-saveRDS(statustable, 'data/pipbuffer/resultstable.rds')
+saveRDS(statustable, file.path(data_dir,"pipbuffer","resultstable.rds"))
 
 # --- Dimension summary for successful loads ---
 cat('\n\nDimension summary for successfully loaded countries:\n')
@@ -135,13 +137,13 @@ sink()
 # --- Build combined results from cache ---
 cat('Building combined results from cache files...\n')
 gc(full = TRUE, reset = TRUE)
-cachefiles <- dir('data/pipbuffer', pattern = '^pip_.*\\.rds$', full.names = TRUE)
+cachefiles <- dir(file.path(data_dir, "pipbuffer"), pattern = '^pip_.*\\.rds$', full.names = TRUE)
 lpip <- vector('list', length(cachefiles))
 names(lpip) <- gsub('^pip_|\\.rds$', '', basename(cachefiles))
 for (i in seq_along(cachefiles)) {
   lpip[[i]] <- readRDS(cachefiles[i])
 }
-saveRDS(lpip, 'data/pipbuffer/allpipresults.rds')
+saveRDS(lpip, file.path(data_dir,"pipbuffer","allpipresults.rds"))
 rm(lpip); gc(full = TRUE, reset = TRUE)
-cat('Done. Combined results saved to data/pipbuffer/allpipresults.rds\n')
+cat('Done. Combined results saved to data/loaded/pipbuffer/allpipresults.rds\n')
 cat(nI + nL, ' countries loaded successfully,  ', n0, ' empty,  ', nX, ' errors\n')

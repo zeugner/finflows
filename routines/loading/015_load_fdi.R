@@ -34,8 +34,8 @@ library(MDstats); library(MD3)
 defaultcountrycode(NULL)
 
 # --- Setup buffer directory and log ---
-if (!dir.exists('data/fdibuffer')) dir.create('data/fdibuffer', recursive = TRUE)
-sink('data/fdibuffer/fdiloader.log', append = FALSE)
+if (!dir.exists(file.path(data_dir,"fdibuffer"))) dir.create(file.path(data_dir,"fdibuffer"), recursive = TRUE)
+sink(file.path(data_dir,"fdibuffer","fdiloader.log"), append = FALSE)
 cat(gc(), '\n')
 
 # --- Dataflow definitions ---
@@ -78,7 +78,7 @@ vdimsel_flow_aggr <- ".T_FA_F+T_FA_F5A+T_FA_F5B+T_FA_FL.USD_EXC.A.A+L.ALL+ROU+RS
 vdimsel_flow_ctry <- ".T_FA_F+T_FA_F5A+T_FA_FL.USD_EXC.DI+DO.A+L.ALL+ROU+RSP.D.....A."
 
 # --- Get list of reporting countries ---
-if (!file.exists('data/fdibuffer/whatctries_fdi.rds')) {
+if (!file.exists(file.path(data_dir,"fdibuffer","whatctries_fdi.rds"))) {
   cat('Querying reporting country list from OECD FDI...\n')
   whatctries <- try(
     mds(dfprefix %&% 'POS_AGGR/.LE_FA_F.USD_EXC.A.A.ALL.D.....A.',
@@ -86,14 +86,14 @@ if (!file.exists('data/fdibuffer/whatctries_fdi.rds')) {
     silent = TRUE
   )
   if (is(whatctries, 'md3')) {
-    saveRDS(whatctries, 'data/fdibuffer/whatctries_fdi.rds')
+    saveRDS(whatctries, file.path(data_dir,"fdibuffer","whatctries_fdi.rds"))
   } else {
     cat('ERROR discovering countries: ', as.character(whatctries), '\n')
     sink()
     stop('Could not discover reporting countries. Check query.')
   }
 } else {
-  whatctries <- readRDS('data/fdibuffer/whatctries_fdi.rds')
+  whatctries <- readRDS(file.path(data_dir,"fdibuffer","whatctries_fdi.rds"))
 }
 ccc <- dimcodes(whatctries)[[1]]
 rm(whatctries); gc(full = TRUE, reset = TRUE)
@@ -117,8 +117,7 @@ for (cc in ccc[, 1]) {
       match(cc, ccc[, 1]), '/', NROW(ccc), ': ', cc, ' ___\n')
 
   for (df in names(dataflows)) {
-
-    cachefile <- 'data/fdibuffer/fdi_' %&% df %&% '_' %&% cc %&% '.rds'
+    cachefile <- file.path(data_dir, "fdibuffer", paste0("fdi_",df,"_" ,cc, ".rds"))
     logkey    <- cc %&% '_' %&% df
 
     cat('  ', df, ': ')
@@ -183,7 +182,7 @@ cat('  0 = no series available from OECD\n')
 cat('  X = server loading error\n\n')
 
 print(statusmat)
-saveRDS(statusmat, 'data/fdibuffer/statusmat.rds')
+saveRDS(statusmat, file.path(data_dir,"fdibuffer","statusmat.rds"))
 
 # --- Summary per dataflow ---
 cat('\nSummary per dataflow:\n')
@@ -216,7 +215,7 @@ gc(full = TRUE, reset = TRUE)
 
 for (df in names(dataflows)) {
   pattern <- '^fdi_' %&% df %&% '_.*\\.rds$'
-  cachefiles <- dir('data/fdibuffer', pattern = pattern, full.names = TRUE)
+  cachefiles <- dir(file.path(data_dir,"fdibuffer"), pattern = pattern, full.names = TRUE)
 
   if (length(cachefiles) > 0) {
     lfdi <- vector('list', length(cachefiles))
@@ -224,7 +223,7 @@ for (df in names(dataflows)) {
     for (i in seq_along(cachefiles)) {
       lfdi[[i]] <- readRDS(cachefiles[i])
     }
-    saveRDS(lfdi, 'data/fdibuffer/allfdi_' %&% df %&% '.rds')
+    saveRDS(lfdi, file.path(data_dir,"fdibuffer",paste0("allfdi_",df,".rds")))
     cat('  ', df, ': ', length(lfdi), ' countries combined\n')
     rm(lfdi); gc(full = TRUE, reset = TRUE)
   } else {
@@ -232,4 +231,4 @@ for (df in names(dataflows)) {
   }
 }
 
-cat('Done. Combined results saved to data/fdibuffer/allfdi_*.rds\n')
+cat('Done. Combined results saved to data/loaded/fdibuffer/allfdi_*.rds\n')

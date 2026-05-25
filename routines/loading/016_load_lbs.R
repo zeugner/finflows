@@ -33,8 +33,8 @@ library(MDstats); library(MD3)
 defaultcountrycode(NULL)
 
 # --- Setup buffer directory and log ---
-if (!dir.exists('data/lbsbuffer')) dir.create('data/lbsbuffer', recursive = TRUE)
-sink('data/lbsbuffer/lbsloader.log', append = FALSE)
+if (!dir.exists(file.path(data_dir,"lbsbuffer"))) dir.create(file.path(data_dir,"lbsbuffer"), recursive = TRUE)
+sink(file.path(data_dir,"lbsbuffer","lbsloader.log"), append = FALSE)
 cat(gc(), '\n')
 
 # --- Dataflow definition (single dataflow) ---
@@ -46,7 +46,7 @@ vdimsel  <- ".S..A+D+G+I+M.TO1.A.5J.A.%s...A+N+R"   # %s = slot 9 L_REP_CTY
 # --- Get list of reporting countries ---
 ## Only included a few dimensions when retrieving country list (those that we will filter out anyway)
 ## If i leave everything blank, it doesn't run
-if (!file.exists('data/lbsbuffer/whatctries_lbs.rds')) {
+if (!file.exists(file.path(data_dir,"lbsbuffer","whatctries_lbs.rds"))) {
   cat('Querying reporting country list from BIS LBS...\n')
   whatctries <- try(
     mds(dfprefix %&% '/.S...TO1.A.5J.A....',
@@ -54,14 +54,14 @@ if (!file.exists('data/lbsbuffer/whatctries_lbs.rds')) {
     silent = TRUE
   )
   if (is(whatctries, 'md3')) {
-    saveRDS(whatctries, 'data/lbsbuffer/whatctries_lbs.rds')
+    saveRDS(whatctries, file.path(data_dir,"lbsbuffer","whatctries_lbs.rds"))
   } else {
     cat('ERROR discovering countries: ', as.character(whatctries), '\n')
     sink()
     stop('Could not discover reporting countries. Check query.')
   }
 } else {
-  whatctries <- readRDS('data/lbsbuffer/whatctries_lbs.rds')
+  whatctries <- readRDS(file.path(data_dir,"lbsbuffer","whatctries_lbs.rds"))
 }
 ccc <- dimcodes(whatctries)[['L_REP_CTY']]
 rm(whatctries); gc(full = TRUE, reset = TRUE)
@@ -79,8 +79,8 @@ for (cc in ccc[, 1]) {
   cat('\n___ ', as.character(Sys.time()), ': country ',
       match(cc, ccc[, 1]), '/', NROW(ccc), ': ', cc, ' ___\n')
   
-  cachefile <- 'data/lbsbuffer/lbs_' %&% cc %&% '.rds'
-  
+  cachefile <- file.path(data_dir, "lbsbuffer", paste0("lbs_", cc, ".rds"))
+
   if (file.exists(cachefile)) {
     cat('  cache... ')
     temp <- readRDS(cachefile)
@@ -125,7 +125,7 @@ cat('  0 = no series available from BIS\n')
 cat('  X = server loading error\n\n')
 
 print(statusmat)
-saveRDS(statusmat, 'data/lbsbuffer/statusmat.rds')
+saveRDS(statusmat,file.path(data_dir,"lbsbuffer","statusmat.rds"))
 
 nI <- sum(statusmat == 'I', na.rm = TRUE)
 nL <- sum(statusmat == 'L', na.rm = TRUE)
@@ -144,14 +144,14 @@ sink()
 cat('Building combined result from cache files...\n')
 gc(full = TRUE, reset = TRUE)
 
-cachefiles <- dir('data/lbsbuffer', pattern = '^lbs_.*\\.rds$', full.names = TRUE)
+cachefiles <- dir(file.path(data_dir,"lbsbuffer"), pattern = '^lbs_.*\\.rds$', full.names = TRUE)
 
 if (length(cachefiles) > 0) {
   llbs <- vector('list', length(cachefiles))
   names(llbs) <- gsub('^lbs_|\\.rds$', '', basename(cachefiles))
   for (i in seq_along(cachefiles)) llbs[[i]] <- readRDS(cachefiles[i])
-  saveRDS(llbs, 'data/lbsbuffer/alllbs.rds')
-  cat('Done:', length(llbs), 'countries combined -> data/lbsbuffer/alllbs.rds\n')
+  saveRDS(llbs, file.path(data_dir,"lbsbuffer","alllbs.rds"))
+  cat('Done:', length(llbs), 'countries combined -> data/loaded/lbsbuffer/alllbs.rds\n')
   rm(llbs); gc(full = TRUE, reset = TRUE)
 } else {
   cat('No cache files found.\n')
