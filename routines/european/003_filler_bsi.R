@@ -56,14 +56,14 @@ dim(deposits_bsi)
 dimnames(deposits_bsi)[['REF_AREA']] = ccode(dimnames(deposits_bsi)[['REF_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 dimnames(deposits_bsi)[['COUNTERPART_AREA']] = ccode(dimnames(deposits_bsi)[['COUNTERPART_AREA']],2,'iso2m',leaveifNA=TRUE); gc()
 
-<<<<<<< HEAD
-=======
+#<<<<<<< HEAD
+#=======
 ###  manual allocation of EA to EA20 
 dimnames(deposits_bsi)$REF_AREA[dimnames(deposits_bsi)$REF_AREA=='U5'] ='EA20'
 dimnames(deposits_bsi)$COUNTERPART_AREA[dimnames(deposits_bsi)$COUNTERPART_AREA=='U5'] ='EA20'
 
 
->>>>>>> f55887bf1cfac16c1298286e6e92e55225f65c0d
+#>>>>>>> f55887bf1cfac16c1298286e6e92e55225f65c0d
 names(dimnames(deposits_bsi))[names(dimnames(deposits_bsi))=="REF_SECTOR"] <- 'COUNTERPART_SECTOR'
 names(dimnames(deposits_bsi))[names(dimnames(deposits_bsi))=="REF_AREA"] <- 'COUNTERPART_AREA2'
 names(dimnames(deposits_bsi))[names(dimnames(deposits_bsi))=="COUNTERPART_AREA"] <- 'REF_AREA'

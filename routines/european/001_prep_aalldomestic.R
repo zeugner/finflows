@@ -193,8 +193,8 @@ aa = aa[,, setdiff(tempix, c('S0', 'S2')),,,,,]
 gc()
 
 
-aa[F.AT.S1.S11+S12K+S1+S1M.LE._T.2022q4.W0+W2+WRL_REST]
-aa[F.AT.S11+S12K+S1+S1M.S1.LE._T.2022q4.W0+W2+WRL_REST]
+aa[F.AT.S1.S11.LE._T.2022q4.W0+W2+WRL_REST]
+aa[F.AT.S11.S1.LE._T.2022q4.W0+W2+WRL_REST]
 
 dimnames(aa)
 
@@ -206,23 +206,18 @@ dimnames(aa)
 ####   REF <-> COUNTERPART for both AREA and SECTOR       ####
 ##############################################################
 
+
 ll = copy(aa)
 ll_W <- aall[..S0+S2+S1.....]
 
 dim(ll)
-dim(ll_W)
-###verbindlichkeiten S11 ll_W[F.AT.S0+S2+S1.S11.LE._T.2022q4.W2] 
-# dim(ll_W)
-# INSTR           REF_AREA         REF_SECTOR COUNTERPART_SECTOR              STO     FUNCTIONAL_CAT 
-# 38                 51                  3                 32                  2                  6 
-# TIME   COUNTERPART_AREA 
-# 117                  3
 
 names(dimnames(ll_W))[4] = 'TEMP_SECTOR'
 names(dimnames(ll_W))[3] = 'COUNTERPART_SECTOR'
 names(dimnames(ll_W))[4] = 'REF_SECTOR'
 
-ll[...S1....WRL_REST, usenames=TRUE, onlyna=FALSE] <- ll_W[..S2.....W2]; gc()
+
+ll[...S1....WRL_REST, usenames=TRUE, onlyna=FALSE] <- ll_W[..S2.....W2]; gc() # liabilities towards RoW
 ll[...S1....W0,       usenames=TRUE, onlyna=FALSE] <- ll_W[..S0.....W2]; gc()
 ll[...S1....W2,       usenames=TRUE, onlyna=FALSE] <- ll_W[..S1.....W2]; gc()
 
@@ -230,12 +225,26 @@ tempix = dimnames(ll)[[3]]
 ll = ll[,, setdiff(tempix, c('S0', 'S2')),,,,,]
 gc()
 
-
 #switching structure of CP AREA and CP Sector for liabilities
-ll=aperm(copy(ll), c(1,8,4,3,5,6,7,2))
-dim(ll)
+
+## Old code
+# ll=aperm(copy(ll), c(1,8,4,3,5,6,7,2))
+# dim(ll)
+
+ll=aperm(copy(ll), c(1,8,3,4,5,6,7,2))
+
+names(dimnames(ll))[4] = 'TEMP_SECTOR'
+names(dimnames(ll))[3] = 'COUNTERPART_SECTOR'
+names(dimnames(ll))[4] = 'REF_SECTOR'
+
 
 ll[F..S1.S11.LE._T.2022q4.AT]
+
+##this 
+aa[F.AT.S1M.S11.LE._T.2022q4.W2]
+## should be equal to this
+ll[F.W2.S1M.S11.LE._T.2022q4.AT]
+
 
 
 saveRDS(aa, file.path(data_dir, 'aa_prep.rds'))

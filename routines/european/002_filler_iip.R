@@ -308,7 +308,7 @@ aa[.EA19......WRL_REST] <- aa[.EA19......EXT_EA19]
 aa[.EU27......WRL_REST] <- aa[.EU27......EXT_EU27]
 aa[.EU28......WRL_REST] <- aa[.EU28......EXT_EU28]
 
-saveRDS(aa, file='data/aa_iip_cps_temp.rds')
+saveRDS(aa,file.path(data_dir, 'aa_iip_cps_temp.rds'))
 
 liabfiller = function(iip,le='LE',cparea=c("EXT_EA19", "WRL_REST", "BG", "BR", "CA", "CH",
                                            "CN_X_HK", "CZ", "DK", "EUI", "EXT_EU27", "HK",
@@ -370,7 +370,6 @@ ll[.WRL_REST......EU27] <- ll[.EXT_EU27......EU27]
 ll[.WRL_REST......EU28] <- ll[.EXT_EU28......EU28]
 
 gc()
-saveRDS(aa, file.path(data_dir, 'aa_iip_cps_temp.rds'))
 saveRDS(ll, file.path(data_dir, 'll_iip_cps_temp.rds'))
 
 ##############################################################
