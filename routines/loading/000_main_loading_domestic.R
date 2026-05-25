@@ -7,7 +7,7 @@ if (!require("MDecfin")) {
   stop("MDecfin package is required but not installed")
 }
 # Set the project directories
-if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/loaded'
 script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines'
 
 # Check directories exist
@@ -221,18 +221,35 @@ loading_plan <- list(
   # IIP / BOP data from Eurostat (external sector positions)
   iip_bop = list(
     script = file.path(script_dir, "loading/013_load_iip_bop.R"),
-    output = file.path(data_dir, "iip_bop.rds"),
+    output = file.path(data_dir, "iip_cps.rds"),
     name = "Eurostat IIP/BOP External Positions",
     phase = "Cross-Border"
   ),
   
-  # CPIS data from IMF (bilateral portfolio positions)
-  cpis = list(
-    script = file.path(script_dir, "loading/014_load_cpis.R"),
-    output = file.path(data_dir, "cpisbuffer/allcresultslist.rds"),
-    name = "IMF CPIS Bilateral Portfolio Positions",
+  # PIP data from IMF (bilateral portfolio positions)
+  pip = list(
+    script = file.path(script_dir, "loading/014_load_pip.R"),
+    output = file.path(data_dir, "pipbuffer/allpipresults.rds"),
+    name = "IMF Portfolio Investment Positions",
+    phase = "Cross-Border"
+  ),
+  
+  # FDI data from OECD (bilateral direct investment positions)
+  fdi = list(
+    script = file.path(script_dir, "loading/015_load_fdi.R"),
+    output = file.path(data_dir, "fdibuffer/allfdi_pos_ctry.rds"),
+    name = "OECD Foreign Direct Investment Positions",
+    phase = "Cross-Border"
+  ),
+  
+  # Banking sector data from BIS (bilateral F, F2, and F4 positions)
+  lbs = list(
+    script = file.path(script_dir, "loading/016_load_lbs.R"),
+    output = file.path(data_dir, "lbsbuffer/alllbs.rds"),
+    name = "BIS Locational Banking Statistics",
     phase = "Cross-Border"
   )
+  
 )
 
 # Execute data loading pipeline
