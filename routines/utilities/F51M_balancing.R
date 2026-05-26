@@ -15,6 +15,12 @@
 #
 # Returns:
 #   aall with balancing cells updated for all countries and periods
+#
+# Performance notes:
+#   - strsplit results are cached at startup (not recomputed per solve)
+#   - constraint matrix is pre-allocated (no rbind in loop)
+#   - row/col membership maps are pre-computed
+#   - Inf values are coerced to NA before solving
 # ============================================================================
 
 library(lpSolve)
@@ -51,16 +57,58 @@ balance_f51m <- function(aall,
   n_bal <- length(balancing_cells)
   
   # -----------------------------------------------------------------
+  # PRE-COMPUTE: cache strsplit and membership maps once (not per solve)
+  # -----------------------------------------------------------------
+  bal_parts <- strsplit(balancing_cells, "\\.", fixed = FALSE)
+  bal_rows  <- vapply(bal_parts, `[[`, character(1), 1)   # row sector for each bal cell
+  bal_cols  <- vapply(bal_parts, `[[`, character(1), 2)   # col sector for each bal cell
+  
+  # for each sub-sector, which balancing-cell indices belong to its row / col?
+  bal_row_map <- lapply(sub_sectors, function(r) which(bal_rows == r))
+  bal_col_map <- lapply(sub_sectors, function(c) which(bal_cols == c))
+  names(bal_row_map) <- sub_sectors
+  names(bal_col_map) <- sub_sectors
+  
+  # -----------------------------------------------------------------
+  # PRE-COMPUTE: LP variable layout (constant across all solves)
+  # -----------------------------------------------------------------
+  x_idx <- seq_len(n_bal)
+  d_idx <- n_bal + seq_len(n_bal)
+  e_idx <- 2*n_bal + seq_len(n_sec)
+  f_idx <- 2*n_bal + n_sec   + seq_len(n_sec)
+  p_idx <- 2*n_bal + 2*n_sec + seq_len(n_sec)
+  q_idx <- 2*n_bal + 3*n_sec + seq_len(n_sec)
+  n_lp_vars <- 2*n_bal + 4*n_sec
+  
+  obj        <- rep(0, n_lp_vars)
+  obj[d_idx] <- w_pen
+  obj[e_idx] <- w_disc
+  obj[f_idx] <- w_disc
+  obj[p_idx] <- w_disc
+  obj[q_idx] <- w_disc
+  
+  # -----------------------------------------------------------------
+  # PRE-ALLOCATE: constraint matrix (max possible rows; trim before solve)
+  # Rows:
+  #   up to n_sec row-sum constraints
+  #   up to n_sec col-sum constraints
+  #   2 * n_bal   penalty linearisation rows
+  #   n_bal       non-negativity of x
+  #   (2*n_bal + 4*n_sec) non-negativity of slacks  [one row each]
+  # Total upper bound:
+  n_con_max <- 2*n_sec + 2*n_bal + n_bal + (2*n_bal + 4*n_sec)
+  # -----------------------------------------------------------------
+  
+  zf <- function(x) ifelse(is.na(x), 0, x)
+  
+  # -----------------------------------------------------------------
   # HELPER: run balancer for one country/period
-  # Returns list(aall, status, disc_before, disc_after)
   # -----------------------------------------------------------------
   balance_one <- function(aall, country, period) {
     
-    zf <- function(x) ifelse(is.na(x), 0, x)
-    
     # --- extract matrix ---
     slice_id <- sprintf(
-      "F51M.%s.%s.%s.LE._S.%s",
+      "F51M.%s.%s.%s.LE._T.%s",
       country,
       paste(all_sectors, collapse="+"),
       paste(all_sectors, collapse="+"),
@@ -96,26 +144,27 @@ balance_f51m <- function(aall,
     }
     m <- m[all_sectors, all_sectors]
     
-    g <- function(r, c) zf(m[r, c])
+    # FIX: coerce Inf / -Inf to NA so the LP constraints are well-defined
+    m[is.infinite(m)] <- NA
     
     # --- observed balancing cell values ---
     obs_vals <- numeric(n_bal)
-    for (i in seq_along(balancing_cells)) {
-      parts        <- strsplit(balancing_cells[i], "\\.")[[1]]
-      obs_vals[i]  <- g(parts[1], parts[2])
-    }
+    for (i in seq_len(n_bal))
+      obs_vals[i] <- zf(m[bal_rows[i], bal_cols[i]])
     
     # --- fixed sums (non-balancing cells) per row and col ---
     fixed_row <- setNames(numeric(n_sec), sub_sectors)
     fixed_col <- setNames(numeric(n_sec), sub_sectors)
-    for (r in sub_sectors)
-      fixed_row[r] <- sum(sapply(sub_sectors, function(c)
-        if (paste(r,c,sep=".") %in% balancing_cells) 0 else g(r,c)))
-    for (c in sub_sectors)
-      fixed_col[c] <- sum(sapply(sub_sectors, function(r)
-        if (paste(r,c,sep=".") %in% balancing_cells) 0 else g(r,c)))
+    for (r in sub_sectors) {
+      non_bal_cols <- setdiff(sub_sectors, bal_cols[bal_row_map[[r]]])
+      fixed_row[r] <- sum(zf(m[r, non_bal_cols]))
+    }
+    for (c in sub_sectors) {
+      non_bal_rows <- setdiff(sub_sectors, bal_rows[bal_col_map[[c]]])
+      fixed_col[c] <- sum(zf(m[non_bal_rows, c]))
+    }
     
-    # --- discrepancy helper (raw anchors, NA preserved) ---
+    # --- discrepancy helper ---
     discrepancy_table <- function(mat) {
       sub     <- mat[sub_sectors, sub_sectors]
       row_sum <- rowSums(zf(sub))
@@ -130,79 +179,73 @@ balance_f51m <- function(aall,
     
     disc_before <- discrepancy_table(m)
     
-    # --- variable indices ---
-    x_idx <- seq_len(n_bal)
-    d_idx <- n_bal + seq_len(n_bal)
-    e_idx <- 2*n_bal + seq_len(n_sec)
-    f_idx <- 2*n_bal + n_sec  + seq_len(n_sec)
-    p_idx <- 2*n_bal + 2*n_sec + seq_len(n_sec)
-    q_idx <- 2*n_bal + 3*n_sec + seq_len(n_sec)
-    n_lp_vars <- 2*n_bal + 4*n_sec
+    # -----------------------------------------------------------------
+    # BUILD CONSTRAINT MATRIX — pre-allocated, filled by index
+    # -----------------------------------------------------------------
+    con_mat <- matrix(0, nrow = n_con_max, ncol = n_lp_vars)
+    con_dir <- character(n_con_max)
+    con_rhs <- numeric(n_con_max)
+    crow    <- 0L   # current row counter
     
-    obj        <- rep(0, n_lp_vars)
-    obj[d_idx] <- w_pen
-    obj[e_idx] <- w_disc
-    obj[f_idx] <- w_disc
-    obj[p_idx] <- w_disc
-    obj[q_idx] <- w_disc
-    
-    con_mat <- matrix(0, nrow=0, ncol=n_lp_vars)
-    con_dir <- character(0)
-    con_rhs <- numeric(0)
-    
-    add_con <- function(row, dir, rhs) {
-      con_mat <<- rbind(con_mat, row)
-      con_dir <<- c(con_dir, dir)
-      con_rhs <<- c(con_rhs, rhs)
-    }
-    
-    # row constraints (skip if anchor is NA)
+    # -- row-sum constraints (skip if anchor is NA) --
     for (j in seq_along(sub_sectors)) {
       r <- sub_sectors[j]
       if (is.na(m[r, "S1"])) next
-      row <- rep(0, n_lp_vars)
-      for (i in seq_along(balancing_cells)) {
-        parts <- strsplit(balancing_cells[i], "\\.")[[1]]
-        if (parts[1] == r) row[x_idx[i]] <- 1
-      }
-      row[e_idx[j]] <- -1
-      row[f_idx[j]] <-  1
-      add_con(row, "=", m[r,"S1"] - fixed_row[r])
+      crow <- crow + 1L
+      con_mat[crow, x_idx[bal_row_map[[r]]]] <- 1
+      con_mat[crow, e_idx[j]] <- -1
+      con_mat[crow, f_idx[j]] <-  1
+      con_dir[crow] <- "="
+      con_rhs[crow] <- m[r, "S1"] - fixed_row[r]
     }
     
-    # col constraints (skip if anchor is NA)
+    # -- col-sum constraints (skip if anchor is NA) --
     for (k in seq_along(sub_sectors)) {
       c <- sub_sectors[k]
       if (is.na(m["S1", c])) next
-      row <- rep(0, n_lp_vars)
-      for (i in seq_along(balancing_cells)) {
-        parts <- strsplit(balancing_cells[i], "\\.")[[1]]
-        if (parts[2] == c) row[x_idx[i]] <- 1
-      }
-      row[p_idx[k]] <- -1
-      row[q_idx[k]] <-  1
-      add_con(row, "=", m["S1",c] - fixed_col[c])
+      crow <- crow + 1L
+      con_mat[crow, x_idx[bal_col_map[[c]]]] <- 1
+      con_mat[crow, p_idx[k]] <- -1
+      con_mat[crow, q_idx[k]] <-  1
+      con_dir[crow] <- "="
+      con_rhs[crow] <- m["S1", c] - fixed_col[c]
     }
     
-    # penalty linearisation |x_i - obs_i| <= d_i
+    # -- penalty linearisation |x_i - obs_i| <= d_i --
     for (i in seq_len(n_bal)) {
-      r1 <- rep(0, n_lp_vars); r1[x_idx[i]] <-  1; r1[d_idx[i]] <- -1
-      r2 <- rep(0, n_lp_vars); r2[x_idx[i]] <- -1; r2[d_idx[i]] <- -1
-      add_con(r1, "<=",  obs_vals[i])
-      add_con(r2, "<=", -obs_vals[i])
+      crow <- crow + 1L
+      con_mat[crow, x_idx[i]] <-  1
+      con_mat[crow, d_idx[i]] <- -1
+      con_dir[crow] <- "<="
+      con_rhs[crow] <-  obs_vals[i]
+      
+      crow <- crow + 1L
+      con_mat[crow, x_idx[i]] <- -1
+      con_mat[crow, d_idx[i]] <- -1
+      con_dir[crow] <- "<="
+      con_rhs[crow] <- -obs_vals[i]
     }
     
-    # non-negativity of balancing cells
+    # -- non-negativity of balancing cells --
     for (i in seq_len(n_bal)) {
-      row <- rep(0, n_lp_vars); row[x_idx[i]] <- -1
-      add_con(row, "<=", 0)
+      crow <- crow + 1L
+      con_mat[crow, x_idx[i]] <- -1
+      con_dir[crow] <- "<="
+      con_rhs[crow] <- 0
     }
     
-    # non-negativity of slacks
+    # -- non-negativity of slacks --
     for (idx in c(d_idx, e_idx, f_idx, p_idx, q_idx)) {
-      row <- rep(0, n_lp_vars); row[idx] <- -1
-      add_con(row, "<=", 0)
+      crow <- crow + 1L
+      con_mat[crow, idx] <- -1
+      con_dir[crow] <- "<="
+      con_rhs[crow] <- 0
     }
+    
+    # trim to actual number of constraints
+    con_mat <- con_mat[seq_len(crow), , drop = FALSE]
+    con_dir <- con_dir[seq_len(crow)]
+    con_rhs <- con_rhs[seq_len(crow)]
     
     # --- solve ---
     lp_res <- lp("min", obj, con_mat, con_dir, con_rhs)
@@ -215,19 +258,16 @@ balance_f51m <- function(aall,
     
     # --- build solved matrix ---
     m_sol <- m
-    for (i in seq_along(balancing_cells)) {
-      parts <- strsplit(balancing_cells[i], "\\.")[[1]]
-      m_sol[parts[1], parts[2]] <- sol_vals[i]
-    }
+    for (i in seq_len(n_bal))
+      m_sol[bal_rows[i], bal_cols[i]] <- sol_vals[i]
     
     disc_after <- discrepancy_table(m_sol)
     
     # --- write back to aall ---
     for (fc_apply in c("_T","_S")) {
-      for (i in seq_along(balancing_cells)) {
-        parts <- strsplit(balancing_cells[i], "\\.")[[1]]
-        sid   <- sprintf("F51M.%s.%s.%s.LE.%s.%s",
-                         country, parts[1], parts[2], fc_apply, period)
+      for (i in seq_len(n_bal)) {
+        sid  <- sprintf("F51M.%s.%s.%s.LE.%s.%s",
+                        country, bal_rows[i], bal_cols[i], fc_apply, period)
         aall[sid] <- sol_vals[i]
       }
     }
@@ -244,10 +284,10 @@ balance_f51m <- function(aall,
   # =================================================================
   # MAIN LOOP
   # =================================================================
-  total_pairs    <- length(countries) * length(periods)
-  n_ok           <- 0
-  n_no_data      <- 0
-  n_lp_failed    <- 0
+  total_pairs     <- length(countries) * length(periods)
+  n_ok            <- 0
+  n_no_data       <- 0
+  n_lp_failed     <- 0
   sum_disc_before <- 0
   sum_disc_after  <- 0
   
@@ -259,7 +299,7 @@ balance_f51m <- function(aall,
   for (country in countries) {
     for (period in periods) {
       
-      res <- balance_one(aall, country, period)
+      res  <- balance_one(aall, country, period)
       aall <- res$aall
       
       if (res$status == "no_data") {
@@ -287,21 +327,17 @@ balance_f51m <- function(aall,
           "  [%-6s %s] disc before=%.2f  after=%.2f  improvement=%.2f\n",
           country, period, db, da, db - da
         ))
-        
-        if (db > 0 && da > db) {
-          cat(sprintf(
-            "  WARNING: discrepancy increased for %s %s\n",
-            country, period
-          ))
-        }
+        if (db > 0 && da > db)
+          cat(sprintf("  WARNING: discrepancy increased for %s %s\n",
+                      country, period))
       }
     }
   }
   
   cat(sprintf("\n=== SUMMARY ===\n"))
-  cat(sprintf("  Runs OK:        %d\n", n_ok))
-  cat(sprintf("  No data:        %d\n", n_no_data))
-  cat(sprintf("  LP failed:      %d\n", n_lp_failed))
+  cat(sprintf("  Runs OK:             %d\n", n_ok))
+  cat(sprintf("  No data:             %d\n", n_no_data))
+  cat(sprintf("  LP failed:           %d\n", n_lp_failed))
   cat(sprintf("  Total |disc| before: %.2f\n", sum_disc_before))
   cat(sprintf("  Total |disc| after:  %.2f\n", sum_disc_after))
   cat(sprintf("  Total improvement:   %.2f\n", sum_disc_before - sum_disc_after))

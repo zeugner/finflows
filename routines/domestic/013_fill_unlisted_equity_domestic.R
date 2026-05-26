@@ -23,6 +23,7 @@ if (!exists("script_dir")) script_dir = getwd()
 # Load the main aall matrix containing financial accounts data
 aall=readRDS(file.path(data_dir, 'intermediate_domestic_data_files/aall_equity_bilateral_imf_gov.rds'))
 aall["F51M+F512+F519....LE.."][which(aall["F51M+F512+F519....LE.."]<0)] <- 0
+aall["F51M+F512+F519....LE.."][which(aall["F51M+F512+F519....LE.."]==Inf)] <- NA
 gc()
 
 aall[F5....LE._D.,onlyna=TRUE]=aall[F51....LE._D.]+zerofiller(aall[F52....LE._D.])
