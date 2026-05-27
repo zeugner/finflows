@@ -9,7 +9,8 @@ if (!require("MDecfin")) {
 }
 
 # Set the project directories
-if (!exists("data_dir")) data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+data_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/filled'
+loaded_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/loaded'
 script_dir <- '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines'
 
 # Check directories exist
@@ -18,6 +19,9 @@ if (!dir.exists(script_dir)) {
 }
 if (!dir.exists(data_dir)) {
   stop("Data directory not found: ", data_dir)
+}
+if (!dir.exists(loaded_dir)) {
+  stop("Loaded directory not found: ", loaded_dir)
 }
 
 # Set working directory to script location
@@ -118,7 +122,7 @@ filling_plan <- list(
   # Phase 1: Initial QSA Processing
   combine_qsa = list(
     script = file.path(script_dir, "domestic/001_finflowers_combineQSA.R"),
-    input = file.path(data_dir, "fflist.rds"),
+    input = file.path(loaded_dir, "fflist.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/aall_qsa.rds"),
     phase = "Initial Processing",
     name = "Combine QSA"
@@ -144,7 +148,7 @@ filling_plan <- list(
   # Phase 3: NASQ Processing
   nasq_processing = list(
     script = file.path(script_dir, "domestic/004_nasq_treatment.R"),
-    input = file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"),
+    input = file.path(loaded_dir, "domestic_loading_data_files/nasq_S.rds"),
     output = file.path(data_dir, "intermediate_domestic_data_files/nasq_processed_assets_stocks.rds"),
     phase = "NASQ Processing",
     name = "NASQ Treatment"
@@ -232,23 +236,23 @@ filling_plan <- list(
   f81_fill = list(
     script = file.path(script_dir, "domestic/014_F81.R"),
     input = file.path(data_dir, "intermediate_domestic_data_files/aall_f51m.rds"),
-    output = file.path(data_dir, "aall_f81.rds"),
+    output = file.path(data_dir, "intermediate_domestic_data_files/aall_f81.rds"),
     phase = "Final Instruments",
     name = "F81 Fill"
   ),
   
   f89_fill = list(
     script = file.path(script_dir, "domestic/015_F89.R"),
-    input = file.path(data_dir, "aall_f81.rds"),
-    output = file.path(data_dir, "aall_f89.rds"),
+    input = file.path(data_dir, "intermediate_domestic_data_files/aall_f81.rds"),
+    output = file.path(data_dir, "intermediate_domestic_data_files/aall_f89.rds"),
     phase = "Final Instruments",
     name = "F89 Fill"
   ),
   
   f6_fill = list(
     script = file.path(script_dir, "domestic/016_F6.R"),
-    input = file.path(data_dir, "aall_f89.rds"),
-    output = file.path(data_dir, "intermediate_domestic_data_files/aall_domestic_T_FND.rds"),
+    input = file.path(data_dir, "intermediate_domestic_data_files/aall_f89.rds"),
+    output = file.path(data_dir, "intermediate_domestic_data_files/aall_domestic.rds"),
     phase = "Final Instruments",
     name = "F6 Fill"
   )
@@ -330,10 +334,10 @@ cat("DATA PROCESSING SUMMARY\n")
 cat(paste(rep("=", 80), collapse = ""), "\n")
 cat("Processing and filling phase completed successfully!\n")
 cat("\nFinal datasets created:\n")
-cat("- Main dataset: ", file.path(data_dir, "intermediate_domestic_data_files/aall_domestic_T_FND.rds"), "\n")
-cat("- Insurance data: ", file.path(data_dir, "aall_F6.rds"), "\n")
-cat("- Trade credits: ", file.path(data_dir, "aall_f81.rds"), "\n")
-cat("- Other accounts: ", file.path(data_dir, "aall_f89.rds"), "\n")
+cat("- Main dataset: ", file.path(data_dir, "intermediate_domestic_data_files/aall_domestic.rds"), "\n")
+cat("- Insurance data: ", file.path(data_dir, "intermediate_domestic_data_files/aall_F6.rds"), "\n")
+cat("- Trade credits: ", file.path(data_dir, "intermediate_domestic_data_files/aall_f81.rds"), "\n")
+cat("- Other accounts: ", file.path(data_dir, "intermediate_domestic_data_files/aall_f89.rds"), "\n")
 cat("\nCheck the logs directory for detailed execution logs.\n")
 cat("Total processing phases completed: 10\n")
 cat("\nNext step: Run european/main_filler.R to fill cross-border exposures.\n")
