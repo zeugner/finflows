@@ -17,13 +17,14 @@ zerofiller=function(x, fillscalar=0){
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # --- Load previously saved data ---
 aall <- readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_f81.rds"))
 
-otheraccounts <- readRDS(file.path(data_dir, "otheraccounts.rds"))
-bopf89q <- readRDS(file.path(data_dir, "bopf89q.rds"))
-bopf89a <- readRDS(file.path(data_dir, "bopf89a.rds"))
+otheraccounts <- readRDS(file.path(loaded_dir, "otheraccounts.rds"))
+bopf89q <- readRDS(file.path(loaded_dir, "bopf89q.rds"))
+bopf89a <- readRDS(file.path(loaded_dir, "bopf89a.rds"))
 
 # --- Prepare working object ---
 af89_=aall['F89....LE._T+_S+_O.1999q1:']

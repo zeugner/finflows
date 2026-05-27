@@ -4,10 +4,11 @@ library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # Load consolidated data
-lc = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_consolidated_stocks_assets.rds"))
-lct = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_consolidated_flows_assets.rds"))
+lc = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_consolidated_stocks_assets.rds"))
+lct = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_consolidated_flows_assets.rds"))
 aall=readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_NASA_S0.rds"))
 
 # Load processed quarterly data

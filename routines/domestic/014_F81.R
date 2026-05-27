@@ -17,13 +17,14 @@ zerofiller=function(x, fillscalar=0){
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # --- Load previously saved data ---
 aall <- readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_f51m.rds"))
 
-tradecredits <- readRDS(file.path(data_dir, "tradecredits.rds"))
-bopf81q <- readRDS(file.path(data_dir, "bopf81q.rds"))
-bopf81a <- readRDS(file.path(data_dir, "bopf81a.rds"))
+tradecredits <- readRDS(file.path(loaded_dir, "tradecredits.rds"))
+bopf81q <- readRDS(file.path(loaded_dir, "bopf81q.rds"))
+bopf81a <- readRDS(file.path(loaded_dir, "bopf81a.rds"))
 
 # --- Prepare working object ---
 tradecredits=add.dim(tradecredits,.dimname = 'FUNCTIONAL_CAT',.dimcodes = '_T')

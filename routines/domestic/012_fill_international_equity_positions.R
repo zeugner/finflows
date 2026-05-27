@@ -11,6 +11,7 @@ zerofiller=function(x, fillscalar=0){
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # Country code conversion mapping (ISO3 to ISO2)
 country_map <- c(
@@ -34,8 +35,8 @@ gc()
 aall['....._F+_O+_P+_R.'] <- NA
 
 ### STEP ZERO: INITIAL DATA LOADING 
-af5_eur <- readRDS(file.path(data_dir, "af5_eur.rds"))
-lf5_eur <- readRDS(file.path(data_dir, "lf5_eur.rds"))
+af5_eur <- readRDS(file.path(loaded_dir, "af5_eur.rds"))
+lf5_eur <- readRDS(file.path(loaded_dir, "lf5_eur.rds"))
 
 names(dimnames(af5_eur))[1]=names(dimnames(lf5_eur))[1]='REF_AREA'  
 
@@ -44,11 +45,11 @@ dimnames(af5_eur)$REF_AREA <- country_map[dimnames(af5_eur)$REF_AREA]
 dimnames(lf5_eur)$REF_AREA <- country_map[dimnames(lf5_eur)$REF_AREA]
 
 # Load af51 object containing F512 (unlisted shares), F519 (other equity), and F51M data
-af51=readRDS(file.path(data_dir, 'af51.rds'))
+af51=readRDS(file.path(loaded_dir, 'af51.rds'))
 gc()
 
 # Load government equity data containing F51, F511, F51M, and F52
-gov_equity=readRDS(file.path(data_dir, 'gov_equity.rds'))
+gov_equity=readRDS(file.path(loaded_dir, 'gov_equity.rds'))
 gc()
 
 

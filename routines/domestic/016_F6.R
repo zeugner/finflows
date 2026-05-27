@@ -16,13 +16,14 @@ zerofiller=function(x, fillscalar=0){
 }
 
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # --- Load previously saved data ---
 aall <- readRDS(file.path(data_dir, "intermediate_domestic_data_files/aall_f89.rds"));gc()
 
-insurancepensions <- readRDS(file.path(data_dir, "insurancepensions.rds"))
-bopf6a <- readRDS(file.path(data_dir, "bopf6a.rds"))
-bopf6q <- readRDS(file.path(data_dir, "bopf6q.rds"))
+insurancepensions <- readRDS(file.path(loaded_dir, "insurancepensions.rds"))
+bopf6a <- readRDS(file.path(loaded_dir, "bopf6a.rds"))
+bopf6q <- readRDS(file.path(loaded_dir, "bopf6q.rds"))
 
 # --- Prepare working object ---
 af6_=aall['F6....LE._T+_S+_O.1999q1:']

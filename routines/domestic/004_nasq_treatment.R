@@ -7,10 +7,12 @@ library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
+
 
 # Load NASQ data that was already processed in 008_load_NASQ.R
-nasq_S = readRDS(file.path(data_dir, "domestic_loading_data_files/nasq_S.rds"))
-nasq_F = readRDS(file.path(data_dir, "domestic_loading_data_files/nasq_F.rds"))
+nasq_S = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasq_S.rds"))
+nasq_F = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasq_F.rds"))
 
 # Extract quarterly data from 1999Q4 onwards
 lq=nasq_S["ASS....1999q4:"]

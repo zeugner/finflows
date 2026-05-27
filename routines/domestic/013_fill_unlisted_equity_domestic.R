@@ -19,6 +19,7 @@ APPLY_F51M_BALANCING <- TRUE
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 if (!exists("script_dir")) script_dir = getwd()
 # Load the main aall matrix containing financial accounts data
 aall=readRDS(file.path(data_dir, 'intermediate_domestic_data_files/aall_equity_bilateral_imf_gov.rds'))
@@ -43,7 +44,7 @@ aall["F51M..S0.S2.._D."]<-aall["F51M..S1.S2.._D."]
 aall["..S1.S1.._D."]<-0
 
 ### CENTRAL BANK HOLDINGS (source https://www.ecb.europa.eu/ecb/orga/capital/html/index.en.html )
-ecb_capital_md3=readRDS(file.path(data_dir, 'ecb_capital_md3.rds'))
+ecb_capital_md3=readRDS(file.path(loaded_dir, 'ecb_capital_md3.rds'))
 gc()
 
 aall[F519..S121.S2.LE._O.,onlyna=TRUE]<-ecb_capital_md3
@@ -218,8 +219,8 @@ aall[F51M.CZ+EA20.S1+S1M+S13+S11+S121+S12T+S124+S12Q+S12O+S12K.S2.LE._T.2023q4]
 ### BUT THESE ZEROS ARE NOT REAL. SO WE HAVE TO REPLACE THEM WITH EUROSTAT IIP BOP!!!
 
 # Load BoP-IIP country-level data (quarterly and annual)
-bopf51ma = readRDS(file.path(data_dir, 'bopf51ma.rds'))
-bopf51mq = readRDS(file.path(data_dir, 'bopf51mq.rds'))
+bopf51ma = readRDS(file.path(loaded_dir, 'bopf51ma.rds'))
+bopf51mq = readRDS(file.path(loaded_dir, 'bopf51mq.rds'))
 
 # Rename source dimensions. 
 names(dimnames(bopf51ma))[1] = names(dimnames(bopf51mq))[1] = 'REF_AREA'
@@ -230,7 +231,7 @@ names(dimnames(bopf51ma))[2] = 'REF_SECTOR'
 bop_iip_eu = mds('ESTAT/bop_eu6_q/........')
 
 gc()
-saveRDS(bop_iip_eu, file.path(data_dir, 'domestic_loading_data_files/bop_iip_eu.rds'))
+saveRDS(bop_iip_eu, file.path(loaded_dir, 'domestic_loading_data_files/bop_iip_eu.rds'))
 
 # Filter EA aggregates: geo=EAxx, partner=EXT_EAxx, sector10 open, ASS, NSA,
 # F51M direct + F519 other. F512 (portfolio listed shares) is not available

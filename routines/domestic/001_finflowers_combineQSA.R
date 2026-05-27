@@ -4,9 +4,10 @@ library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # Load the list of financial flow matrices/arrays from ECB's QSA data
-lll=readRDS(file.path(data_dir, 'fflist.rds'))
+lll=readRDS(file.path(loaded_dir, 'fflist.rds'))
 # The list contains two main components:
 # - A: Assets matrices
 # - L: Liabilities matrices

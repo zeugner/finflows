@@ -4,15 +4,16 @@ library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 aall=readRDS(file.path(data_dir, 'intermediate_domestic_data_files/aall_NASQ.rds'))
 setkey(aall, NULL)
 
 # Load unconsolidated data
-la = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_assets.rds"))
-lat = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_flows_assets.rds"))
-la_l = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_LIAB.rds"))
-lat_l = readRDS(file.path(data_dir, "domestic_loading_data_files/nasa_unconsolidated_flows_LIAB.rds"))
+la = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_assets.rds"))
+lat = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_unconsolidated_flows_assets.rds"))
+la_l = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_unconsolidated_stocks_LIAB.rds"))
+lat_l = readRDS(file.path(loaded_dir, "domestic_loading_data_files/nasa_unconsolidated_flows_LIAB.rds"))
 
 names(dimnames(la))[[3]] = names(dimnames(lat))[[3]] = names(dimnames(la_l))[[3]] = names(dimnames(lat_l))[[3]] = 'REF_AREA'
 names(dimnames(la))[[2]] = names(dimnames(lat))[[2]] = names(dimnames(la_l))[[2]] = names(dimnames(lat_l))[[2]] = 'INSTR'

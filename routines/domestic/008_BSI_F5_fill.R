@@ -4,11 +4,12 @@ library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 # Load assets data
-asbsi= readRDS(file.path(data_dir, "bsi_assets.rds"))
+asbsi= readRDS(file.path(loaded_dir, "bsi_assets.rds"))
 # Load liabilities data
-libsi = readRDS(file.path(data_dir, "bsi_liab.rds"))
+libsi = readRDS(file.path(loaded_dir, "bsi_liab.rds"))
 
 # Load current aall version
 aall=readRDS(file.path(data_dir, 'intermediate_domestic_data_files/aall_NASA_intrasector.rds'))
