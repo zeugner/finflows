@@ -21,6 +21,9 @@
 #   - constraint matrix is pre-allocated (no rbind in loop)
 #   - row/col membership maps are pre-computed
 #   - Inf values are coerced to NA before solving
+#   - write-back is batched: all results accumulated during the loop,
+#     then written to aall in a single md3 assignment at the end
+#     (avoids ~90s per solve from repeated individual md3 writes)
 # ============================================================================
 
 library(lpSolve)
@@ -108,7 +111,7 @@ balance_f51m <- function(aall,
     
     # --- extract matrix ---
     slice_id <- sprintf(
-      "F51M.%s.%s.%s.LE._T.%s",
+      "F51M.%s.%s.%s.LE._S.%s",
       country,
       paste(all_sectors, collapse="+"),
       paste(all_sectors, collapse="+"),
@@ -263,17 +266,8 @@ balance_f51m <- function(aall,
     
     disc_after <- discrepancy_table(m_sol)
     
-    # --- write back to aall ---
-    for (fc_apply in c("_T","_S")) {
-      for (i in seq_len(n_bal)) {
-        sid  <- sprintf("F51M.%s.%s.%s.LE.%s.%s",
-                        country, bal_rows[i], bal_cols[i], fc_apply, period)
-        aall[sid] <- sol_vals[i]
-      }
-    }
-    
-    list(aall        = aall,
-         status      = "ok",
+    # write-back is handled in bulk by the main loop
+    list(status      = "ok",
          disc_before = disc_before,
          disc_after  = disc_after,
          m           = m,
@@ -282,7 +276,7 @@ balance_f51m <- function(aall,
   }
   
   # =================================================================
-  # MAIN LOOP
+  # MAIN LOOP — solve only, accumulate results
   # =================================================================
   total_pairs     <- length(countries) * length(periods)
   n_ok            <- 0
@@ -290,6 +284,10 @@ balance_f51m <- function(aall,
   n_lp_failed     <- 0
   sum_disc_before <- 0
   sum_disc_after  <- 0
+  
+  # pre-allocate results list (one entry per successful solve)
+  results_list <- vector("list", total_pairs)
+  n_results    <- 0L
   
   cat(sprintf(
     "\n=== F51M LP BALANCER: %d countries x %d periods = %d runs ===\n",
@@ -299,8 +297,7 @@ balance_f51m <- function(aall,
   for (country in countries) {
     for (period in periods) {
       
-      res  <- balance_one(aall, country, period)
-      aall <- res$aall
+      res <- balance_one(aall, country, period)
       
       if (res$status == "no_data") {
         n_no_data <- n_no_data + 1
@@ -315,7 +312,17 @@ balance_f51m <- function(aall,
         next
       }
       
-      n_ok <- n_ok + 1
+      n_ok    <- n_ok + 1
+      n_results <- n_results + 1L
+      
+      # accumulate for bulk write-back
+      results_list[[n_results]] <- data.table(
+        REF_AREA           = country,
+        REF_SECTOR         = bal_rows,
+        COUNTERPART_SECTOR = bal_cols,
+        TIME               = period,
+        obs_value          = res$sol_vals
+      )
       
       db <- sum(abs(res$disc_before), na.rm=TRUE)
       da <- sum(abs(res$disc_after),  na.rm=TRUE)
@@ -332,6 +339,38 @@ balance_f51m <- function(aall,
                       country, period))
       }
     }
+  }
+  
+  # =================================================================
+  # BULK WRITE-BACK — single md3 assignment per FUNCTIONAL_CAT
+  # =================================================================
+  if (n_results > 0) {
+    cat("\nWriting back results...\n")
+    
+    all_results_dt <- rbindlist(results_list[seq_len(n_results)])
+    
+    writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
+      dt <- copy(all_results_dt)
+      dt[, INSTR          := "F51M"]
+      dt[, STO            := "LE"]
+      dt[, FUNCTIONAL_CAT := fc]
+      dt
+    }))
+    
+    writeback_md3 <- as.md3(writeback_dt,
+                            id.vars = c("INSTR","REF_AREA","REF_SECTOR",
+                                        "COUNTERPART_SECTOR","STO",
+                                        "FUNCTIONAL_CAT","TIME"))
+    
+    aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
+                 paste(countries,   collapse = "+"),
+                 paste(sub_sectors, collapse = "+"),
+                 paste(sub_sectors, collapse = "+"),
+                 paste(periods,     collapse = "+")),
+         usenames = TRUE] <- writeback_md3
+    
+    cat(sprintf("Wrote %d cells in one md3 assignment.\n",
+                nrow(writeback_dt)))
   }
   
   cat(sprintf("\n=== SUMMARY ===\n"))
