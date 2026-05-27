@@ -342,35 +342,45 @@ balance_f51m <- function(aall,
   }
   
   # =================================================================
-  # BULK WRITE-BACK — single md3 assignment per FUNCTIONAL_CAT
+  # BULK WRITE-BACK — one md3 assignment per country
+  # (single call over all countries+periods triggers an md3 bug on
+  #  large inputs: 'object ixval not found')
   # =================================================================
   if (n_results > 0) {
     cat("\nWriting back results...\n")
     
     all_results_dt <- rbindlist(results_list[seq_len(n_results)])
     
-    writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
-      dt <- copy(all_results_dt)
-      dt[, INSTR          := "F51M"]
-      dt[, STO            := "LE"]
-      dt[, FUNCTIONAL_CAT := fc]
-      dt
-    }))
+    for (ctry in countries) {
+      
+      ctry_dt <- all_results_dt[REF_AREA == ctry]
+      if (nrow(ctry_dt) == 0) next
+      
+      ctry_periods <- unique(ctry_dt$TIME)
+      
+      writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
+        dt <- copy(ctry_dt)
+        dt[, INSTR          := "F51M"]
+        dt[, STO            := "LE"]
+        dt[, FUNCTIONAL_CAT := fc]
+        dt
+      }))
+      
+      writeback_md3 <- as.md3(writeback_dt,
+                              id.vars = c("INSTR","REF_AREA","REF_SECTOR",
+                                          "COUNTERPART_SECTOR","STO",
+                                          "FUNCTIONAL_CAT","TIME"))
+      
+      aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
+                   ctry,
+                   paste(sub_sectors, collapse = "+"),
+                   paste(sub_sectors, collapse = "+"),
+                   paste(ctry_periods, collapse = "+")),
+           usenames = TRUE] <- writeback_md3
+    }
     
-    writeback_md3 <- as.md3(writeback_dt,
-                            id.vars = c("INSTR","REF_AREA","REF_SECTOR",
-                                        "COUNTERPART_SECTOR","STO",
-                                        "FUNCTIONAL_CAT","TIME"))
-    
-    aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
-                 paste(countries,   collapse = "+"),
-                 paste(sub_sectors, collapse = "+"),
-                 paste(sub_sectors, collapse = "+"),
-                 paste(periods,     collapse = "+")),
-         usenames = TRUE] <- writeback_md3
-    
-    cat(sprintf("Wrote %d cells in one md3 assignment.\n",
-                nrow(writeback_dt)))
+    cat(sprintf("Wrote %d cells across %d countries.\n",
+                nrow(all_results_dt) * 2L, length(countries)))
   }
   
   cat(sprintf("\n=== SUMMARY ===\n"))
