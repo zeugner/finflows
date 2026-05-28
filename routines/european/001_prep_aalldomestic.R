@@ -4,7 +4,7 @@ library(MD3)
 # Set data directory
 #data_dir= file.path(getwd(),'data')
 if (!exists("data_dir")) data_dir = getwd()
-
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 ############################################################################################################################
 ############################################################################################################################
@@ -90,7 +90,7 @@ saveRDS(aall,file=file.path(data_dir,'vintages/aall_temp' %&% format(Sys.time(),
 ##############################################################
 source(file.path(script_dir, "european/fndloader0.R"))
 
-fnd=readRDS(file.path(data_dir, 'fndqsa.rds'))
+fnd=readRDS(file.path(loaded_dir, 'fndqsa.rds'))
 names(dimnames(fnd))[5] = 'INSTR'
 fnd=aperm(copy(fnd),c(5,2,3,1,4,6))
 

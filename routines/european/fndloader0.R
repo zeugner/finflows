@@ -1,5 +1,6 @@
 library(MDstats)
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 #fnda1=mds('ECB/QSA/Q.N..W1..S1.N.A.F+LE.._Z+T._Z.XDC._T.S.V.N.FND')
 fnda0=mds('ECB/QSA/Q.N..W0..S1.N.A.F+LE.._Z+T._Z.XDC._T.S.V.N.FND')
@@ -16,4 +17,4 @@ mysl=add.dim(fndl0[....T.],'REF_SECTOR',.dimcodes = 'S0')
 
 mysa=add.dim(fnda0[....T.],'COUNTERPART_SECTOR',.dimcodes = 'S0')
 mys=merge(mysa,mysl)
-saveRDS(mys, file.path(data_dir, 'fndqsa.rds'))
+saveRDS(mys, file.path(loaded_dir, 'fndqsa.rds'))
