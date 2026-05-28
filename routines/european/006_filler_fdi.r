@@ -1,16 +1,17 @@
 library(MDstats); library(MD3); library(data.table)
 
 # Set data directory
-if (!exists("data_dir")) data_dir = '\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/'
+if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 source('V:/FinFlows/githubrepo/finflows/routines/utilities.R')
 gc()
 
 ## Load data
-allfdi_pos_aggr <- readRDS(file.path(data_dir,'fdibuffer/allfdi_pos_aggr.rds'))
-allfdi_pos_ctry <- readRDS(file.path(data_dir,'fdibuffer/allfdi_pos_ctry.rds'))
-allfdi_flow_aggr <- readRDS(file.path(data_dir,'fdibuffer/allfdi_flow_aggr.rds'))
-allfdi_flow_ctry <- readRDS(file.path(data_dir,'fdibuffer/allfdi_flow_ctry.rds'))
+allfdi_pos_aggr <- readRDS(file.path(loaded_dir,'fdibuffer/allfdi_pos_aggr.rds'))
+allfdi_pos_ctry <- readRDS(file.path(loaded_dir,'fdibuffer/allfdi_pos_ctry.rds'))
+allfdi_flow_aggr <- readRDS(file.path(loaded_dir,'fdibuffer/allfdi_flow_aggr.rds'))
+allfdi_flow_ctry <- readRDS(file.path(loaded_dir,'fdibuffer/allfdi_flow_ctry.rds'))
 
 allfdi_pos_aggr <- do.call(rbind,allfdi_pos_aggr)
 allfdi_pos_ctry <- do.call(rbind,allfdi_pos_ctry)
@@ -135,7 +136,7 @@ allfdi[".F5...........",onlyna=TRUE] <- allfdi[".F5A..........."] + allfdi[".F5B
 # Note ULT still retained for some reason, but can drop it
 # Direction can be dropped as well
 allfdi <- allfdi[...A......IMC...]
-saveRDS(allfdi, file.path(data_dir,"aall_fdi.rds"))
+saveRDS(allfdi, file.path(loaded_dir,"aall_fdi.rds"))
 
 ### Now reduced number of dimensions. Should be REF_AREA, INSTR, ACCOUNTING_ENTRY (A/L), TYPE_ENTITY, COUNTERPART_AREA, STO, TIME
 dim(allfdi)

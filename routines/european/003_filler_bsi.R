@@ -2,7 +2,7 @@ library(MDstats); library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
-
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 
 ## load filled iip bop
@@ -12,7 +12,7 @@ ll=readRDS(file.path(data_dir,'ll_iip_cps.rds')); gc()
 
 # Load loans data
 
-loans_bsi= readRDS(file.path(data_dir, "bsi_loans.rds")); gc()
+loans_bsi= readRDS(file.path(loaded_dir, "bsi_loans.rds")); gc()
 
 
 dim(loans_bsi)
@@ -45,7 +45,7 @@ aa[F4L..S12T..._O.., usenames=TRUE, onlyna=TRUE] = loans_bsi[".K....1998q4:"]
 aa["F4.AT.S12T..LE._T.2022q4.W2+EA20+DE"]
 
 # Load deposits data
-deposits_bsi = readRDS(file.path(data_dir, "bsi_deposits.rds")); gc()
+deposits_bsi = readRDS(file.path(loaded_dir, "bsi_deposits.rds")); gc()
 
 
 ###  manual allocation of U5 to EA20 

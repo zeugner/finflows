@@ -3,6 +3,7 @@ library(MDstats); library(MD3)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 ##############################################################
 ########      loading prepared domestic data    ##############
@@ -24,7 +25,8 @@ ll=readRDS(file.path(data_dir,'ll_prep.rds')); gc()
 ########filling of EA aggregate based on ECB QSA##############
 ##############################################################
 
-eatemp=readRDS(file.path(data_dir,'eaaggregate_ecbqsa.rds'))
+# i cant retrace this, so i hardcoded it
+eatemp=readRDS(file.path('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/data/','eaaggregate_ecbqsa.rds')) 
 dimnames(eatemp)
 
 dimnames(eatemp)[['REF_AREA']] = ccode(dimnames(eatemp)[['REF_AREA']],2,'iso2m'); gc()
@@ -75,7 +77,7 @@ saveRDS(ll,file.path(data_dir, 'll_iip_cps_temp.rds'))
 ########filling of quarterly financial bop data###############
 ##############################################################
 
-bopeu=readRDS(file.path(data_dir,'bop_cps_euea.rds'))
+bopeu=readRDS(file.path(loaded_dir,'bop_cps_euea.rds'))
 dimnames(bopeu)
 
 names(dimnames(bopeu)) = c('REF_AREA', 'COUNTERPART_AREA', 'REF_SECTOR', 'STO', 'BOP_ITEM', 'TIME')
@@ -230,8 +232,8 @@ saveRDS(ll, file.path(data_dir, 'll_bop_cps_eu_temp.rds'))
 ########filling of quarterly and annual iip data###############
 ##############################################################
 
-iipq=readRDS(file.path(data_dir,'iip_cps.rds'))
-iipa=readRDS(file.path(data_dir,'iip_cps_annual.rds'))
+iipq=readRDS(file.path(loaded_dir,'iip_cps.rds'))
+iipa=readRDS(file.path(loaded_dir,'iip_cps_annual.rds'))
 dimnames(iipa)
 iipa_a=iipa[".....1999+2000+2001+2002+2003+2004+2005+2006+2007+2008+2009+2010+2011+2012+2013+2014+2015+2016+2017+2018+2019+2020+2021+2022+2023+2024+2025"]
 frequency(iipa_a)='Q'
@@ -384,7 +386,7 @@ saveRDS(ll, file.path(data_dir, 'll_iip_cps_temp.rds'))
 #### REF_SECTOR, BOP_ITEM, TIME                           ####
 ##############################################################
 
-bop_ind = readRDS(file.path(data_dir, 'bop_cps.rds'))
+bop_ind = readRDS(file.path(loaded_dir, 'bop_cps.rds'))
 
 # Rename to match iip dimension structure
 # bop_cps raw dims: STO, geo, partner, sector10, bop_item, TIME
@@ -414,8 +416,8 @@ rm(bop_ind); gc()
 ##############################################################
 ########      filling EUI bop and iip data     ###############
 ##############################################################
-bopeui=readRDS(file.path(data_dir,'bop_eui.rds'))
-iipeui=readRDS(file.path(data_dir,'iip_eui.rds'))
+bopeui=readRDS(file.path(loaded_dir,'bop_eui.rds'))
+iipeui=readRDS(file.path(loaded_dir,'iip_eui.rds'))
 dim(bopeui); dim(iipeui)
 str(bopeui); str(iipeui)
 frequency(iipeui)='Q'; gc()

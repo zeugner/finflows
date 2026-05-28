@@ -2,6 +2,7 @@ library(MDstats); library(MD3)
 
 # Set data directory - guarded so it won't override when called from main_filler.R
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 #source('\\\\s-jrciprnacl01p-cifs-ipsc.jrc.it/ECOFIN/FinFlows/githubrepo/finflows/routines/utilities.R')
 gc()
@@ -11,7 +12,7 @@ aa=readRDS(file.path(data_dir,'aa_iip_bsi.rds')); gc()
 ll=readRDS(file.path(data_dir,'ll_iip_bsi.rds')); gc()
 
 ## load shs-s data
-ash=readRDS(file.path(data_dir,'ash.rds')); gc()
+ash=readRDS(file.path(loaded_dir,'ash.rds')); gc()
 gc()
 
 ############################################################
@@ -53,7 +54,7 @@ ash['shss.EA19....LE..',usenames=TRUE, onlyna=TRUE]=tempshsea
 ash['.EA+EA19.W0.S11.S13.LE.F3.2019q4']
 
 
-saveRDS(ash, file.path(data_dir, 'ash.rds'))
+saveRDS(ash, file.path(loaded_dir, 'ash.rds'))
 
 
 ashs=ash

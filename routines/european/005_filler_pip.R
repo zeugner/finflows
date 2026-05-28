@@ -20,6 +20,7 @@ library(MDstats); library(MD3); library(data.table)
 
 # Set data directory
 if (!exists("data_dir")) data_dir = getwd()
+if (!exists("loaded_dir")) loaded_dir = data_dir
 
 source('V:/FinFlows/githubrepo/finflows/routines/utilities.R')
 
@@ -36,7 +37,7 @@ ll <- readRDS(file.path(data_dir, 'll_iip_shss.rds')); gc()
 # --- Load PIP country list ---
 #############################################################################
 
-whatctries <- readRDS(file.path(data_dir, 'pipbuffer/whatctries_pip.rds'))
+whatctries <- readRDS(file.path(loaded_dir, 'pipbuffer/whatctries_pip.rds'))
 ccc <- dimcodes(whatctries)[[1]]
 AREA <- ccc[, 1]  # ISO3 codes
 rm(whatctries); gc()
@@ -427,7 +428,7 @@ ea_all_members <- ea_members_for_year(2100)
 # Scan available caches
 ea_available <- character(0)
 for (m in ea_all_members) {
-  cachefile <- file.path(data_dir, 'pipbuffer/pip_' %&% m %&% '.rds')
+  cachefile <- file.path(loaded_dir, 'pipbuffer/pip_' %&% m %&% '.rds')
   if (file.exists(cachefile)) ea_available <- c(ea_available, m)
 }
 cat('  EA members with caches:', length(ea_available), '/', length(ea_all_members), '\n')
@@ -440,7 +441,7 @@ if (length(ea_available) > 0) {
   
   for (m in ea_available) {
     cat('  ', m, '... ')
-    cachefile <- file.path(data_dir, 'pipbuffer/pip_' %&% m %&% '.rds')
+    cachefile <- file.path(loaded_dir, 'pipbuffer/pip_' %&% m %&% '.rds')
     pip_cc <- readRDS(cachefile)
     res <- process_pip_country(pip_cc)
     rm(pip_cc); gc()
@@ -631,7 +632,7 @@ cat('\n=== Processing PIP data for', length(AREA), 'countries ===\n')
 
 for (cc in AREA) {
   
-  cachefile <- file.path(data_dir, 'pipbuffer/pip_' %&% cc %&% '.rds')
+  cachefile <- file.path(loaded_dir, 'pipbuffer/pip_' %&% cc %&% '.rds')
   if (!file.exists(cachefile)) { cat(cc, ': no cache file, skipping\n'); next }
   
   cat(as.character(Sys.time()), ': ', match(cc, AREA), '/', length(AREA),
