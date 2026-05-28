@@ -121,11 +121,29 @@ execution_plan <- list(
       output = file.path(data_dir, "ll_iip_shss.rds"),
       name = "SHSS filler"
     ),
-    # Step 5: CPIS filler
-    cpis = list(
-      script = file.path(script_dir, "european/filler_cpis.R"),
-      output = file.path(data_dir, "ll_iip_cpis.rds"),
-      name = "CPIS filler"
+    # Step 5: Porfolio Investment Position (PIP) filler
+    pip = list(
+      script = file.path(script_dir, "european/005_filler_pip.R"),
+      output = file.path(data_dir, "ll_iip_pip.rds"),
+      name = "PIP filler"
+    ),
+    # Step 6: OECD FDI filler
+    fdi = list(
+      script = file.path(script_dir, "european/006_filler_fdi.R"),
+      output = file.path(data_dir, "ll_iip_fdi.rds"),
+      name = "FDI filler"
+    ),
+    # Step 7: BIS Locational Banking Statistics (LBS) filler
+    lbs = list(
+      script = file.path(script_dir, "european/007_filler_lbs.R"),
+      output = file.path(data_dir, "ll_iip_lbs.rds"),
+      name = "LBS filler"
+    ),
+    # Step 8: Calculate aggregate terms for Instruments and Func. categories 
+    agg = list(
+      script = file.path(script_dir, "european/aggregate_fin_sec.R"),
+      output = file.path(data_dir, "ll_iip_agg.rds"),
+      name = "Calculate Aggregates"
     )
   )
 )
