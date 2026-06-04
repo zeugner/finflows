@@ -421,6 +421,8 @@ aall[F51M..S2.S11.LE._T.]<-bopf51mq[".S11.L_LE.FA__D__F51M."]+bopf51mq[".S11.L_L
 aall[F51M..S2.S11.LE._S.]<-aall[F51M..S2.S11.LE._T.]
 
 aall[F51M..S1.S11.LE..]<-aall[F51M..S0.S11.LE..]-aall[F51M..S2.S11.LE..]
+# Gabor: some negatives appear gain, so correct
+aall[F51M..S1.S11.LE..][which(aall[F51M..S1.S11.LE..]<0)] <-0
 
 aall[F51M..S12T+S12Q.S11...,onlyna=TRUE]<-0
 
