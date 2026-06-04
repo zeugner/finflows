@@ -14,7 +14,18 @@
 #   verbose   : if TRUE, print per-country-period results; if FALSE, only summary
 #
 # Returns:
-#   aall with balancing cells updated for all countries and periods
+#   aall with balancing cells updated for all countries and periods.
+#   A data.frame named 'f51m_error_log' is assigned to the GLOBAL environment,
+#   containing one row per failed country-period combination with columns:
+#     REF_AREA, TIME, stage, error_message
+#   Print or inspect it after the call:
+#     print(f51m_error_log)
+#     write.csv(f51m_error_log, "f51m_errors.csv", row.names=FALSE)
+#
+# Error handling:
+#   - balance_one()  : wrapped in tryCatch; failures logged, loop continues
+#   - as.md3()       : wrapped in tryCatch; write-back failures logged separately
+#   - Both stages assign a 'stage' label so you know exactly where the error occurred
 #
 # Performance notes:
 #   - strsplit results are cached at startup (not recomputed per solve)
@@ -63,10 +74,9 @@ balance_f51m <- function(aall,
   # PRE-COMPUTE: cache strsplit and membership maps once (not per solve)
   # -----------------------------------------------------------------
   bal_parts <- strsplit(balancing_cells, "\\.", fixed = FALSE)
-  bal_rows  <- vapply(bal_parts, `[[`, character(1), 1)   # row sector for each bal cell
-  bal_cols  <- vapply(bal_parts, `[[`, character(1), 2)   # col sector for each bal cell
+  bal_rows  <- vapply(bal_parts, `[[`, character(1), 1)
+  bal_cols  <- vapply(bal_parts, `[[`, character(1), 2)
   
-  # for each sub-sector, which balancing-cell indices belong to its row / col?
   bal_row_map <- lapply(sub_sectors, function(r) which(bal_rows == r))
   bal_col_map <- lapply(sub_sectors, function(c) which(bal_cols == c))
   names(bal_row_map) <- sub_sectors
@@ -90,26 +100,37 @@ balance_f51m <- function(aall,
   obj[p_idx] <- w_disc
   obj[q_idx] <- w_disc
   
-  # -----------------------------------------------------------------
-  # PRE-ALLOCATE: constraint matrix (max possible rows; trim before solve)
-  # Rows:
-  #   up to n_sec row-sum constraints
-  #   up to n_sec col-sum constraints
-  #   2 * n_bal   penalty linearisation rows
-  #   n_bal       non-negativity of x
-  #   (2*n_bal + 4*n_sec) non-negativity of slacks  [one row each]
-  # Total upper bound:
   n_con_max <- 2*n_sec + 2*n_bal + n_bal + (2*n_bal + 4*n_sec)
-  # -----------------------------------------------------------------
   
   zf <- function(x) ifelse(is.na(x), 0, x)
   
+  # =================================================================
+  # ERROR LOG — accumulated throughout; written to global env at end
+  # =================================================================
+  error_log <- data.table(
+    REF_AREA      = character(),
+    TIME          = character(),
+    stage         = character(),   # "solve" | "writeback_md3" | "writeback_assign"
+    error_message = character()
+  )
+  
+  log_error <- function(country, period, stage, msg) {
+    error_log <<- rbind(error_log, data.table(
+      REF_AREA      = country,
+      TIME          = period,
+      stage         = stage,
+      error_message = as.character(msg)
+    ))
+    cat(sprintf("  [%-6s %s] ERROR in %-20s: %s\n",
+                country, period, stage, msg))
+  }
+  
   # -----------------------------------------------------------------
   # HELPER: run balancer for one country/period
+  # Returns a named list; status is one of: "ok", "no_data", "lp_failed"
   # -----------------------------------------------------------------
   balance_one <- function(aall, country, period) {
     
-    # --- extract matrix ---
     slice_id <- sprintf(
       "F51M.%s.%s.%s.LE._S.%s",
       country,
@@ -124,15 +145,13 @@ balance_f51m <- function(aall,
     )
     
     if (is.null(slice_dt) || nrow(slice_dt) == 0)
-      return(list(aall=aall, status="no_data",
-                  disc_before=NA, disc_after=NA))
+      return(list(status="no_data"))
     
     m_wide <- dcast(slice_dt, REF_SECTOR ~ COUNTERPART_SECTOR,
                     value.var="obs_value")
     m      <- as.matrix(m_wide[, -1, with=FALSE])
     rownames(m) <- m_wide$REF_SECTOR
     
-    # ensure all expected sectors present
     missing_r <- setdiff(all_sectors, rownames(m))
     missing_c <- setdiff(all_sectors, colnames(m))
     if (length(missing_r) > 0) {
@@ -147,15 +166,12 @@ balance_f51m <- function(aall,
     }
     m <- m[all_sectors, all_sectors]
     
-    # FIX: coerce Inf / -Inf to NA so the LP constraints are well-defined
     m[is.infinite(m)] <- NA
     
-    # --- observed balancing cell values ---
     obs_vals <- numeric(n_bal)
     for (i in seq_len(n_bal))
       obs_vals[i] <- zf(m[bal_rows[i], bal_cols[i]])
     
-    # --- fixed sums (non-balancing cells) per row and col ---
     fixed_row <- setNames(numeric(n_sec), sub_sectors)
     fixed_col <- setNames(numeric(n_sec), sub_sectors)
     for (r in sub_sectors) {
@@ -167,7 +183,6 @@ balance_f51m <- function(aall,
       fixed_col[c] <- sum(zf(m[non_bal_rows, c]))
     }
     
-    # --- discrepancy helper ---
     discrepancy_table <- function(mat) {
       sub     <- mat[sub_sectors, sub_sectors]
       row_sum <- rowSums(zf(sub))
@@ -182,15 +197,11 @@ balance_f51m <- function(aall,
     
     disc_before <- discrepancy_table(m)
     
-    # -----------------------------------------------------------------
-    # BUILD CONSTRAINT MATRIX — pre-allocated, filled by index
-    # -----------------------------------------------------------------
     con_mat <- matrix(0, nrow = n_con_max, ncol = n_lp_vars)
     con_dir <- character(n_con_max)
     con_rhs <- numeric(n_con_max)
-    crow    <- 0L   # current row counter
+    crow    <- 0L
     
-    # -- row-sum constraints (skip if anchor is NA) --
     for (j in seq_along(sub_sectors)) {
       r <- sub_sectors[j]
       if (is.na(m[r, "S1"])) next
@@ -202,7 +213,6 @@ balance_f51m <- function(aall,
       con_rhs[crow] <- m[r, "S1"] - fixed_row[r]
     }
     
-    # -- col-sum constraints (skip if anchor is NA) --
     for (k in seq_along(sub_sectors)) {
       c <- sub_sectors[k]
       if (is.na(m["S1", c])) next
@@ -214,7 +224,6 @@ balance_f51m <- function(aall,
       con_rhs[crow] <- m["S1", c] - fixed_col[c]
     }
     
-    # -- penalty linearisation |x_i - obs_i| <= d_i --
     for (i in seq_len(n_bal)) {
       crow <- crow + 1L
       con_mat[crow, x_idx[i]] <-  1
@@ -229,7 +238,6 @@ balance_f51m <- function(aall,
       con_rhs[crow] <- -obs_vals[i]
     }
     
-    # -- non-negativity of balancing cells --
     for (i in seq_len(n_bal)) {
       crow <- crow + 1L
       con_mat[crow, x_idx[i]] <- -1
@@ -237,7 +245,6 @@ balance_f51m <- function(aall,
       con_rhs[crow] <- 0
     }
     
-    # -- non-negativity of slacks --
     for (idx in c(d_idx, e_idx, f_idx, p_idx, q_idx)) {
       crow <- crow + 1L
       con_mat[crow, idx] <- -1
@@ -245,33 +252,27 @@ balance_f51m <- function(aall,
       con_rhs[crow] <- 0
     }
     
-    # trim to actual number of constraints
     con_mat <- con_mat[seq_len(crow), , drop = FALSE]
     con_dir <- con_dir[seq_len(crow)]
     con_rhs <- con_rhs[seq_len(crow)]
     
-    # --- solve ---
     lp_res <- lp("min", obj, con_mat, con_dir, con_rhs)
     
     if (lp_res$status != 0)
-      return(list(aall=aall, status="lp_failed",
-                  disc_before=disc_before, disc_after=NA))
+      return(list(status="lp_failed",
+                  disc_before=disc_before))
     
     sol_vals <- lp_res$solution[x_idx]
     
-    # --- build solved matrix ---
     m_sol <- m
     for (i in seq_len(n_bal))
       m_sol[bal_rows[i], bal_cols[i]] <- sol_vals[i]
     
     disc_after <- discrepancy_table(m_sol)
     
-    # write-back is handled in bulk by the main loop
     list(status      = "ok",
          disc_before = disc_before,
          disc_after  = disc_after,
-         m           = m,
-         m_sol       = m_sol,
          sol_vals    = sol_vals)
   }
   
@@ -282,10 +283,10 @@ balance_f51m <- function(aall,
   n_ok            <- 0
   n_no_data       <- 0
   n_lp_failed     <- 0
+  n_solve_error   <- 0
   sum_disc_before <- 0
   sum_disc_after  <- 0
   
-  # pre-allocate results list (one entry per successful solve)
   results_list <- vector("list", total_pairs)
   n_results    <- 0L
   
@@ -297,7 +298,19 @@ balance_f51m <- function(aall,
   for (country in countries) {
     for (period in periods) {
       
-      res <- balance_one(aall, country, period)
+      # ---- wrap the entire solve in tryCatch ----
+      res <- tryCatch(
+        balance_one(aall, country, period),
+        error = function(e) {
+          list(status = "solve_error", msg = conditionMessage(e))
+        }
+      )
+      
+      if (res$status == "solve_error") {
+        n_solve_error <- n_solve_error + 1
+        log_error(country, period, "solve", res$msg)
+        next
+      }
       
       if (res$status == "no_data") {
         n_no_data <- n_no_data + 1
@@ -312,10 +325,10 @@ balance_f51m <- function(aall,
         next
       }
       
-      n_ok    <- n_ok + 1
+      # status == "ok"
+      n_ok      <- n_ok + 1
       n_results <- n_results + 1L
       
-      # accumulate for bulk write-back
       results_list[[n_results]] <- data.table(
         REF_AREA           = country,
         REF_SECTOR         = bal_rows,
@@ -342,14 +355,15 @@ balance_f51m <- function(aall,
   }
   
   # =================================================================
-  # BULK WRITE-BACK — one md3 assignment per country
-  # (single call over all countries+periods triggers an md3 bug on
-  #  large inputs: 'object ixval not found')
+  # BULK WRITE-BACK — per-country, each wrapped in tryCatch
   # =================================================================
   if (n_results > 0) {
     cat("\nWriting back results...\n")
     
     all_results_dt <- rbindlist(results_list[seq_len(n_results)])
+    
+    n_wb_ok    <- 0L
+    n_wb_error <- 0L
     
     for (ctry in countries) {
       
@@ -358,38 +372,94 @@ balance_f51m <- function(aall,
       
       ctry_periods <- unique(ctry_dt$TIME)
       
-      writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
-        dt <- copy(ctry_dt)
-        dt[, INSTR          := "F51M"]
-        dt[, STO            := "LE"]
-        dt[, FUNCTIONAL_CAT := fc]
-        dt
-      }))
+      # ---- build the write-back md3 object ----
+      writeback_md3 <- tryCatch({
+        
+        writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
+          dt <- copy(ctry_dt)
+          dt[, INSTR          := "F51M"]
+          dt[, STO            := "LE"]
+          dt[, FUNCTIONAL_CAT := fc]
+          dt
+        }))
+        
+        as.md3(writeback_dt,
+               id.vars = c("INSTR","REF_AREA","REF_SECTOR",
+                           "COUNTERPART_SECTOR","STO",
+                           "FUNCTIONAL_CAT","TIME"))
+        
+      }, error = function(e) {
+        # log every period for this country individually
+        for (p in ctry_periods)
+          log_error(ctry, p, "writeback_md3", conditionMessage(e))
+        NULL
+      })
       
-      writeback_md3 <- as.md3(writeback_dt,
-                              id.vars = c("INSTR","REF_AREA","REF_SECTOR",
-                                          "COUNTERPART_SECTOR","STO",
-                                          "FUNCTIONAL_CAT","TIME"))
+      if (is.null(writeback_md3)) {
+        n_wb_error <- n_wb_error + length(ctry_periods)
+        next
+      }
       
-      aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
-                   ctry,
-                   paste(sub_sectors, collapse = "+"),
-                   paste(sub_sectors, collapse = "+"),
-                   paste(ctry_periods, collapse = "+")),
-           usenames = TRUE] <- writeback_md3
+      # ---- assign into aall ----
+      assign_ok <- tryCatch({
+        aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
+                     ctry,
+                     paste(sub_sectors, collapse = "+"),
+                     paste(sub_sectors, collapse = "+"),
+                     paste(ctry_periods, collapse = "+")),
+             usenames = TRUE] <- writeback_md3
+        TRUE
+      }, error = function(e) {
+        for (p in ctry_periods)
+          log_error(ctry, p, "writeback_assign", conditionMessage(e))
+        FALSE
+      })
+      
+      if (isTRUE(assign_ok)) {
+        n_wb_ok <- n_wb_ok + 1L
+      } else {
+        n_wb_error <- n_wb_error + length(ctry_periods)
+      }
     }
     
-    cat(sprintf("Wrote %d cells across %d countries.\n",
-                nrow(all_results_dt) * 2L, length(countries)))
+    cat(sprintf(
+      "Write-back complete: %d countries OK, %d country-periods with errors.\n",
+      n_wb_ok, n_wb_error
+    ))
   }
   
+  # =================================================================
+  # SUMMARY
+  # =================================================================
   cat(sprintf("\n=== SUMMARY ===\n"))
   cat(sprintf("  Runs OK:             %d\n", n_ok))
   cat(sprintf("  No data:             %d\n", n_no_data))
   cat(sprintf("  LP failed:           %d\n", n_lp_failed))
+  cat(sprintf("  Solve errors:        %d\n", n_solve_error))
   cat(sprintf("  Total |disc| before: %.2f\n", sum_disc_before))
   cat(sprintf("  Total |disc| after:  %.2f\n", sum_disc_after))
   cat(sprintf("  Total improvement:   %.2f\n", sum_disc_before - sum_disc_after))
+  
+  if (nrow(error_log) > 0) {
+    cat(sprintf("\n  *** %d error(s) logged — inspect 'f51m_error_log' ***\n",
+                nrow(error_log)))
+    # write to global environment so the caller can inspect it
+    assign("f51m_error_log", as.data.frame(error_log), envir = .GlobalEnv)
+    # also dump a CSV next to the working directory for safety
+    tryCatch(
+      write.csv(as.data.frame(error_log),
+                file.path(getwd(), "f51m_error_log.csv"),
+                row.names = FALSE),
+      error = function(e) invisible(NULL)
+    )
+    cat("  Full log saved to f51m_error_log (global) and f51m_error_log.csv\n")
+  } else {
+    cat("  No errors.\n")
+    assign("f51m_error_log",
+           data.frame(REF_AREA=character(), TIME=character(),
+                      stage=character(), error_message=character()),
+           envir = .GlobalEnv)
+  }
   
   invisible(aall)
 }
