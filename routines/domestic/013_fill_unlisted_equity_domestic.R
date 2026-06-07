@@ -553,6 +553,16 @@ if (APPLY_F51M_BALANCING) {
     verbose    = FALSE  # set TRUE for per-country-period output
   )
   
+  balancing_pairs <- list(
+    c("S1M","S11"), c("S11","S12T"), c("S1M","S12O"), c("S124","S11"),
+    c("S121","S11"), c("S12T","S12O"), c("S11","S12O"), c("S12O","S11"),
+    c("S12O","S12T"), c("S12O","S12Q"), c("S13","S12O")
+  )
+  for (bp in balancing_pairs) {
+    key <- sprintf("F51M..%s.%s.LE..", bp[1], bp[2])
+    aall[key][which(aall[key] < 0)] <- 0
+  }
+  
 }
   
 #### FROM NOW ON: OLD SCRIPT
