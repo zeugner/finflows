@@ -40,6 +40,7 @@ ll <- readRDS(file.path(data_dir, 'll_iip_shss.rds')); gc()
 whatctries <- readRDS(file.path(loaded_dir, 'pipbuffer/whatctries_pip.rds'))
 ccc <- dimcodes(whatctries)[[1]]
 AREA <- ccc[, 1]  # ISO3 codes
+AREA <- c(ccc[, 1], "USA") ### adding US that was lacking
 rm(whatctries); gc()
 
 #############################################################################

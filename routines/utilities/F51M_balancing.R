@@ -15,26 +15,22 @@
 #
 # Returns:
 #   aall with balancing cells updated for all countries and periods.
-#   A data.frame named 'f51m_error_log' is assigned to the GLOBAL environment,
-#   containing one row per failed country-period combination with columns:
-#     REF_AREA, TIME, stage, error_message
-#   Print or inspect it after the call:
-#     print(f51m_error_log)
-#     write.csv(f51m_error_log, "f51m_errors.csv", row.names=FALSE)
+#   A data.frame named 'f51m_error_log' is assigned to the global environment.
 #
-# Error handling:
-#   - balance_one()  : wrapped in tryCatch; failures logged, loop continues
-#   - as.md3()       : wrapped in tryCatch; write-back failures logged separately
-#   - Both stages assign a 'stage' label so you know exactly where the error occurred
+# Root cause of the 'ixval not found' error:
+#   as.md3() internally derives 'ixval' from the id.vars argument.  When the
+#   data.table passed to as.md3() does not contain every column listed in
+#   id.vars (or they are added after the fact via copy()+:= inside lapply),
+#   'ixval' is never created and the call crashes.  The fix is to store ALL
+#   id columns — including INSTR, STO, and FUNCTIONAL_CAT — in results_list
+#   at solve time, so as.md3() always receives a complete, well-formed table.
 #
 # Performance notes:
 #   - strsplit results are cached at startup (not recomputed per solve)
 #   - constraint matrix is pre-allocated (no rbind in loop)
 #   - row/col membership maps are pre-computed
 #   - Inf values are coerced to NA before solving
-#   - write-back is batched: all results accumulated during the loop,
-#     then written to aall in a single md3 assignment at the end
-#     (avoids ~90s per solve from repeated individual md3 writes)
+#   - write-back is batched per country (one md3 assignment per country)
 # ============================================================================
 
 library(lpSolve)
@@ -44,7 +40,7 @@ balance_f51m <- function(aall,
                          countries,
                          periods,
                          w_disc   = 100,
-                         w_pen    = 1,
+                         w_pen    = 0.1,
                          verbose  = TRUE) {
   
   sub_sectors <- c("S1M","S11","S13","S121","S12T","S124","S12Q","S12O")
@@ -71,7 +67,7 @@ balance_f51m <- function(aall,
   n_bal <- length(balancing_cells)
   
   # -----------------------------------------------------------------
-  # PRE-COMPUTE: cache strsplit and membership maps once (not per solve)
+  # PRE-COMPUTE: cache strsplit and membership maps once
   # -----------------------------------------------------------------
   bal_parts <- strsplit(balancing_cells, "\\.", fixed = FALSE)
   bal_rows  <- vapply(bal_parts, `[[`, character(1), 1)
@@ -83,14 +79,14 @@ balance_f51m <- function(aall,
   names(bal_col_map) <- sub_sectors
   
   # -----------------------------------------------------------------
-  # PRE-COMPUTE: LP variable layout (constant across all solves)
+  # PRE-COMPUTE: LP variable layout
   # -----------------------------------------------------------------
-  x_idx <- seq_len(n_bal)
-  d_idx <- n_bal + seq_len(n_bal)
-  e_idx <- 2*n_bal + seq_len(n_sec)
-  f_idx <- 2*n_bal + n_sec   + seq_len(n_sec)
-  p_idx <- 2*n_bal + 2*n_sec + seq_len(n_sec)
-  q_idx <- 2*n_bal + 3*n_sec + seq_len(n_sec)
+  x_idx     <- seq_len(n_bal)
+  d_idx     <- n_bal + seq_len(n_bal)
+  e_idx     <- 2*n_bal + seq_len(n_sec)
+  f_idx     <- 2*n_bal + n_sec   + seq_len(n_sec)
+  p_idx     <- 2*n_bal + 2*n_sec + seq_len(n_sec)
+  q_idx     <- 2*n_bal + 3*n_sec + seq_len(n_sec)
   n_lp_vars <- 2*n_bal + 4*n_sec
   
   obj        <- rep(0, n_lp_vars)
@@ -105,12 +101,12 @@ balance_f51m <- function(aall,
   zf <- function(x) ifelse(is.na(x), 0, x)
   
   # =================================================================
-  # ERROR LOG — accumulated throughout; written to global env at end
+  # ERROR LOG
   # =================================================================
   error_log <- data.table(
     REF_AREA      = character(),
     TIME          = character(),
-    stage         = character(),   # "solve" | "writeback_md3" | "writeback_assign"
+    stage         = character(),
     error_message = character()
   )
   
@@ -127,12 +123,11 @@ balance_f51m <- function(aall,
   
   # -----------------------------------------------------------------
   # HELPER: run balancer for one country/period
-  # Returns a named list; status is one of: "ok", "no_data", "lp_failed"
   # -----------------------------------------------------------------
   balance_one <- function(aall, country, period) {
     
     slice_id <- sprintf(
-      "F51M.%s.%s.%s.LE._S.%s",
+      "F51M.%s.%s.%s.LE._T.%s",
       country,
       paste(all_sectors, collapse="+"),
       paste(all_sectors, collapse="+"),
@@ -165,7 +160,6 @@ balance_f51m <- function(aall,
       m <- cbind(m, extra)
     }
     m <- m[all_sectors, all_sectors]
-    
     m[is.infinite(m)] <- NA
     
     obs_vals <- numeric(n_bal)
@@ -189,10 +183,8 @@ balance_f51m <- function(aall,
       col_sum <- colSums(zf(sub))
       row_tot <- m[sub_sectors, "S1"]
       col_tot <- m["S1", sub_sectors]
-      rbind(
-        rows = row_sum - zf(row_tot),
-        cols = col_sum - zf(col_tot)
-      )
+      rbind(rows = row_sum - zf(row_tot),
+            cols = col_sum - zf(col_tot))
     }
     
     disc_before <- discrepancy_table(m)
@@ -226,30 +218,24 @@ balance_f51m <- function(aall,
     
     for (i in seq_len(n_bal)) {
       crow <- crow + 1L
-      con_mat[crow, x_idx[i]] <-  1
-      con_mat[crow, d_idx[i]] <- -1
-      con_dir[crow] <- "<="
-      con_rhs[crow] <-  obs_vals[i]
+      con_mat[crow, x_idx[i]] <-  1; con_mat[crow, d_idx[i]] <- -1
+      con_dir[crow] <- "<="; con_rhs[crow] <-  obs_vals[i]
       
       crow <- crow + 1L
-      con_mat[crow, x_idx[i]] <- -1
-      con_mat[crow, d_idx[i]] <- -1
-      con_dir[crow] <- "<="
-      con_rhs[crow] <- -obs_vals[i]
+      con_mat[crow, x_idx[i]] <- -1; con_mat[crow, d_idx[i]] <- -1
+      con_dir[crow] <- "<="; con_rhs[crow] <- -obs_vals[i]
     }
     
     for (i in seq_len(n_bal)) {
       crow <- crow + 1L
       con_mat[crow, x_idx[i]] <- -1
-      con_dir[crow] <- "<="
-      con_rhs[crow] <- 0
+      con_dir[crow] <- "<="; con_rhs[crow] <- 0
     }
     
     for (idx in c(d_idx, e_idx, f_idx, p_idx, q_idx)) {
       crow <- crow + 1L
       con_mat[crow, idx] <- -1
-      con_dir[crow] <- "<="
-      con_rhs[crow] <- 0
+      con_dir[crow] <- "<="; con_rhs[crow] <- 0
     }
     
     con_mat <- con_mat[seq_len(crow), , drop = FALSE]
@@ -259,8 +245,7 @@ balance_f51m <- function(aall,
     lp_res <- lp("min", obj, con_mat, con_dir, con_rhs)
     
     if (lp_res$status != 0)
-      return(list(status="lp_failed",
-                  disc_before=disc_before))
+      return(list(status="lp_failed", disc_before=disc_before))
     
     sol_vals <- lp_res$solution[x_idx]
     
@@ -268,16 +253,14 @@ balance_f51m <- function(aall,
     for (i in seq_len(n_bal))
       m_sol[bal_rows[i], bal_cols[i]] <- sol_vals[i]
     
-    disc_after <- discrepancy_table(m_sol)
-    
     list(status      = "ok",
          disc_before = disc_before,
-         disc_after  = disc_after,
+         disc_after  = discrepancy_table(m_sol),
          sol_vals    = sol_vals)
   }
   
   # =================================================================
-  # MAIN LOOP — solve only, accumulate results
+  # MAIN LOOP
   # =================================================================
   total_pairs     <- length(countries) * length(periods)
   n_ok            <- 0
@@ -287,7 +270,9 @@ balance_f51m <- function(aall,
   sum_disc_before <- 0
   sum_disc_after  <- 0
   
-  results_list <- vector("list", total_pairs)
+  # KEY FIX: store ALL id columns here, for both _T and _S, so that
+  # as.md3(id.vars=...) receives a fully-formed table with no missing columns.
+  results_list <- vector("list", total_pairs * 2L)  # *2 for _T and _S
   n_results    <- 0L
   
   cat(sprintf(
@@ -295,15 +280,14 @@ balance_f51m <- function(aall,
     length(countries), length(periods), total_pairs
   ))
   
+  t_start <- proc.time()[["elapsed"]]
+  
   for (country in countries) {
     for (period in periods) {
       
-      # ---- wrap the entire solve in tryCatch ----
       res <- tryCatch(
         balance_one(aall, country, period),
-        error = function(e) {
-          list(status = "solve_error", msg = conditionMessage(e))
-        }
+        error = function(e) list(status="solve_error", msg=conditionMessage(e))
       )
       
       if (res$status == "solve_error") {
@@ -311,32 +295,34 @@ balance_f51m <- function(aall,
         log_error(country, period, "solve", res$msg)
         next
       }
-      
       if (res$status == "no_data") {
         n_no_data <- n_no_data + 1
-        if (verbose)
-          cat(sprintf("  [%-6s %s] no data\n", country, period))
+        if (verbose) cat(sprintf("  [%-6s %s] no data\n", country, period))
         next
       }
-      
       if (res$status == "lp_failed") {
         n_lp_failed <- n_lp_failed + 1
         cat(sprintf("  [%-6s %s] LP FAILED\n", country, period))
         next
       }
       
-      # status == "ok"
-      n_ok      <- n_ok + 1
-      n_results <- n_results + 1L
+      # status == "ok": store one data.table per functional category,
+      # with every id column already present — no column additions at write-back.
+      for (fc in c("_T", "_S")) {
+        n_results <- n_results + 1L
+        results_list[[n_results]] <- data.table(
+          INSTR              = "F51M",
+          REF_AREA           = country,
+          REF_SECTOR         = bal_rows,
+          COUNTERPART_SECTOR = bal_cols,
+          STO                = "LE",
+          FUNCTIONAL_CAT     = fc,
+          TIME               = period,
+          obs_value          = res$sol_vals
+        )
+      }
       
-      results_list[[n_results]] <- data.table(
-        REF_AREA           = country,
-        REF_SECTOR         = bal_rows,
-        COUNTERPART_SECTOR = bal_cols,
-        TIME               = period,
-        obs_value          = res$sol_vals
-      )
-      
+      n_ok <- n_ok + 1
       db <- sum(abs(res$disc_before), na.rm=TRUE)
       da <- sum(abs(res$disc_after),  na.rm=TRUE)
       sum_disc_before <- sum_disc_before + db
@@ -355,7 +341,8 @@ balance_f51m <- function(aall,
   }
   
   # =================================================================
-  # BULK WRITE-BACK — per-country, each wrapped in tryCatch
+  # BULK WRITE-BACK — one md3 assignment per country
+  # as.md3() now always receives a complete table; no column mutations needed.
   # =================================================================
   if (n_results > 0) {
     cat("\nWriting back results...\n")
@@ -372,37 +359,26 @@ balance_f51m <- function(aall,
       
       ctry_periods <- unique(ctry_dt$TIME)
       
-      # ---- build the write-back md3 object ----
-      writeback_md3 <- tryCatch({
-        
-        writeback_dt <- rbindlist(lapply(c("_T", "_S"), function(fc) {
-          dt <- copy(ctry_dt)
-          dt[, INSTR          := "F51M"]
-          dt[, STO            := "LE"]
-          dt[, FUNCTIONAL_CAT := fc]
-          dt
-        }))
-        
-        as.md3(writeback_dt,
+      # as.md3(): table already has every id column — no copy/mutate needed
+      writeback_md3 <- tryCatch(
+        as.md3(ctry_dt,
                id.vars = c("INSTR","REF_AREA","REF_SECTOR",
                            "COUNTERPART_SECTOR","STO",
-                           "FUNCTIONAL_CAT","TIME"))
-        
-      }, error = function(e) {
-        # log every period for this country individually
-        for (p in ctry_periods)
-          log_error(ctry, p, "writeback_md3", conditionMessage(e))
-        NULL
-      })
+                           "FUNCTIONAL_CAT","TIME")),
+        error = function(e) {
+          for (p in ctry_periods)
+            log_error(ctry, p, "writeback_md3", conditionMessage(e))
+          NULL
+        }
+      )
       
       if (is.null(writeback_md3)) {
         n_wb_error <- n_wb_error + length(ctry_periods)
         next
       }
       
-      # ---- assign into aall ----
       assign_ok <- tryCatch({
-        aall[sprintf("F51M.%s.%s.%s.LE._T+_S.%s",
+        aall[sprintf("F51M.%s.%s.%s.LE._T.%s",
                      ctry,
                      paste(sub_sectors, collapse = "+"),
                      paste(sub_sectors, collapse = "+"),
@@ -431,7 +407,15 @@ balance_f51m <- function(aall,
   # =================================================================
   # SUMMARY
   # =================================================================
+  
+  elapsed <- proc.time()[["elapsed"]] - t_start
+  hms_fmt <- sprintf("%02d:%02d:%02d",
+                     as.integer(elapsed) %/% 3600L,
+                     (as.integer(elapsed) %% 3600L) %/% 60L,
+                     as.integer(elapsed) %% 60L)
+  
   cat(sprintf("\n=== SUMMARY ===\n"))
+  cat(sprintf("  Total elapsed time:  %s (%.1f s)\n", hms_fmt, elapsed))
   cat(sprintf("  Runs OK:             %d\n", n_ok))
   cat(sprintf("  No data:             %d\n", n_no_data))
   cat(sprintf("  LP failed:           %d\n", n_lp_failed))
@@ -443,13 +427,10 @@ balance_f51m <- function(aall,
   if (nrow(error_log) > 0) {
     cat(sprintf("\n  *** %d error(s) logged — inspect 'f51m_error_log' ***\n",
                 nrow(error_log)))
-    # write to global environment so the caller can inspect it
     assign("f51m_error_log", as.data.frame(error_log), envir = .GlobalEnv)
-    # also dump a CSV next to the working directory for safety
     tryCatch(
       write.csv(as.data.frame(error_log),
-                file.path(getwd(), "f51m_error_log.csv"),
-                row.names = FALSE),
+                file.path(getwd(), "f51m_error_log.csv"), row.names = FALSE),
       error = function(e) invisible(NULL)
     )
     cat("  Full log saved to f51m_error_log (global) and f51m_error_log.csv\n")

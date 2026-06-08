@@ -35,8 +35,10 @@ ccc <- dimcodes(whatctries)[[1]]
 rm(whatctries); gc(full = TRUE, reset = TRUE)
 
 # --- Status tracking ---
-statusvec <- setNames(rep(NA_character_, NROW(ccc)), ccc[, 1])
-dimlog    <- vector('list', NROW(ccc)); names(dimlog) <- ccc[, 1]
+# USA is added explicitly: by construction it is absent from ccc
+# (the country list was built from reporters holding assets vs USA)
+statusvec <- setNames(rep(NA_character_, NROW(ccc) + 1L), c(ccc[, 1], 'USA'))
+dimlog    <- vector('list', NROW(ccc) + 1L); names(dimlog) <- c(ccc[, 1], 'USA')
 
 # --- Main loading loop ---
 cat('\nLoading PIP data for ', NROW(ccc), ' reporting countries\n')
@@ -93,6 +95,51 @@ for (cc in ccc[, 1]) {
     rm(temp)
     gc(full = TRUE, reset = TRUE)
   }
+}
+
+# --- USA: special case (absent from ccc by construction) ---
+cat('\n___ ', as.character(Sys.time()), ': USA (special case) ___')
+
+cachefile <- file.path(data_dir, "pipbuffer", "pip_USA.rds")
+
+if (file.exists(cachefile)) {
+  cat(' cache... ')
+  temp <- readRDS(cachefile)
+  statusvec['USA'] <- 'L'
+  dimlog[['USA']] <- dim(temp)
+  cat('OK (', paste(dim(temp), collapse = ' x '), ')\n')
+  rm(temp)
+  
+} else {
+  cat(' querying IMF... ')
+  gc(full = TRUE, reset = TRUE)
+  
+  temp <- try(
+    mds('IMF/PIP/USA.A+L.' %&% vindicators %&% '....', 
+        drop = FALSE, labels = FALSE),
+    silent = TRUE
+  )
+  
+  if (is(temp, 'md3')) {
+    statusvec['USA'] <- 'I'
+    dimlog[['USA']] <- dim(temp)
+    saveRDS(temp, cachefile)
+    cat('OK (', paste(dim(temp), collapse = ' x '), ')\n')
+    
+  } else if (any(grepl('err', class(temp)))) {
+    msg <- as.character(temp)
+    if (any(grepl('SDMX result contains 0 time series', msg, ignore.case = TRUE))) {
+      statusvec['USA'] <- '0'
+      cat('no data\n')
+    } else {
+      statusvec['USA'] <- 'X'
+      cat('ERROR: ', substr(msg[1], 1, 120), '\n')
+      Sys.sleep(3)
+    }
+  }
+  
+  rm(temp)
+  gc(full = TRUE, reset = TRUE)
 }
 
 # --- Reporting ---
